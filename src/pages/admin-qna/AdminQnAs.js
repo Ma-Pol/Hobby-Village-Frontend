@@ -7,12 +7,30 @@ import AdminQnAModify from './AdminQnAModify';
 
 const AdminQnAs = () => {
   return (
-    <Routes>
-      <Route path="/m/qnas/lists" element={<AdminQnALists />} />
-      <Route path="/m/qnas/details/:qnaCode" element={<AdminQnADetails />} />
-      <Route path="/m/qnas/create" element={<AdminQnACreate />} />
-      <Route path="/m/qnas/modify/:aswCode" element={<AdminQnAModify />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<AdminQnALists />} />
+        <Route exact path="details/:qnaCode" element={<AdminQnADetails />} />
+        <Route exact path="create" element={<AdminQnACreate />} />
+        <Route exact path="modify/:aswCode" element={<AdminQnAModify />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

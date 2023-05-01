@@ -5,13 +5,32 @@ import AdminReviewsDetails from './AdminReviewsDetails';
 
 const AdminReviews = () => {
   return (
-    <Routes>
-      <Route path="/m/reviews/lists" element={<AdminReviewsLists />} />
-      <Route
-        path="/m/reviews/details/:revwCode"
-        element={<AdminReviewsDetails />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<AdminReviewsLists />} />
+        <Route
+          exact
+          path="details/:revwCode"
+          element={<AdminReviewsDetails />}
+        />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

@@ -12,7 +12,7 @@ import UserDibs from './pages/user-cartsNdibs/UserDibs';
 import UserReviews from './pages/user-reviews/UserReviews';
 import UserProducts from './pages/user-products/UserProducts';
 import Purchase from './pages/user-purchase/Purchase';
-import UserRequests from './pages/user-requests/UserRequests';
+import UserRequests from './pages/user-request/UserRequests';
 import UserNotices from './pages/user-notices/UserNotices';
 import UserCs from './pages/user-cs/UserCs';
 import Admin from './pages/Admin';
@@ -26,17 +26,22 @@ root.render(
       <Route exact path="/signup" element={<UserSignup />} />
       <Route exact path="/users/:email/modify" element={<UserModify />} />
       <Route exact path="/recommend" element={<Recommend />} />
-      <Route exact path="/guide" element={<UserGuide />} />
-      <Route path="/mypages/:email" element={<UserMyPages />} />
-      <Route path="/carts/:email/lists/:category" element={<UserCarts />} />
-      <Route path="/dibs/:email/lists/:category" element={<UserDibs />} />
-      <Route path="/reviews" element={<UserReviews />} />
-      <Route path="/products" element={<UserProducts />} />
+      {/* 나중에 serviceInfo로 바꾸기 */}
+      <Route exact path="/guide" element={<UserGuide />} />{' '}
+      <Route exact path="/mypages/:email/*" element={<UserMyPages />} />
+      <Route
+        exact
+        path="/carts/:email/lists/:category"
+        element={<UserCarts />}
+      />
+      <Route exact path="/dibs/:email/lists/:category" element={<UserDibs />} />
+      <Route exact path="/reviews/*" element={<UserReviews />} />
+      <Route exact path="/products/*" element={<UserProducts />} />
       <Route exact path="/purchase" element={<Purchase />} />
-      <Route path="/requests" element={<UserRequests />} />
-      <Route path="/notices" element={<UserNotices />} />
-      <Route path="/cs" element={<UserCs />} />
-      <Route path="/m" element={<Admin />} />
+      <Route exact path="/requests" element={<UserRequests />} />
+      <Route exact path="/notices/*" element={<UserNotices />} />
+      <Route exact path="/cs/*" element={<UserCs />} />
+      <Route exact path="/m/*" element={<Admin />} />
       <Route
         path="*"
         element={
