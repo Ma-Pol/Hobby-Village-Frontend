@@ -33,9 +33,9 @@ const AdminUsersLists = () => {
         .all([
           axios.get(`/m/users/count`),
           axios.get(
-            `/m/users/lists?sort=${searchParams.get(
-              'sort'
-            )}&pages=${searchParams.get('pages')}`
+            `/m/users?sort=${searchParams.get('sort')}&pages=${searchParams.get(
+              'pages'
+            )}`
           ),
         ])
         .then(
@@ -62,7 +62,7 @@ const AdminUsersLists = () => {
             )}&keyword=${searchParams.get('keyword')}`
           ),
           axios.get(
-            `/m/users/lists?condition=${searchParams.get(
+            `/m/users?condition=${searchParams.get(
               'condition'
             )}&keyword=${searchParams.get('keyword')}&sort=${searchParams.get(
               'sort'
@@ -97,6 +97,7 @@ const AdminUsersLists = () => {
     const condition = conditionRef.current.value;
     const keyword = keywordRef.current.value;
     if (keyword === '') {
+      conditionRef.current.value = 'email';
       navigate(`/m/users/lists?sort=${sort}&pages=1`);
     } else {
       navigate(
