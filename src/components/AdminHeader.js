@@ -110,7 +110,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/orders/lists"
+            to="/m/orders/lists?sort=-odrDate&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
