@@ -8,25 +8,43 @@ import MyPagesAddressesModify from './MyPagesAddressesModify';
 
 const UserMyPages = () => {
   return (
-    <Routes>
-      <Route path="/mypages/:email/orders" element={<MyPagesOrders />} />
-      <Route
-        path="/mypages/:email/requests/lists"
-        element={<MyPagesRequests />}
-      />
-      <Route
-        path="/mypages/:email/addresses/lists"
-        element={<MyPagesAddressesLists />}
-      />
-      <Route
-        path="/mypages/:email/addresses/create"
-        element={<MyPagesAddressesCreate />}
-      />
-      <Route
-        path="/mypages/:email/addresses/modify"
-        element={<MyPagesAddressesModify />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="orders" element={<MyPagesOrders />} />
+        <Route exact path="requests/lists" element={<MyPagesRequests />} />
+        <Route
+          exact
+          path="addresses/lists"
+          element={<MyPagesAddressesLists />}
+        />
+        <Route
+          exact
+          path="addresses/create"
+          element={<MyPagesAddressesCreate />}
+        />
+        <Route
+          exact
+          path="addresses/modify"
+          element={<MyPagesAddressesModify />}
+        />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

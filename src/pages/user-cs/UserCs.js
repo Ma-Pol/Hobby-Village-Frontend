@@ -8,13 +8,31 @@ import UserQnACreate from './UserQnACreate';
 
 const UserCs = () => {
   return (
-    <Routes>
-      <Route path="/cs/faq/lists" element={<UserFAQLists />} />
-      <Route path="/cs/qna/:email/lists" element={<UserQnALists />} />
-      <Route path="/cs/faq/details/:faqCode" element={<UserFAQDetails />} />
-      <Route path="/cs/qna/details/:qstCode" element={<UserQnADetails />} />
-      <Route path="/cs/qna/create" element={<UserQnACreate />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="faq/lists" element={<UserFAQLists />} />
+        <Route exact path="qna/:email/lists" element={<UserQnALists />} />
+        <Route exact path="faq/details/:faqCode" element={<UserFAQDetails />} />
+        <Route exact path="qna/details/:qstCode" element={<UserQnADetails />} />
+        <Route exact path="qna/create" element={<UserQnACreate />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
