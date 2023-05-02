@@ -8,6 +8,8 @@ import {
   InputLabel,
   Pagination,
   TextField,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -20,6 +22,9 @@ const AdminProductsLists = () => {
   const [productList, setProductList] = useState([]); // 상품 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
+  const [currentFilter, setCurrentFilter] = useState(
+    searchParams.get('filter')
+  ); // 현재 필터
   const sortRef = useRef(); // 현재 정렬 기준
   const conditionRef = useRef(); // 현재 검색 조건
   const keywordRef = useRef(); // 현재 검색 키워드
@@ -31,11 +36,13 @@ const AdminProductsLists = () => {
       // 다중 요청(페이지네이션을 위한 전체 상품 수 요청, 상품 목록 요청)
       axios
         .all([
-          axios.get(`/m/products/count`),
+          axios.get(`/m/products/count?filter=${searchParams.get('filter')}`),
           axios.get(
             `/m/products?sort=${searchParams.get(
               'sort'
-            )}&pages=${searchParams.get('pages')}`
+            )}&filter=${searchParams.get('filter')}&pages=${searchParams.get(
+              'pages'
+            )}`
           ),
         ])
         .then(
@@ -43,6 +50,7 @@ const AdminProductsLists = () => {
             setTotalPage(Math.ceil(count.data / 10)); // 전체 페이지 수 설정
             setProductList(list.data); // 상품 목록 설정
             setCurrentPage(searchParams.get('pages')); // 현재 페이지 설정
+            setCurrentFilter(searchParams.get('filter')); // 현재 필터 설정
             sortRef.current.value = searchParams.get('sort'); // 현재 정렬 기준 설정
             conditionRef.current.value = 'prodCode'; // 현재 검색 조건 기본값 설정
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
@@ -59,14 +67,18 @@ const AdminProductsLists = () => {
           axios.get(
             `/m/products/count?condition=${searchParams.get(
               'condition'
-            )}&keyword=${searchParams.get('keyword')}`
+            )}&keyword=${searchParams.get('keyword')}&filter=${searchParams.get(
+              'filter'
+            )}`
           ),
           axios.get(
             `/m/products?condition=${searchParams.get(
               'condition'
             )}&keyword=${searchParams.get('keyword')}&sort=${searchParams.get(
               'sort'
-            )}&pages=${searchParams.get('pages')}`
+            )}&filter=${searchParams.get('filter')}&pages=${searchParams.get(
+              'pages'
+            )}`
           ),
         ])
         .then(
@@ -74,6 +86,7 @@ const AdminProductsLists = () => {
             setTotalPage(Math.ceil(count.data / 10));
             setProductList(list.data);
             setCurrentPage(searchParams.get('pages'));
+            setCurrentFilter(searchParams.get('filter'));
             sortRef.current.value = searchParams.get('sort');
             conditionRef.current.value = searchParams.get('condition');
             keywordRef.current.value = searchParams.get('keyword');
@@ -97,10 +110,12 @@ const AdminProductsLists = () => {
     const condition = conditionRef.current.value;
     const keyword = keywordRef.current.value;
     if (keyword === '') {
-      navigate(`/m/products/lists?sort=${sort}&pages=1`);
+      navigate(
+        `/m/products/lists?sort=${sort}&filter=${currentFilter}&pages=1`
+      );
     } else {
       navigate(
-        `/m/products?condition=${condition}&keyword=${keyword}&sort=${sort}&pages=1`
+        `/m/products/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&filter=${currentFilter}&pages=1`
       );
     }
   };
@@ -110,6 +125,37 @@ const AdminProductsLists = () => {
     const sort = sortRef.current.value;
     searchParams.set('sort', sort);
     setSearchParams(searchParams);
+  };
+
+  // 필터 변경 시
+  const filterChange = (e, value) => {
+    if (value !== null) {
+      searchParams.set('filter', value);
+      setSearchParams(searchParams);
+      setCurrentFilter(value);
+    }
+  };
+
+  const filterBox = {
+    height: '30px',
+    backgroundColor: '#ffffff',
+    color: '#828282',
+    fontWeight: 'bold',
+    fontSize: '0.8rem',
+    transition: 'all 0.25s',
+    '&:hover': {
+      backgroundColor: '#c3c36a',
+      color: '#ffffff',
+    },
+    '&.Mui-selected': {
+      backgroundColor: '#c3c36a',
+      textDecoration: 'underline',
+    },
+    '&.Mui-selected:hover': {
+      backgroundColor: '#c3c36a',
+      textDecoration: 'underline',
+      color: '#ffffff',
+    },
   };
 
   const tableHead = {
@@ -141,41 +187,73 @@ const AdminProductsLists = () => {
       </Typography>
       {/* 상품 목록 글씨 표기 끝 */}
 
-      {/* 정렬 기준 선택용 Select Box 표기 시작 */}
-      <Box sx={{ float: 'right', pr: 1, mb: 1 }}>
-        <InputLabel
-          sx={{
-            fontSize: '0.8rem',
-          }}
-          variant="standard"
-          htmlFor="adminProductListSort"
-        >
-          정렬 기준
-        </InputLabel>
-        <NativeSelect
-          inputRef={sortRef}
-          onChange={sortChange}
-          sx={{
-            px: 1,
-            hover: {
-              backgroundColor: '#ffffff',
-            },
-            focus: {
-              backgroundColor: '#fffffff',
-            },
-          }}
-          defaultValue="-prodRegiDate"
-          inputProps={{
-            name: 'sort',
-            id: 'adminProductListSort',
-          }}
-        >
-          <option value="-prodRegiDate">최근 상품 순</option>
-          <option value="prodRegiDate">오래된 상품 순</option>
-        </NativeSelect>
-      </Box>
-      {/* 정렬 기준 선택용 Select Box 표기 끝 */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+        }}
+      >
+        {/* 필터 선택용 Toggle Button 표기 시작 */}
+        <Box sx={{ float: 'right', pr: 3, mb: 1 }}>
+          <ToggleButtonGroup
+            value={String(currentFilter)}
+            exclusive
+            onChange={filterChange}
+            aria-label="text alignment"
+          >
+            <ToggleButton value="none" aria-label="left aligned" sx={filterBox}>
+              전체 상품
+            </ToggleButton>
+            <ToggleButton value="rented" aria-label="centered" sx={filterBox}>
+              대여 상품
+            </ToggleButton>
+            <ToggleButton
+              value="no-rent"
+              aria-label="right aligned"
+              sx={filterBox}
+            >
+              미대여 상품
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
+        {/* 필터 선택용 Toggle Button 표기 끝 */}
 
+        {/* 정렬 기준 선택용 Select Box 표기 시작 */}
+        <Box sx={{ float: 'right', pr: 1, mb: 1 }}>
+          <InputLabel
+            sx={{
+              fontSize: '0.8rem',
+            }}
+            variant="standard"
+            htmlFor="adminProductListSort"
+          >
+            정렬 기준
+          </InputLabel>
+          <NativeSelect
+            inputRef={sortRef}
+            onChange={sortChange}
+            sx={{
+              px: 1,
+              hover: {
+                backgroundColor: '#ffffff',
+              },
+              focus: {
+                backgroundColor: '#fffffff',
+              },
+            }}
+            defaultValue="-prodRegiDate"
+            inputProps={{
+              name: 'sort',
+              id: 'adminProductListSort',
+            }}
+          >
+            <option value="-prodRegiDate">최근 상품 순</option>
+            <option value="prodRegiDate">오래된 상품 순</option>
+          </NativeSelect>
+        </Box>
+        {/* 정렬 기준 선택용 Select Box 표기 끝 */}
+      </Box>
       {/* 상품 목록 테이블 표기 시작 */}
       <Box
         sx={{
@@ -236,7 +314,8 @@ const AdminProductsLists = () => {
               key={product.prodCode}
               prodCode={product.prodCode}
               prodName={product.prodName}
-              prodHost={product.pordHost}
+              prodHost={product.prodHost}
+              prodIsRental={product.prodIsRental}
               userCode={product.userCode}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
@@ -245,6 +324,27 @@ const AdminProductsLists = () => {
         {/* 상품 목록 테이블 데이터 표기 끝 */}
       </Box>
       {/* 상품 목록 테이블 표기 끝 */}
+
+      <Button
+        variant="contained"
+        size="small"
+        href="/m/products/create"
+        sx={{
+          mt: 1,
+          mr: 1,
+          height: '25px',
+          float: 'right',
+          backgroundColor: '#d9d9d9',
+          color: '#000000',
+          border: '1px solid #000000',
+          '&:hover': {
+            backgroundColor: '#c6c6c6',
+            color: '#000000',
+          },
+        }}
+      >
+        상품 등록
+      </Button>
 
       {/* 페이지네이션 표기 시작 */}
       <Box

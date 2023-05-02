@@ -2,12 +2,14 @@ import { Grid, Typography, Button, Link } from '@mui/material';
 import React from 'react';
 
 const AdminProductsRows = ({
+  prodCode,
+  prodName,
+  prodHost,
   userCode,
-  userEmail,
-  userName,
-  userDelete,
+  prodIsRental,
   isLast,
 }) => {
+  const prodLink = `/m/products/details/${prodCode}`;
   const userLink = `/m/users/details/${userCode}`;
 
   const tableLine = {
@@ -41,51 +43,58 @@ const AdminProductsRows = ({
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid className="userEmail" item xs={6}>
+      <Grid item xs={2}>
         <Typography sx={tableData}>
           <Link
-            href={userLink}
-            title={userEmail}
+            href={prodLink}
+            title={prodCode + '\n상품 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
-            {userEmail}
+            {prodCode}
           </Link>
         </Typography>
       </Grid>
-      <Grid item xs={3}>
-        <Typography title={userName} sx={tableData}>
-          {userName}
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={3}
-        sx={{
-          textAlign: 'center',
-        }}
-      >
-        <Button
-          onClick={() => {
-            userDelete(userCode);
-          }}
-          variant="contained"
+
+      <Grid item xs={6}>
+        <Typography
           sx={{
-            width: '65px',
-            height: '30px',
-            backgroundColor: '#f5b8b8',
-            borderRadius: '15px',
-            border: '1px solid #626262',
-            color: '#000000',
-            fontWeight: 'bold',
-            '&:hover': {
-              backgroundColor: 'tomato',
-              color: '#ffffff',
-            },
+            px: 1,
+            py: 0.5,
+            textAlign: 'left',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
-          삭제
-        </Button>
+          <Link
+            href={prodLink}
+            title={prodName + '\n상품 상세 페이지'}
+            underline="hover"
+            sx={{ color: '#000000', cursor: 'pointer' }}
+          >
+            {prodName}
+          </Link>
+        </Typography>
+      </Grid>
+
+      <Grid item xs={2}>
+        <Typography sx={tableData}>
+          <Link
+            href={userLink}
+            title={prodHost + '\n회원 상세 페이지'}
+            underline="hover"
+            sx={{ color: '#000000', cursor: 'pointer' }}
+          >
+            {prodHost}
+          </Link>
+        </Typography>
+      </Grid>
+
+      <Grid item xs={2}>
+        <Typography sx={tableData}>
+          {prodIsRental === 0 ? '미대여' : '대여'}
+        </Typography>
       </Grid>
     </Grid>
   );
