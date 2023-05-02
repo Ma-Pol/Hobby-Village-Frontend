@@ -141,6 +141,16 @@ const AdminUsersLists = () => {
     }
   };
 
+  const tableHead = {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    px: 1,
+    py: 0.5,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
   return (
     <Container>
       {/* 회원 목록 글씨 표기 시작 */}
@@ -219,40 +229,13 @@ const AdminUsersLists = () => {
           }}
         >
           <Grid item xs={6}>
-            <Typography
-              sx={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                px: 1,
-                py: 0.5,
-              }}
-            >
-              회원 이메일
-            </Typography>
+            <Typography sx={tableHead}>회원 이메일</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography
-              sx={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                px: 1,
-                py: 0.5,
-              }}
-            >
-              회원 이름
-            </Typography>
+            <Typography sx={tableHead}>회원 이름</Typography>
           </Grid>
           <Grid item xs={3}>
-            <Typography
-              sx={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                px: 1,
-                py: 0.5,
-              }}
-            >
-              회원 관리
-            </Typography>
+            <Typography sx={tableHead}>회원 관리</Typography>
           </Grid>
         </Grid>
         {/* 회원 목록 테이블 컬럼명 표기 끝 */}

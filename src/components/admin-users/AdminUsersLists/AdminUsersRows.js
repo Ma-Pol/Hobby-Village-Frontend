@@ -45,7 +45,7 @@ const AdminUsersRows = ({
         <Typography sx={tableData}>
           <Link
             href={userLink}
-            title={userEmail}
+            title={userEmail + '\n회원 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
@@ -55,7 +55,14 @@ const AdminUsersRows = ({
       </Grid>
       <Grid item xs={3}>
         <Typography title={userName} sx={tableData}>
-          {userName}
+          <Link
+            href={userLink}
+            title={userEmail + '\n회원 상세 페이지'}
+            underline="hover"
+            sx={{ color: '#000000', cursor: 'pointer' }}
+          >
+            {userName}
+          </Link>
         </Typography>
       </Grid>
       <Grid
