@@ -17,7 +17,7 @@ import AdminOrdersRows from '../../components/admin-orders/AdminOrdersLists/Admi
 const AdminOrdersLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
-  const [orderList, setOrderList] = useState([]); // 회원 목록
+  const [orderList, setOrderList] = useState([]); // 주문 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
   const sortRef = useRef(); // 현재 정렬 기준
