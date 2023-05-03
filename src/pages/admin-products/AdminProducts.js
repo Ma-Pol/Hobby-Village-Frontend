@@ -7,18 +7,34 @@ import AdminProductsModify from './AdminProductsModify';
 
 const AdminProducts = () => {
   return (
-    <Routes>
-      <Route path="/m/products/lists" element={<AdminProductsLists />} />
-      <Route
-        path="/m/products/details/:prodCode"
-        element={<AdminProductsDetails />}
-      />
-      <Route path="/m/products/create" element={<AdminProductsCreate />} />
-      <Route
-        path="/m/products/modify/:prodCode"
-        element={<AdminProductsModify />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<AdminProductsLists />} />
+        <Route path="details/:prodCode" element={<AdminProductsDetails />} />
+        <Route exact path="create" element={<AdminProductsCreate />} />
+        <Route
+          exact
+          path="modify/:prodCode"
+          element={<AdminProductsModify />}
+        />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
