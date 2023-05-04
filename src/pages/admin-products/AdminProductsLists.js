@@ -200,19 +200,14 @@ const AdminProductsLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
-            aria-label="text alignment"
           >
-            <ToggleButton value="none" aria-label="left aligned" sx={filterBox}>
+            <ToggleButton value="none" sx={filterBox}>
               전체 상품
             </ToggleButton>
-            <ToggleButton value="rented" aria-label="centered" sx={filterBox}>
+            <ToggleButton value="rented" sx={filterBox}>
               대여 상품
             </ToggleButton>
-            <ToggleButton
-              value="no-rent"
-              aria-label="right aligned"
-              sx={filterBox}
-            >
+            <ToggleButton value="no-rent" sx={filterBox}>
               미대여 상품
             </ToggleButton>
           </ToggleButtonGroup>
@@ -426,10 +421,6 @@ const AdminProductsLists = () => {
             backgroundColor: '#c3c36a',
             color: '#000000',
             fontWeight: 'bold',
-            '&:hover': {
-              backgroundColor: '#c3c36a',
-              color: '#ffffff',
-            },
           }}
         >
           검색
