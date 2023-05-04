@@ -73,7 +73,9 @@ const AdminCouponsRows = ({
       </Grid>
 
       <Grid item xs={2}>
-        <Typography sx={tableData}>{deadline}</Typography>
+        <Typography sx={tableData}>
+          {deadline !== null ? deadline : '-'}
+        </Typography>
       </Grid>
 
       <Grid item xs={1} sx={tableData}>

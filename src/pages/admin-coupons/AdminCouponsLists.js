@@ -144,7 +144,8 @@ const AdminCouponsLists = () => {
           // 마지막 페이지에서 마지막 쿠폰을 삭제할 경우 이전 페이지로 이동
           if (
             Number(couponList.length % 10) === 1 &&
-            totalPage === Number(currentPage)
+            totalPage === Number(currentPage) &&
+            totalPage !== 1
           ) {
             searchParams.set('pages', currentPage - 1);
             setSearchParams(searchParams);
