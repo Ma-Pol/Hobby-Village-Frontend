@@ -151,7 +151,7 @@ const AdminRequestsLists = () => {
       const sort = searchParams.get('sort');
       const condition = searchParams.get('condition');
       const keyword = searchParams.get('keyword');
-      let nextURL = `/m/requests/${value}/lists?`;
+      let nextURL = `/m/requests/${value}/lists?`; // 공통 URL
 
       // 검색한 상태가 아니면서 위탁 철회 관련 필터를 선택한 상태에서 카테고리를 변경하는 경우
       if (
@@ -269,12 +269,11 @@ const AdminRequestsLists = () => {
               value={String(currentCategory)}
               exclusive
               onChange={categoryChange}
-              aria-label="sell-or-consign"
             >
-              <ToggleButton value="sell" aria-label="sell" sx={filterBox}>
+              <ToggleButton value="sell" sx={filterBox}>
                 판매
               </ToggleButton>
-              <ToggleButton value="consign" aria-label="consign" sx={filterBox}>
+              <ToggleButton value="consign" sx={filterBox}>
                 위탁
               </ToggleButton>
             </ToggleButtonGroup>
@@ -486,9 +485,6 @@ const AdminRequestsLists = () => {
           sx={{
             mx: 1,
             width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
           }}
         />
         <Button
