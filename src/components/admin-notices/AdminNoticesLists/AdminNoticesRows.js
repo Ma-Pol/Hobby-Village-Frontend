@@ -41,14 +41,14 @@ const AdminNoticesRows = ({
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <Typography sx={tableData}>{notCode}</Typography>
       </Grid>
       <Grid item xs={1}>
         <Typography sx={tableData}>{notCategory}</Typography>
       </Grid>
 
-      <Grid item xs={7}>
+      <Grid item xs={8}>
         <Typography
           sx={{
             px: 1,
