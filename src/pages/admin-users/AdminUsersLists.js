@@ -338,9 +338,6 @@ const AdminUsersLists = () => {
           sx={{
             mx: 1,
             width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
           }}
         />
         <Button
