@@ -76,20 +76,22 @@ const AdminCouponsRows = ({
         <Typography sx={tableData}>{deadline}</Typography>
       </Grid>
 
-      <Grid item xs={1}>
+      <Grid item xs={1} sx={tableData}>
         <Button
           onClick={() => {
             couponDelete(couponCode);
           }}
           variant="contained"
           sx={{
-            width: '65px',
-            height: '30px',
+            width: '50px',
+            height: '25px',
+            lineHeight: '25px',
             backgroundColor: '#f5b8b8',
-            borderRadius: '15px',
+            borderRadius: '12.5px',
             border: '1px solid #626262',
             color: '#000000',
             fontWeight: 'bold',
+            fontSize: '0.8rem',
             '&:hover': {
               backgroundColor: 'tomato',
               color: '#ffffff',

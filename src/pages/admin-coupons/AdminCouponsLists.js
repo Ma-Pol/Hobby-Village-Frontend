@@ -226,23 +226,14 @@ const AdminCouponsLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
-            aria-label="text alignment"
           >
-            <ToggleButton value="none" aria-label="left aligned" sx={filterBox}>
+            <ToggleButton value="none" sx={filterBox}>
               전체 쿠폰
             </ToggleButton>
-            <ToggleButton
-              value="available"
-              aria-label="centered"
-              sx={filterBox}
-            >
+            <ToggleButton value="available" sx={filterBox}>
               사용 가능 쿠폰
             </ToggleButton>
-            <ToggleButton
-              value="unavailable"
-              aria-label="right aligned"
-              sx={filterBox}
-            >
+            <ToggleButton value="unavailable" sx={filterBox}>
               종료된 쿠폰
             </ToggleButton>
           </ToggleButtonGroup>
@@ -444,9 +435,6 @@ const AdminCouponsLists = () => {
           sx={{
             mx: 1,
             width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
           }}
         />
         <Button
