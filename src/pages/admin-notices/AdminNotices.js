@@ -7,18 +7,34 @@ import AdminNoticesModify from './AdminNoticesModify';
 
 const AdminNotices = () => {
   return (
-    <Routes>
-      <Route path="/m/notices/lists" element={<AdminNoticesLists />} />
-      <Route
-        path="/m/notices/details/:notCode"
-        element={<AdminNoticesDetails />}
-      />
-      <Route path="/m/notices/create" element={<AdminNoticesCreate />} />
-      <Route
-        path="/m/notices/modify/:notCode"
-        element={<AdminNoticesModify />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<AdminNoticesLists />} />
+        <Route
+          exact
+          path="details/:notCode"
+          element={<AdminNoticesDetails />}
+        />
+        <Route exact path="create" element={<AdminNoticesCreate />} />
+        <Route path="modify/:notCode" element={<AdminNoticesModify />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

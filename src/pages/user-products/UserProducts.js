@@ -7,15 +7,34 @@ import UserProductsDetails from './UserProductsDetails';
 
 const UserProducts = () => {
   return (
-    <Routes>
-      <Route path="/products/lists" element={<UserProductsList />} />
-      <Route path="/products/lists/search" element={<UserProductsSearch />} />
-      <Route path="/products/brand/lists" element={<UserProductsBrandList />} />
-      <Route
-        path="/products/details/:prodCode"
-        element={<UserProductsDetails />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<UserProductsList />} />
+        <Route exact path="lists/search" element={<UserProductsSearch />} />
+        <Route exact path="brand/lists" element={<UserProductsBrandList />} />
+        <Route
+          exact
+          path="details/:prodCode"
+          element={<UserProductsDetails />}
+        />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
