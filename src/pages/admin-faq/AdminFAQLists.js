@@ -191,35 +191,26 @@ const AdminFAQLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
-            aria-label="faq-filter"
           >
-            <ToggleButton value="none" aria-label="all" sx={filterBox}>
+            <ToggleButton value="none" sx={filterBox}>
               전체
             </ToggleButton>
-            <ToggleButton value="product" aria-label="product" sx={filterBox}>
+            <ToggleButton value="product" sx={filterBox}>
               상품 문의
             </ToggleButton>
-            <ToggleButton
-              value="login-about"
-              aria-label="login-about"
-              sx={filterBox}
-            >
+            <ToggleButton value="login-about" sx={filterBox}>
               로그인/정보
             </ToggleButton>
-            <ToggleButton
-              value="sell-consign"
-              aria-label="sell-consign"
-              sx={filterBox}
-            >
+            <ToggleButton value="sell-consign" sx={filterBox}>
               판매/위탁
             </ToggleButton>
-            <ToggleButton value="payment" aria-label="payment" sx={filterBox}>
+            <ToggleButton value="payment" sx={filterBox}>
               결제
             </ToggleButton>
-            <ToggleButton value="shipping" aria-label="shipping" sx={filterBox}>
+            <ToggleButton value="shipping" sx={filterBox}>
               배송 문의
             </ToggleButton>
-            <ToggleButton value="other" aria-label="other" sx={filterBox}>
+            <ToggleButton value="other" sx={filterBox}>
               기타
             </ToggleButton>
           </ToggleButtonGroup>
@@ -284,13 +275,13 @@ const AdminFAQLists = () => {
             borderBottom: '2px solid #000000',
           }}
         >
-          <Grid item xs={2}>
+          <Grid item xs={1}>
             <Typography sx={tableHead}>번호</Typography>
           </Grid>
           <Grid item xs={2}>
             <Typography sx={tableHead}>구분</Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={7}>
             <Typography sx={tableHead}>FAQ 제목</Typography>
           </Grid>
           <Grid item xs={2}>

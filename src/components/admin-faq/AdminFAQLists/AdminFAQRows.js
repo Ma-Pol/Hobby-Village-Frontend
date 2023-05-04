@@ -35,7 +35,7 @@ const AdminFAQRows = ({ faqCode, faqCategory, faqTitle, faqDate, isLast }) => {
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <Typography sx={tableData}>{faqCode}</Typography>
       </Grid>
 
@@ -43,7 +43,7 @@ const AdminFAQRows = ({ faqCode, faqCategory, faqTitle, faqDate, isLast }) => {
         <Typography sx={tableData}>{faqCategory}</Typography>
       </Grid>
 
-      <Grid item xs={6}>
+      <Grid item xs={7}>
         <Typography
           sx={{
             px: 1,
