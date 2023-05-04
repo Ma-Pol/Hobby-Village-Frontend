@@ -113,7 +113,7 @@ const AdminOrdersRows = ({
         <Typography
           title={prodCode + '\n상품 상세 페이지'}
           sx={
-            // 잔여 일수가 1 이상이면 검은색 글씨
+            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
             rentalPeriod -
               Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
               0 ||
@@ -137,7 +137,7 @@ const AdminOrdersRows = ({
         <Typography
           title={odrEmail + '\n회원 상세 페이지'}
           sx={
-            // 잔여 일수가 1 이상이면 검은색 글씨
+            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
             rentalPeriod -
               Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
               0 ||
@@ -160,7 +160,7 @@ const AdminOrdersRows = ({
       <Grid item xs={2}>
         <Typography
           sx={
-            // 잔여 일수가 1 이상이면 검은색 글씨
+            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
             rentalPeriod -
               Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
               0 ||
@@ -194,7 +194,7 @@ const AdminOrdersRows = ({
       <Grid item xs={2}>
         <Typography
           sx={
-            // 잔여 일수가 1 이상이면 검은색 글씨
+            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
             rentalPeriod -
               Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
               0 ||
