@@ -198,16 +198,11 @@ const AdminReviewsLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
-            aria-label="text alignment"
           >
-            <ToggleButton value="none" aria-label="left aligned" sx={filterBox}>
+            <ToggleButton value="none" sx={filterBox}>
               전체 리뷰
             </ToggleButton>
-            <ToggleButton
-              value="heavily-reported"
-              aria-label="centered"
-              sx={filterBox}
-            >
+            <ToggleButton value="heavily-reported" sx={filterBox}>
               신고가 다수 접수된 리뷰
             </ToggleButton>
           </ToggleButtonGroup>
@@ -221,7 +216,7 @@ const AdminReviewsLists = () => {
               fontSize: '0.8rem',
             }}
             variant="standard"
-            htmlFor="adminProductListSort"
+            htmlFor="adminReviewListSort"
           >
             정렬 기준
           </InputLabel>
@@ -240,7 +235,7 @@ const AdminReviewsLists = () => {
             defaultValue="-revwRegiDate"
             inputProps={{
               name: 'sort',
-              id: 'adminProductListSort',
+              id: 'adminReviewListSort',
             }}
           >
             <option value="-revwRegiDate">최근 작성 순</option>
@@ -371,7 +366,7 @@ const AdminReviewsLists = () => {
           defaultValue="prodCode"
           inputProps={{
             name: 'condition',
-            id: 'adminProductListCondition',
+            id: 'adminReviewListCondition',
           }}
         >
           <option value="prodCode">상품 번호</option>
@@ -383,15 +378,12 @@ const AdminReviewsLists = () => {
               search();
             }
           }}
-          id="adminProductListKeyword"
+          id="adminReviewListKeyword"
           variant="outlined"
           size="small"
           sx={{
             mx: 1,
             width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
           }}
         />
         <Button
