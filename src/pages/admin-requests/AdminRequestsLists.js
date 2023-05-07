@@ -125,14 +125,18 @@ const AdminRequestsLists = () => {
     const sort = sortRef.current.value;
     const condition = conditionRef.current.value;
     const keyword = keywordRef.current.value;
-    if (keyword === '') {
-      navigate(
-        `/m/requests/${currentCategory}/lists?sort=${sort}&filter=${currentFilter}&pages=1`
-      );
+    if (keyword.match(/^$|^[0-9가-힣a-zA-Z\s-]+$/) === null) {
+      alert('검색 키워드는 한글, 영문, 숫자, 공백, -만 입력 가능합니다.');
     } else {
-      navigate(
-        `/m/requests/${currentCategory}/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&filter=${currentFilter}&pages=1`
-      );
+      if (keyword === '') {
+        navigate(
+          `/m/requests/${currentCategory}/lists?sort=${sort}&filter=${currentFilter}&pages=1`
+        );
+      } else {
+        navigate(
+          `/m/requests/${currentCategory}/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&filter=${currentFilter}&pages=1`
+        );
+      }
     }
   };
 
