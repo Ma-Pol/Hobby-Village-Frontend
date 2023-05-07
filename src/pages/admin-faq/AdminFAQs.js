@@ -7,12 +7,30 @@ import AdminFAQCreate from './AdminFAQCreate';
 
 const AdminFAQs = () => {
   return (
-    <Routes>
-      <Route path="/m/faqs/lists" element={<AdminFAQLists />} />
-      <Route path="/m/faqs/details/:faqCode" element={<AdminFAQDetails />} />
-      <Route path="/m/faqs/modify/:faqCode" element={<AdminFAQModify />} />
-      <Route path="/m/faqs/create" element={<AdminFAQCreate />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<AdminFAQLists />} />
+        <Route exact path="details/:faqCode" element={<AdminFAQDetails />} />
+        <Route exact path="modify/:faqCode" element={<AdminFAQModify />} />
+        <Route exact path="create" element={<AdminFAQCreate />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
