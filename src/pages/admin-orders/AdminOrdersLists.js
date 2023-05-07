@@ -44,7 +44,7 @@ const AdminOrdersLists = () => {
             setOrderList(list.data); // 주문 목록 설정
             setCurrentPage(searchParams.get('pages')); // 현재 페이지 설정
             sortRef.current.value = searchParams.get('sort'); // 현재 정렬 기준 설정
-            conditionRef.current.value = 'odrNumber'; // 현재 검색 조건 기본값 설정
+            conditionRef.current.value = 'op.odrNumber'; // 현재 검색 조건 기본값 설정
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
@@ -98,12 +98,16 @@ const AdminOrdersLists = () => {
     const sort = sortRef.current.value;
     const condition = conditionRef.current.value;
     const keyword = keywordRef.current.value;
-    if (keyword === '') {
-      navigate(`/m/orders/lists?sort=${sort}&pages=1`);
+    if (keyword.match(/^$|^[0-9가-힣a-zA-Z\s-]+$/) === null) {
+      alert('검색 키워드는 한글, 영문, 숫자, 공백, -만 입력 가능합니다.');
     } else {
-      navigate(
-        `/m/orders/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&pages=1`
-      );
+      if (keyword === '') {
+        navigate(`/m/orders/lists?sort=${sort}&pages=1`);
+      } else {
+        navigate(
+          `/m/orders/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&pages=1`
+        );
+      }
     }
   };
 
@@ -202,14 +206,14 @@ const AdminOrdersLists = () => {
             borderBottom: '2px solid #000000',
           }}
         >
-          <Grid item xs={2}>
+          <Grid item xs={4}>
             <Typography sx={tableHead}>주문 번호</Typography>
           </Grid>
           <Grid item xs={2}>
             <Typography sx={tableHead}>상품 번호</Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Typography sx={tableHead}>주문 이메일</Typography>
+          <Grid item xs={2}>
+            <Typography sx={tableHead}>주문 닉네임</Typography>
           </Grid>
           <Grid item xs={2}>
             <Typography sx={tableHead}>잔여 일수</Typography>
@@ -240,15 +244,7 @@ const AdminOrdersLists = () => {
           orderList.map((order, index, row) => (
             <AdminOrdersRows
               key={order.odrCode}
-              odrCode={order.odrCode}
-              odrNumber={order.odrNumber}
-              prodCode={order.prodCode}
-              odrEmail={order.odrEmail}
-              userCode={order.userCode}
-              deliDate={order.deliDate}
-              rentalPeriod={order.rentalPeriod}
-              deadline={order.deadline}
-              odrState={order.odrState}
+              order={order}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
@@ -301,15 +297,15 @@ const AdminOrdersLists = () => {
               backgroundColor: '#fffffff',
             },
           }}
-          defaultValue="odrNumber"
+          defaultValue="op.odrNumber"
           inputProps={{
             name: 'condition',
             id: 'adminOrderListCondition',
           }}
         >
-          <option value="odrNumber">주문 번호</option>
-          <option value="prodCode">상품 번호</option>
-          <option value="odrEmail">주문 이메일</option>
+          <option value="op.odrNumber">주문 번호</option>
+          <option value="op.prodCode">상품 번호</option>
+          <option value="u.nickname">주문 닉네임</option>
         </NativeSelect>
         <TextField
           inputRef={keywordRef}

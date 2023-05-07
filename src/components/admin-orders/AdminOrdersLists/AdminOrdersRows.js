@@ -1,19 +1,18 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
 
-const AdminOrdersRows = ({
-  odrCode,
-  odrNumber,
-  prodCode,
-  odrEmail,
-  userCode,
-  deliDate,
-  rentalPeriod,
-  deadline,
-  odrState,
-  isLast,
-}) => {
-  const orderLink = `/m/orders/details/${odrCode}`;
+const AdminOrdersRows = ({ order, isLast }) => {
+  const {
+    odrNumber,
+    prodCode,
+    deliDate,
+    rentalPeriod,
+    deadline,
+    odrState,
+    userCode,
+    nickname,
+  } = order;
+  const orderLink = `/m/orders/details/${odrNumber}`;
   const productLink = `/m/products/details/${prodCode}`;
   const userLink = `/m/users/details/${userCode}`;
 
@@ -85,7 +84,7 @@ const AdminOrdersRows = ({
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid item xs={2}>
+      <Grid item xs={4}>
         <Typography
           title={odrNumber + '\n주문 상세 페이지'}
           sx={
@@ -133,9 +132,9 @@ const AdminOrdersRows = ({
         </Typography>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={2}>
         <Typography
-          title={odrEmail + '\n회원 상세 페이지'}
+          title={nickname + '\n회원 상세 페이지'}
           sx={
             // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
             rentalPeriod -
@@ -152,7 +151,7 @@ const AdminOrdersRows = ({
           }
         >
           <Link href={userLink} underline="hover" sx={{ cursor: 'pointer' }}>
-            {odrEmail}
+            {nickname}
           </Link>
         </Typography>
       </Grid>
@@ -181,7 +180,7 @@ const AdminOrdersRows = ({
               : rentalPeriod -
                   Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
                 0
-              ? // 배송 후면 대여일수 - (오늘 - 배송일) 표시
+              ? // 배송 후면 [대여일수 - (오늘 - 배송일)] 표시
                 rentalPeriod -
                   Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
                 0
