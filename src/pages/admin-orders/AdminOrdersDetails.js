@@ -1,10 +1,12 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import AdminOrdersTable from '../../components/admin-orders/AdminOrdersDetails/AdminOrdersDetailTable';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const AdminOrdersDetails = ({ prevPage }) => {
+const AdminOrdersDetails = () => {
+  const location = useLocation();
+  const prevPage = location.state?.queryString;
   const navigate = useNavigate();
   const { odrNumber } = useParams();
   const [orderDetail, setOrderDetail] = useState([]);
@@ -76,7 +78,7 @@ const AdminOrdersDetails = ({ prevPage }) => {
       >
         <Button
           onClick={() => {
-            if (prevPage === 'direct') {
+            if (prevPage === undefined) {
               navigate('/m/orders/lists?sort=-odrDate&pages=1');
             } else {
               navigate(`/m/orders/lists${prevPage}`);
@@ -104,10 +106,6 @@ const AdminOrdersDetails = ({ prevPage }) => {
       {/* 주문 목록 버튼 표기 끝 */}
     </Container>
   );
-};
-
-AdminOrdersDetails.defaultProps = {
-  prevPage: 'direct',
 };
 
 export default AdminOrdersDetails;

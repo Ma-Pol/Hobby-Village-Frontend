@@ -1,7 +1,8 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-const AdminOrdersRows = ({ order, isLast }) => {
+const AdminOrdersRows = ({ order, queryString, isLast }) => {
   const {
     odrNumber,
     prodCode,
@@ -102,7 +103,15 @@ const AdminOrdersRows = ({ order, isLast }) => {
                 tableData[2]
           }
         >
-          <Link href={orderLink} underline="hover" sx={{ cursor: 'pointer' }}>
+          <Link
+            component={RouterLink}
+            to={orderLink}
+            state={{
+              queryString: queryString,
+            }}
+            underline="hover"
+            sx={{ cursor: 'pointer' }}
+          >
             {odrNumber}
           </Link>
         </Typography>

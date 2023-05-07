@@ -10,12 +10,13 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminOrdersRows from '../../components/admin-orders/AdminOrdersLists/AdminOrdersRows';
 
 const AdminOrdersLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation(); // 현재 전체 쿼리스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const [orderList, setOrderList] = useState([]); // 주문 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
@@ -243,8 +244,9 @@ const AdminOrdersLists = () => {
           // 주문 데이터가 있을 경우
           orderList.map((order, index, row) => (
             <AdminOrdersRows
-              key={order.odrCode}
+              key={order.opCode}
               order={order}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
