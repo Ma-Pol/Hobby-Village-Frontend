@@ -412,6 +412,8 @@ const AdminRequestsLists = () => {
               reqProgress={request.reqProgress}
               userCode={request.userCode}
               nickname={request.nickname}
+              category={currentCategory}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))

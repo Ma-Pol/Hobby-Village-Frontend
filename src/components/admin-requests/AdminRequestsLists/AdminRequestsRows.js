@@ -1,5 +1,6 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminRequestsRows = ({
   reqCode,
@@ -9,6 +10,8 @@ const AdminRequestsRows = ({
   reqProgress,
   userCode,
   nickname,
+  category,
+  queryString,
   isLast,
 }) => {
   const reqLink = `/m/requests/details/${reqCode}`;
@@ -64,7 +67,12 @@ const AdminRequestsRows = ({
           }}
         >
           <Link
-            href={reqLink}
+            component={RouterLink}
+            to={reqLink}
+            state={{
+              category: category,
+              queryString: queryString,
+            }}
             title={reqTitle + '\n신청 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
