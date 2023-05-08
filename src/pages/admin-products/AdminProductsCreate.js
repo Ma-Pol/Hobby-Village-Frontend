@@ -12,10 +12,10 @@ import {
   InputLabel,
   TextField,
   MenuItem,
-  Grid,
   Button,
   Input,
   InputAdornment,
+  Grid,
 } from '@mui/material';
 
 const AdminProductsCreate = () => {
@@ -71,11 +71,11 @@ const AdminProductsCreate = () => {
 
   const btnSubmitStyle = {
     width: '65px',
-    height: '30px',
+    height: '35px',
     bgcolor: '#c3c36a',
-    borderRadius: '15px',
+    borderRadius: '20px',
     border: '1px solid #626262',
-    color: '#000000',
+    color: '#323232',
     fontWeight: 'bold',
     '&:hover': {
       bgcolor: '#c3c36a',
@@ -86,11 +86,11 @@ const AdminProductsCreate = () => {
 
   const btnCancelStyle = {
     width: '65px',
-    height: '30px',
+    height: '35px',
     bgcolor: '#ffffff',
-    borderRadius: '15px',
+    borderRadius: '20px',
     border: '1px solid #626262',
-    color: '#000000',
+    color: '#323232',
     fontWeight: 'bold',
     '&:hover': {
       bgcolor: '#ffffff',
@@ -175,7 +175,12 @@ const AdminProductsCreate = () => {
             </TableRow>
             <TableRow>
               <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodPrice">대여 가격</InputLabel>
+                <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <InputLabel for="prodPrice">대여료</InputLabel>
+                  <Typography sx={{ fontSize: '12px', color: '#646464' }}>
+                    &nbsp;(7일 기준)
+                  </Typography>
+                </Grid>
               </TableCell>
               <TableCell sx={tableBodyStyle}>
                 <TextField
@@ -285,7 +290,7 @@ const AdminProductsCreate = () => {
                   id="prodContent"
                   fullWidth
                   size="small"
-                  ref={prodCategoryRef}
+                  ref={prodContentRef}
                   sx={inputStyle}
                   multiline
                   inputProps={{ style: { height: '200px' } }}
@@ -294,7 +299,7 @@ const AdminProductsCreate = () => {
             </TableRow>
             <TableRow>
               <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodHost">대여자 닉네임</InputLabel>
+                <InputLabel for="prodHost">대여자(닉네임)</InputLabel>
               </TableCell>
               <TableCell sx={tableBodyStyle}>
                 <TextField
@@ -313,7 +318,7 @@ const AdminProductsCreate = () => {
                   id="prodTag"
                   fullWidth
                   size="small"
-                  ref={prodContentRef}
+                  ref={prodTagRef}
                   sx={inputStyle}
                   multiline
                 ></TextField>
