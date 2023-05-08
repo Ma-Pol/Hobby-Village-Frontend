@@ -10,13 +10,15 @@ const AdminProducts = () => {
     <>
       <Routes>
         <Route exact path="lists" element={<AdminProductsLists />} />
-        <Route path="details/:prodCode" element={<AdminProductsDetails />} />
+        <Route path="details" element={<AdminProductsDetails />} />
+        {/* <Route path="details/:prodCode" element={<AdminProductsDetails />} /> */}
         <Route exact path="create" element={<AdminProductsCreate />} />
-        <Route
+        <Route exact path="modify" element={<AdminProductsModify />} />
+        {/* <Route
           exact
           path="modify/:prodCode"
           element={<AdminProductsModify />}
-        />
+        /> */}
         <Route
           path="*"
           element={
