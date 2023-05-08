@@ -10,10 +10,12 @@ import AdminCoupons from './admin-coupons/AdminCoupons';
 import AdminNotices from './admin-notices/AdminNotices';
 import AdminFAQs from './admin-faq/AdminFAQs';
 import AdminQnAs from './admin-qna/AdminQnAs';
+import AdminHeader from '../components/AdminHeader';
 
 const Admin = () => {
   return (
     <>
+      <AdminHeader />
       <Routes>
         <Route exact path="" element={<AdminMain />} />
         <Route exact path="users/*" element={<AdminUsers />} />
