@@ -15,7 +15,6 @@ import {
   Grid,
   Button,
 } from '@mui/material';
-import { useStyles } from '@mui/styles';
 
 const AdminProductsCreate = () => {
   const prodCodeRef = useRef();
@@ -65,7 +64,7 @@ const AdminProductsCreate = () => {
           alignItems: 'center',
         }}
       >
-        <TableContainer className={muiTableContainer.root}>
+        <TableContainer>
           <Table sx={{ maxWidth: 1140 }}>
             <TableRow>
               <TableCell sx={{ fontSize: 18 }}>카테고리</TableCell>
