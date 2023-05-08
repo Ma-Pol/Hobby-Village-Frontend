@@ -198,14 +198,15 @@ const AdminNoticesLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
+            aria-label="notice-filter"
           >
-            <ToggleButton value="none" sx={filterBox}>
+            <ToggleButton value="none" aria-label="all" sx={filterBox}>
               전체
             </ToggleButton>
-            <ToggleButton value="info" sx={filterBox}>
+            <ToggleButton value="info" aria-label="information" sx={filterBox}>
               안내
             </ToggleButton>
-            <ToggleButton value="event" sx={filterBox}>
+            <ToggleButton value="event" aria-label="event" sx={filterBox}>
               이벤트
             </ToggleButton>
           </ToggleButtonGroup>
@@ -270,13 +271,13 @@ const AdminNoticesLists = () => {
             borderBottom: '2px solid #000000',
           }}
         >
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <Typography sx={tableHead}>번호</Typography>
           </Grid>
           <Grid item xs={1}>
             <Typography sx={tableHead}>구분</Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Typography sx={tableHead}>공지사항 제목</Typography>
           </Grid>
           <Grid item xs={2}>
