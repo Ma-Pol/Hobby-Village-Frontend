@@ -78,9 +78,9 @@ const AdminProductsCreate = () => {
     color: '#323232',
     fontWeight: 'bold',
     '&:hover': {
-      bgcolor: '#c3c36a',
+      bgcolor: '#A9A951',
       border: '1px solid #626262',
-      color: '#ffffff',
+      color: '#323232',
     },
   };
 
