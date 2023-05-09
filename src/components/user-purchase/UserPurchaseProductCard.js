@@ -8,7 +8,7 @@ const ProductCard = styled(Box)({
   width: '1050px',
   border: '1px solid #d0d0d0',
   borderRadius: '10px',
-  boxShadow: '0px 4px 2px 0px rgba(0,0,0,0.2)',
+  boxShadow: '0px 2px 2px 0px rgba(0,0,0,0.2)',
 });
 
 const ProductCardHeader = styled(Box)({
@@ -57,7 +57,7 @@ const ProductCardBodyData = styled(Box)({
   justifyContent: 'space-between',
 });
 
-const ProductCardBodyDataTitleBox = styled(Typography)({
+const ProductCardBodyDataTitleBox = styled(Box)({
   maxHeight: '70px',
   overflow: 'auto',
 });
@@ -93,13 +93,26 @@ const ProductCardBodyRentalDate = styled(Box)({
   fontWeight: 'bold',
 });
 
-const UserPurchaseProductCard = () => {
+const UserPurchaseProductCard = ({ product }) => {
+  const {
+    prodName,
+    prodPrice,
+    prodShipping,
+    prodHost,
+    prodIsRental,
+    prodPricture,
+    period,
+  } = product;
+  const imageSrc = `http://localhost:8080/purchase/upload/${prodPricture}`;
   return (
     <>
       <ProductCard>
         <ProductCardHeader>
-          <ProductCardHeaderHost>캠린이</ProductCardHeaderHost>
-          <ProductCardHeaderShipping>배송비 2,500원</ProductCardHeaderShipping>
+          <ProductCardHeaderHost>{prodHost}</ProductCardHeaderHost>
+          <ProductCardHeaderShipping>
+            배송비&nbsp;
+            {prodShipping.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+          </ProductCardHeaderShipping>
         </ProductCardHeader>
         <ProductCardBody>
           <ProductCardBodyImage
@@ -109,9 +122,7 @@ const UserPurchaseProductCard = () => {
           />
           <ProductCardBodyData>
             <ProductCardBodyDataTitleBox>
-              <ProductCardBodyDataTitle>
-                캠핑 용품 텐트 + 타프 + 에어매트 + 랜턴 외 10종
-              </ProductCardBodyDataTitle>
+              <ProductCardBodyDataTitle>{prodName}</ProductCardBodyDataTitle>
             </ProductCardBodyDataTitleBox>
             <ProductCardBodyDataPriceBox>
               <ProductCardBodyDataPrice
@@ -119,14 +130,22 @@ const UserPurchaseProductCard = () => {
                   marginBottom: '5px',
                 }}
               >
-                대여 단위 기간(7일) 당 가격 : 1,000 원
+                대여 단위 기간(7일) 당 가격 :&nbsp;
+                {prodPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp;원
               </ProductCardBodyDataPrice>
               <ProductCardBodyDataPrice>
-                결제 예정 금액(배송비 포함) : 3,500 원
+                결제 예정 금액(배송비 포함) :&nbsp;
+                {((prodPrice * period) / 7 + prodShipping)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                &nbsp;원
               </ProductCardBodyDataPrice>
             </ProductCardBodyDataPriceBox>
           </ProductCardBodyData>
-          <ProductCardBodyRentalDate>대여기간: 7 일</ProductCardBodyRentalDate>
+          <ProductCardBodyRentalDate>
+            대여 기간: &nbsp;{period}&nbsp;일
+          </ProductCardBodyRentalDate>
         </ProductCardBody>
       </ProductCard>
     </>
