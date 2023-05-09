@@ -64,7 +64,7 @@ const ProductCardBodyDataTitleBox = styled(Box)({
 
 const ProductCardBodyDataTitle = styled(Typography)({
   fontWeight: 'bold',
-  fontSize: '1.3rem',
+  fontSize: '1.5rem',
   color: '#000000',
 });
 
@@ -94,16 +94,10 @@ const ProductCardBodyRentalDate = styled(Box)({
 });
 
 const UserPurchaseProductCard = ({ product }) => {
-  const {
-    prodName,
-    prodPrice,
-    prodShipping,
-    prodHost,
-    prodIsRental,
-    prodPricture,
-    period,
-  } = product;
-  const imageSrc = `http://localhost:8080/purchase/upload/${prodPricture}`;
+  const { prodName, prodPrice, prodShipping, prodHost, prodPicture, period } =
+    product;
+  const imageSrc = `http://localhost:8080/purchase/upload/${prodPicture}`;
+
   return (
     <>
       <ProductCard>
@@ -117,12 +111,14 @@ const UserPurchaseProductCard = ({ product }) => {
         <ProductCardBody>
           <ProductCardBodyImage
             component="img"
-            // alt={fileName}
-            // src={fileSrc}
+            alt={prodPicture}
+            src={imageSrc}
           />
           <ProductCardBodyData>
             <ProductCardBodyDataTitleBox>
-              <ProductCardBodyDataTitle>{prodName}</ProductCardBodyDataTitle>
+              <ProductCardBodyDataTitle title={prodName}>
+                {prodName}
+              </ProductCardBodyDataTitle>
             </ProductCardBodyDataTitleBox>
             <ProductCardBodyDataPriceBox>
               <ProductCardBodyDataPrice
@@ -134,7 +130,11 @@ const UserPurchaseProductCard = ({ product }) => {
                 {prodPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 &nbsp;원
               </ProductCardBodyDataPrice>
-              <ProductCardBodyDataPrice>
+              <ProductCardBodyDataPrice
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
                 결제 예정 금액(배송비 포함) :&nbsp;
                 {((prodPrice * period) / 7 + prodShipping)
                   .toString()

@@ -5,6 +5,7 @@ import {
   Container,
   InputAdornment,
   MenuItem,
+  Modal,
   Select,
   TextField,
   ToggleButton,
@@ -122,17 +123,25 @@ const PriceLeftBoxRow = styled(Box)({
   alignItems: 'center',
 });
 
+const AddressListModal = styled(Modal)({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+});
+
 const Purchase = () => {
   // const email = window.sessionStorage.getItem('email');
   const email = 'lee@naver.com';
   const navigate = useNavigate();
   const location = useLocation();
-  const { products } = location.state;
   const couponRef = useRef();
   const savedMoneyRef = useRef();
   const ckb1Ref = useRef();
   const ckb2Ref = useRef();
-  // const [productList, setProductList] = useState([]);
   const [userInfo, setUserInfo] = useState();
   const [addressList, setAddressList] = useState([]);
   const [currentAddress, setCurrentAddress] = useState();
@@ -140,7 +149,7 @@ const Purchase = () => {
   const [payment, setPayment] = useState();
 
   useEffect(() => {
-    if (location.state !== null && products !== undefined) {
+    if (location.state !== null && location.state.products !== undefined) {
       getProductState();
       getUserInfo(email);
       getAddressList(email);
@@ -151,7 +160,7 @@ const Purchase = () => {
   }, []);
 
   const getProductState = () => {
-    // const { products } = location.state;
+    const { products } = location.state;
 
     for (let i = 0; i < products.length; i++) {
       const product = products[i];
@@ -168,21 +177,6 @@ const Purchase = () => {
           console.error(err);
         });
     }
-
-    // products.forEach((product) => {
-    //   axios
-    //   .get(`/purchase/products-details/${product.prodCode}`)
-    //   .then((state) => {
-    //     if (state.data === 0) {
-
-    //     } else {
-    //       alert(`${product.prodName} 은(는) 이미 대여 중인 상품입니다.`);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-    // })
   };
 
   const getUserInfo = (email) => {
@@ -241,6 +235,17 @@ const Purchase = () => {
     },
   };
 
+  const daumPostcodeStyle = {
+    display: 'block',
+    position: 'fixed',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    top: '30%',
+    width: '400px',
+    height: '500px',
+    zIndex: '99999',
+  };
+
   return (
     <Container
       sx={{
@@ -258,30 +263,28 @@ const Purchase = () => {
         {/* 주문 상품 헤더 시작 */}
         <HeaderBox>
           <HeaderTypography variant="h5" component="h2">
-            주문 상품 X개
+            주문 상품&nbsp;
+            {location.state !== null && location.state.products.length}개
           </HeaderTypography>
         </HeaderBox>
         {/* 주문 상품 헤더 끝 */}
 
         {/* 주문 상품 데이터 리스트 표기 시작 */}
         <DataBox>
-          {products.length === 0 ? (
+          {location.state !== null && location.state.products.length === 0 ? (
             // navigate(-1, { replace: true })
             <></>
           ) : (
             <>
-              {
-                console.log(products)
-
-                // productList.map((product) => {
-                //   return (
-                //     <UserPurchaseProductCard
-                //       key={product.prodCode}
-                //       product={product}
-                //     />
-                //   );
-                // })
-              }
+              {location.state !== null &&
+                location.state.products.map((product) => {
+                  return (
+                    <UserPurchaseProductCard
+                      key={product.prodCode}
+                      product={product}
+                    />
+                  );
+                })}
             </>
           )}
         </DataBox>
@@ -304,7 +307,7 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              이승현
+              {userInfo.name}
             </Typography>
           </OrderDataBox>
           <OrderDataBox>
@@ -314,7 +317,7 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              example0001@example.com
+              현재 유저 이메일
             </Typography>
           </OrderDataBox>
           <OrderDataBox>
@@ -324,7 +327,10 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              010 - 1234 - 5678
+              {userInfo.phone.replace(
+                /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                `$1 - $2 - $3`
+              )}
             </Typography>
           </OrderDataBox>
         </DataBox>
@@ -338,6 +344,7 @@ const Purchase = () => {
           <HeaderTypography
             variant="h6"
             component="h2"
+            // onClick={address}
             sx={{
               color: '#c3c36a',
               cursor: 'pointer',
@@ -356,13 +363,18 @@ const Purchase = () => {
             }}
           >
             <OrderDataBoxTitle>주소</OrderDataBoxTitle>
+            {}
             <Typography
               sx={{
                 width: '850px',
                 fontSize: '1.2rem',
+                maxHeight: '100%',
+                overflow: 'auto',
               }}
             >
-              [13529] 경기 성남시 분당구 판교역로 166 (백현동) 카카오 본사
+              [{currentAddress.zipCode}]&nbsp;
+              {currentAddress.address1}&nbsp;
+              {currentAddress.address2}
             </Typography>
           </OrderDataBox>
           <OrderDataBox
@@ -377,7 +389,9 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              부재시 문 앞에 놔주세요.
+              {currentAddress.deliRequest === null
+                ? '-'
+                : currentAddress.deliRequest}
             </Typography>
           </OrderDataBox>
           <OrderDataBox>
@@ -388,7 +402,7 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              이승현
+              {currentAddress.receiver}
             </Typography>
           </OrderDataBox>
           <OrderDataBox>
@@ -399,7 +413,10 @@ const Purchase = () => {
                 fontSize: '1.2rem',
               }}
             >
-              010 - 1234 - 5678
+              {currentAddress.phone.replace(
+                /^(\d{2,3})(\d{3,4})(\d{4})$/,
+                `$1 - $2 - $3`
+              )}
             </Typography>
           </OrderDataBox>
         </DataBox>
