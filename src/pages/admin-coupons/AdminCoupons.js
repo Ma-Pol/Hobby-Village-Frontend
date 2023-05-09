@@ -9,11 +9,12 @@ const AdminCoupons = () => {
     <>
       <Routes>
         <Route exact path="lists" element={<AdminCouponsLists />} />
-        <Route
+        <Route exact path="details" element={<AdminCouponsDetails />} />
+        {/* <Route
           exact
           path="details/:couponCode"
           element={<AdminCouponsDetails />}
-        />
+        /> */}
         <Route exact path="create" element={<AdminCouponsCreate />} />
         <Route
           path="*"
