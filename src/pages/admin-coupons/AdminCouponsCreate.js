@@ -14,6 +14,10 @@ import {
   Button,
   InputAdornment,
 } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 const AdminCouponsCreate = () => {
   const couponNameRef = useRef();
@@ -33,7 +37,7 @@ const AdminCouponsCreate = () => {
     border: '1px solid #FFFFFF',
   };
 
-  const tableBodyStyle = { width: 800, border: '1px solid #FFFFFF' };
+  const tableBodyStyle = { width: 500, border: '1px solid #FFFFFF' };
 
   const inputLabelStyle = {
     fontSize: 20,
@@ -42,14 +46,14 @@ const AdminCouponsCreate = () => {
   };
 
   const inputCouponNameStyle = {
-    width: 800,
+    width: 500,
+    '& .MuiFormLabel-root': {
+      color: '#bbbbbb',
+    },
     '& .MuiOutlinedInput-root.Mui-focused': {
       '& > fieldset': {
         borderColor: '#c3c36a',
       },
-    },
-    '& .MuiFormLabel-root': {
-      color: '#bbbbbb',
     },
     '& .MuiFormLabel-root.Mui-focused': {
       color: '#c3c36a',
@@ -68,6 +72,19 @@ const AdminCouponsCreate = () => {
     },
     '& .MuiFormLabel-root.Mui-focused': {
       color: '#c3c36a',
+    },
+  };
+
+  const datePickerStyle = {
+    '& .MuiInputBase-input': {
+      width: '120px',
+      height: '20px',
+      padding: '10px 15px',
+    },
+    '& .MuiOutlinedInput-root.Mui-focused': {
+      '& > fieldset': {
+        borderColor: '#c3c36a',
+      },
     },
   };
 
@@ -132,7 +149,7 @@ const AdminCouponsCreate = () => {
             alignItems: 'center',
           }}
         >
-          <Table sx={{ width: 1000 }}>
+          <Table sx={{ width: 800 }}>
             <TableRow>
               <TableCell sx={tableHeadStyle}>
                 <InputLabel for="couponName" sx={inputLabelStyle}>
@@ -164,7 +181,7 @@ const AdminCouponsCreate = () => {
                   sx={inputStyle}
                 >
                   <MenuItem key={0} value={0}>
-                    종류 선택
+                    할인 종류 선택
                   </MenuItem>
                   <MenuItem key="퍼센트" value="퍼센트">
                     퍼센트
@@ -189,11 +206,11 @@ const AdminCouponsCreate = () => {
                   // ref= : 할인 종류 선택 값에 따라 ref 달라짐
                   sx={inputStyle}
                   label="숫자만 입력"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">&#8361;</InputAdornment>
-                    ),
-                  }}
+                  // InputProps={{
+                  //   startAdornment: (
+                  //     <InputAdornment position="start">&#8361;</InputAdornment>
+                  //   ),
+                  // }} : 할인종류 선택값에 따라 원화 기호 (position start) 또는 퍼센트 기호 (position end) 변경
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -204,13 +221,14 @@ const AdminCouponsCreate = () => {
                 </InputLabel>
               </TableCell>
               <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="deadline"
-                  type="date"
-                  size="small"
-                  ref={deadlineRef}
-                  sx={inputStyle}
-                ></TextField>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    id="deadline"
+                    ref={deadlineRef}
+                    sx={datePickerStyle}
+                    format="YYYY-MM-DD"
+                  />
+                </LocalizationProvider>
               </TableCell>
             </TableRow>
           </Table>
@@ -221,7 +239,7 @@ const AdminCouponsCreate = () => {
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           mt={5}
         >
-          <Button type="submit" variant="outlined" mr={3} sx={btnSubmitStyle}>
+          <Button type="submit" variant="outlined" sx={btnSubmitStyle}>
             발행
           </Button>
           &nbsp;&nbsp;&nbsp;
