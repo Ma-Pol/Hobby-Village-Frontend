@@ -212,7 +212,7 @@ const AdminNoticesLists = () => {
           </ToggleButtonGroup>
         </Box>
         {/* 필터 선택용 Toggle Button 표기 끝 */}
-
+        
         {/* 정렬 기준 선택용 Select Box 표기 시작 */}
         <Box sx={{ float: 'right', pr: 1, mb: 1 }}>
           <InputLabel
