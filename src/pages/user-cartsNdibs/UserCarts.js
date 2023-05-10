@@ -13,7 +13,7 @@ const UserCarts = () => {
             period: 14,
             prodName: '풀부이 땅콩 기본형',
             prodPrice: 2000,
-            prodShipping: 0,
+            prodShipping: 1000,
             prodHost: 'lee01',
             prodPicture: 'san880001.png',
           },
