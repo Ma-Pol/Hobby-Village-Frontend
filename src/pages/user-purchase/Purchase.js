@@ -12,6 +12,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/system';
 import React, { useEffect, useRef, useState } from 'react';
 import UserPurchaseProductCard from '../../components/user-purchase/UserPurchaseProductCard';
@@ -19,9 +20,23 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#6f6f6f',
+    color: '#ffffff',
+    maxWidth: 220,
+    border: '1px solid #6f6f6f',
+  },
+}));
+
 const HeaderTypography = styled(Typography)({
   fontWeight: 'bold',
   userSelect: 'none',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 });
 
 const HeaderBox = styled(Box)({
@@ -178,15 +193,9 @@ const Purchase = () => {
           (location.state.products[0].prodPrice *
             location.state.products[0].period) /
           7; // 총 상품 금액 저장
-        totalShippingRef.current = location.state.products[0].prodShipping; // 총 배송비 저장
-        setTotalPrice(
-          location.state.products[0].prodPrice +
-            location.state.products[0].prodShipping
-        );
-        setExactTotalPrice(
-          location.state.products[0].prodPrice +
-            location.state.products[0].prodShipping
-        );
+        totalShippingRef.current = 0; // 추가 결제 시 배송비는 없음
+        setTotalPrice(totalPriceRef.current);
+        setExactTotalPrice(totalPriceRef.current);
       }
     }
     // 이전 페이지에서 넘겨받은 데이터가 없는 경우 강제로 이전 페이지 이동
@@ -437,8 +446,8 @@ const Purchase = () => {
       // 유저의 적립금이 총 상품 가격보다 큰 경우
       if (userInfo.savedMoney > exactTotalPrice) {
         // 입력된 적립금 값이 총 상품 가격보다 크다면 총 상품 가격으로 변경
-        if (savedMoney > exactTotalPrice) {
-          savedMoneyRef.current.value = exactTotalPrice;
+        if (savedMoney > exactTotalPrice - 100) {
+          savedMoneyRef.current.value = exactTotalPrice - 100;
         }
       }
       // 유저의 적립금이 총 상품 가격 이하인 경우
@@ -1120,6 +1129,7 @@ const Purchase = () => {
                         <UserPurchaseProductCard
                           key={product.prodCode}
                           product={product}
+                          prevPage={location.state.prevPage}
                         />
                       );
                     })}
@@ -1507,7 +1517,52 @@ const Purchase = () => {
           {/* 쿠폰 및 적립금 헤더 시작 */}
           <HeaderBox>
             <HeaderTypography variant="h5" component="h2">
-              쿠폰 및 적립금 사용
+              쿠폰 및 적립금 사용&nbsp;&nbsp;
+              <HtmlTooltip
+                arrow
+                title={
+                  <>
+                    <Typography
+                      sx={{
+                        fontSize: '18px',
+                        textAlign: 'center',
+                        mb: 1,
+                      }}
+                    >
+                      안내사항
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                      }}
+                    >
+                      1. 최종 결제 금액은 100원 미만이 될 수 없습니다.
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                      }}
+                    >
+                      2. 주문 취소 시 사용한 쿠폰은 복구되지 않습니다.
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                      }}
+                    >
+                      3. 사용한 적립금은 함께 주문한 모든 상품이 주문 취소되어야
+                      복구됩니다.
+                    </Typography>
+                  </>
+                }
+              >
+                <img
+                  width="28px"
+                  height="28px"
+                  src="https://img.icons8.com/ios/50/000000/info--v1.png"
+                  alt="쿠폰 및 적립금 안내"
+                />
+              </HtmlTooltip>
             </HeaderTypography>
           </HeaderBox>
           {/* 쿠폰 및 적립금 헤더 끝 */}
@@ -1525,7 +1580,6 @@ const Purchase = () => {
                 defaultValue="none"
                 displayEmpty
                 size="small"
-                inputProps={{ 'aria-label': 'Without label' }}
               >
                 <MenuItem value="none">
                   <Typography
@@ -1533,7 +1587,7 @@ const Purchase = () => {
                       textAlign: 'center',
                     }}
                   >
-                    사용 가능 쿠폰 {couponList.length}장
+                    현재 보유 중인 쿠폰 : {couponList.length}장
                   </Typography>
                 </MenuItem>
 
@@ -1555,7 +1609,11 @@ const Purchase = () => {
                       <MenuItem
                         key={coupon.couponCode}
                         value={index}
-                        disabled={couponList[index].discountFix > totalPrice}
+                        disabled={
+                          totalPrice - coupon.discountFix < 100 ||
+                          totalPrice - (totalPrice * coupon.discountPer) / 100 <
+                            100
+                        }
                         title={discount + coupon.couponName}
                         sx={{
                           width: '400px',
@@ -1610,8 +1668,11 @@ const Purchase = () => {
                 onClick={() => {
                   if (savedMoneyRef.current.value === '') {
                     setExactSavedMoney(0);
-                  } else if (savedMoneyRef.current.value > exactTotalPrice) {
-                    savedMoneyRef.current.value = exactTotalPrice;
+                  } else if (
+                    savedMoneyRef.current.value >
+                    exactTotalPrice - 100
+                  ) {
+                    savedMoneyRef.current.value = exactTotalPrice - 100;
                     setExactSavedMoney(exactTotalPrice);
                   } else {
                     setExactSavedMoney(savedMoneyRef.current.value);
@@ -1638,7 +1699,7 @@ const Purchase = () => {
                 size="small"
                 onClick={() => {
                   if (exactTotalPrice < userInfo.savedMoney) {
-                    savedMoneyRef.current.value = exactTotalPrice;
+                    savedMoneyRef.current.value = exactTotalPrice - 100;
                   } else {
                     savedMoneyRef.current.value = userInfo.savedMoney;
                   }

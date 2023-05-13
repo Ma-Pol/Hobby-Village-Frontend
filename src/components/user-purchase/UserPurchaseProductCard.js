@@ -93,20 +93,29 @@ const ProductCardBodyRentalDate = styled(Box)({
   fontWeight: 'bold',
 });
 
-const UserPurchaseProductCard = ({ product }) => {
+const UserPurchaseProductCard = ({ product, prevPage }) => {
   const { prodName, prodPrice, prodShipping, prodHost, prodPicture, period } =
     product;
   const imageSrc = `http://localhost:8080/purchase/pictures/${prodPicture}`;
+  const price =
+    prevPage !== 'mypages'
+      ? (prodPrice * period) / 7 + prodShipping
+      : (prodPrice * period) / 7;
+  const priceReplace = /\B(?=(\d{3})+(?!\d))/g;
 
   return (
     <>
       <ProductCard>
         <ProductCardHeader>
           <ProductCardHeaderHost>{prodHost}</ProductCardHeaderHost>
-          <ProductCardHeaderShipping>
-            배송비&nbsp;
-            {prodShipping.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
-          </ProductCardHeaderShipping>
+          {prevPage !== 'mypages' ? (
+            <ProductCardHeaderShipping>
+              배송비&nbsp;
+              {prodShipping.toString().replace(priceReplace, ',')}원
+            </ProductCardHeaderShipping>
+          ) : (
+            <></>
+          )}
         </ProductCardHeader>
         <ProductCardBody>
           <ProductCardBodyImage
@@ -126,8 +135,8 @@ const UserPurchaseProductCard = ({ product }) => {
                   marginBottom: '5px',
                 }}
               >
-                대여 단위 기간(7일) 당 가격 :&nbsp;
-                {prodPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                단위 대여 기간(7일) 당 가격 :&nbsp;
+                {prodPrice.toString().replace(priceReplace, ',')}
                 &nbsp;원
               </ProductCardBodyDataPrice>
               <ProductCardBodyDataPrice
@@ -135,10 +144,9 @@ const UserPurchaseProductCard = ({ product }) => {
                   fontWeight: 'bold',
                 }}
               >
-                결제 예정 금액(배송비 포함) :&nbsp;
-                {((prodPrice * period) / 7 + prodShipping)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                결제 예정 금액{prevPage !== 'mypages' && '(배송비 포함)'}
+                &nbsp;:&nbsp;
+                {price.toString().replace(priceReplace, ',')}
                 &nbsp;원
               </ProductCardBodyDataPrice>
             </ProductCardBodyDataPriceBox>
