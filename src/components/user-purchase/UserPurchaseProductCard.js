@@ -96,7 +96,7 @@ const ProductCardBodyRentalDate = styled(Box)({
 const UserPurchaseProductCard = ({ product }) => {
   const { prodName, prodPrice, prodShipping, prodHost, prodPicture, period } =
     product;
-  const imageSrc = `http://localhost:8080/purchase/upload/${prodPicture}`;
+  const imageSrc = `http://localhost:8080/purchase/pictures/${prodPicture}`;
 
   return (
     <>

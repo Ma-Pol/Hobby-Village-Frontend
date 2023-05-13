@@ -1,0 +1,99 @@
+1. 상품 상세 페이지에서 접근
+    접근 방법: 리액트 라우터의 Link 컴포넌트 또는 useNavigate() 사용
+    접근 시 필수 전달 데이터(state)
+        prevPage : 'details',
+        products : [
+            {
+                prodCode: 상품코드,
+                prodName: 상품명,
+                prodPrice: 상품 가격,
+                prodShipping: 상품 배송비,
+                prodHost: 상품 제공자 닉네임,
+                prodPicture: 상품 사진(1번 사진만)
+                period: 상품 대여 일수
+            }
+        ]
+    결제 페이지에서 결제 실패 시 해당 상품 상세 페이지로 강제 이동
+        navigate(`/products/details/${prodCode}`, { replace : true });
+
+2. 장바구니 페이지에서 접근
+    접근 방법: 위와 동일
+    접근 시 필수 전달 데이터(state)
+        prevPage: 'carts',
+        products : [
+            {
+                prodCode: 상품코드,
+                prodName: 상품명,
+                prodPrice: 상품 가격,
+                prodShipping: 상품 배송비,
+                prodHost: 상품 제공자 닉네임,
+                prodPicture: 상품 사진(1번 사진만)
+                period: 상품 대여 일수
+            }, {
+                prodCode: 상품코드,
+                prodName: 상품명,
+                prodPrice: 상품 가격,
+                prodShipping: 상품 배송비,
+                prodHost: 상품 제공자 닉네임,
+                prodPicture: 상품 사진(1번 사진만)
+                period: 상품 대여 일수
+            }, ... (장바구니에서 결제를 선택한 상품의 개수만큼)
+        ]
+    결제 페이지에서 결제 실패 시 장바구니 페이지로 강제 이동
+        navigate(`/carts/${email}/lists/all`, { replace : true });
+
+3. 마이 페이지(주문목록) 페이지에서 접근 - 추가 결제
+    접근 방법: 위와 동일
+    접근 시 필수 전달 데이터(state)
+        prevPage: 'mypages',
+        products : [
+            {
+                prevOdrNumber: 추가 결제를 요청한 상품의 해당 주문 번호 (중요!)
+                prodCode: 상품코드,
+                prodName: 상품명,
+                prodPrice: 상품 가격,
+                prodShipping: 상품 배송비,
+                prodHost: 상품 제공자 닉네임,
+                prodPicture: 상품 사진(1번 사진만)
+                period: 상품 대여 일수
+            }
+        ]
+    결제 페이지에서 결제 실패 시 마이 페이지(주문 목록) 페이지로 강제 이동
+        navigate(`/mypages/${email}`, { replace: true });
+
+
+페이지 접근 방법 상세
+1. Link 컴포넌트 사용
+    <Link to={`/purchase`} state={{
+        prevPage: 'carts',
+        products : [
+            {
+                prodCode: 상품코드,
+                prodName: 상품명,
+                prodPrice: 상품 가격,
+                prodShipping: 상품 배송비,
+                prodHost: 상품 제공자 닉네임,
+                prodPicture: 상품 사진(1번 사진만)
+                period: 상품 대여 일수
+            }, ...
+        ]
+    }} />
+
+2. useNavigate 사용
+    const navigate = useNavigate();
+    navigate(`/purchase`, {
+        state: {
+            prevPage: 'carts',
+            products : [
+                {
+                    prodCode: 상품코드,
+                    prodName: 상품명,
+                    prodPrice: 상품 가격,
+                    prodShipping: 상품 배송비,
+                    prodHost: 상품 제공자 닉네임,
+                    prodPicture: 상품 사진(1번 사진만)
+                    period: 상품 대여 일수
+                }, ...
+            ]
+        }
+    });
