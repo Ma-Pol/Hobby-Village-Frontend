@@ -45,13 +45,13 @@
 
 .img4 {
     position: absolute;
-    top: 2250px;
+    top: 2300px;
     right: 300px;
 
 }
 
 .text1 {
-    font-size: 22px;
+    font-size: 20px;
     width: 430px;
     color: black;
     font-family: "The Jamsil 2 Light";
@@ -63,7 +63,7 @@
 }
 
 .text2 {
-    font-size: 22px;
+    font-size: 20px;
     width: 430px;
     color: black;
     font-family: "The Jamsil 2 Light";
@@ -75,7 +75,7 @@
 }
 
 .text3 {
-    font-size: 22px;
+    font-size: 20px;
     width: 430px;
     color: black;
     font-family: "The Jamsil 2 Light";
@@ -87,7 +87,7 @@
 }
 
 .text4 {
-    font-size: 22px;
+    font-size: 20px;
     width: 430px;
     color: black;
     font-family: "The Jamsil 2 Light";

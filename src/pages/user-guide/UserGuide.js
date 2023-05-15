@@ -1,9 +1,5 @@
 import React from 'react';
 import "./ServiceInfo.css";
-// import serviceguide01 from './assets/ServiceGuide01.png';
-// import serviceguide02 from './assets/ServiceGuide02.png';
-// import serviceguide03 from './assets/ServiceGuide03.png';
-// import serviceguide04 from './assets/ServiceGuide04.png';
 
 const UserGuide = () => {
   return (
@@ -19,13 +15,13 @@ const UserGuide = () => {
        저희가 대여해 드리고 찾아드리겠습니다.       
       </div>
       <div className="img">
-       {/* <img src={serviceguide01} width={350} height={300} />  */}
+       <img className="serviceImg" alt="serviceguide01" src="ServiceGuide/ServiceGuide01.png" width={350} height={300} />
       </div>
     </div>
 
     <div className="section2">
       <div className="text2">
-        <h1>취미 물품 구독 서비스.</h1>
+        <h1>취미 물품 구독 서비스</h1>
                  쉽게 지루해지는 당신,<br/>
                     비싼 용품에 고민하는 당신,<br/><br/>
 
@@ -33,7 +29,7 @@ const UserGuide = () => {
                     일주일 혹은 월 단위로 지금 대여해보세요.
       </div>
       <div className="img2">
-       {/* <img src={serviceguide02} width={350} height={200} />  */}
+       <img className="serviceImg" alt="serviceguide02" src="ServiceGuide/ServiceGuide02.png" width={350} height={200} />
       </div>
     </div>
 
@@ -49,7 +45,7 @@ const UserGuide = () => {
               
                  </div>
       <div className="img3">
-       {/* <img src={serviceguide03} width={350} height={200} />  */}
+       <img className="serviceImg" alt="serviceguide03" src="ServiceGuide/ServiceGuide03.png" width={350} height={200} />
       </div>
     </div>
 
@@ -65,6 +61,7 @@ const UserGuide = () => {
           </div>    
       <div className="img4">
        {/* <img src={serviceguide04} width={350} height={300} />  */}
+       <img className="serviceImg" alt="serviceguide04" src="ServiceGuide/ServiceGuide04.png" width={350} height={300} />
       </div>
     </div>
 
