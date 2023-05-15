@@ -1,0 +1,99 @@
+.body {
+    margin: 0;
+}
+
+.section {
+    height: 700px;
+    background-color: #F8F8E0;
+}
+
+.section2 {
+    height: 700px;
+    background-color: #F7F3F3;
+}
+
+.section3 {
+    height: 700px;
+    background-color: #FFFFFF;
+}
+
+.section4 {
+    height: 700px;
+    background-color: #F7F7ED;
+}
+
+.img {
+    position: absolute;
+    top: 150px;
+    right: 300px;
+
+}
+
+.img2 {
+    position: absolute;
+    top: 900px;
+    right: 300px;
+
+}
+
+.img3 {
+    position: absolute;
+    top: 1600px;
+    right: 300px;
+
+}
+
+.img4 {
+    position: absolute;
+    top: 2250px;
+    right: 300px;
+
+}
+
+.text1 {
+    font-size: 22px;
+    width: 430px;
+    color: black;
+    font-family: "The Jamsil 2 Light";
+    position: absolute;
+    top: 150px;
+    left: 300px;
+
+
+}
+
+.text2 {
+    font-size: 22px;
+    width: 430px;
+    color: black;
+    font-family: "The Jamsil 2 Light";
+    position: absolute;
+    top: 850px;
+    left: 300px;
+
+
+}
+
+.text3 {
+    font-size: 22px;
+    width: 430px;
+    color: black;
+    font-family: "The Jamsil 2 Light";
+    position: absolute;
+    top: 1550px;
+    left: 300px;
+
+
+}
+
+.text4 {
+    font-size: 22px;
+    width: 430px;
+    color: black;
+    font-family: "The Jamsil 2 Light";
+    position: absolute;
+    top: 2250px;
+    left: 300px;
+
+
+}
