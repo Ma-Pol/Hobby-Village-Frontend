@@ -237,7 +237,7 @@ const AdminOrdersProductsTable = ({
         odrEmail: odrEmail,
       })
       .then((res) => {
-        if (res.data === 100) {
+        if (res.data !== 1) {
           alert('알 수 없는 이유로 주문 취소에 실패했습니다.');
         }
       })
@@ -246,18 +246,15 @@ const AdminOrdersProductsTable = ({
       });
   };
 
-  // 주문 취소 처리 3: 취소 후처리
-  const cancelOrderAfter = async (check) => {
-    await axios.patch(`/m/orders/cancelOrderAfte`, {
-      opCode: opCode,
-      prodCode: prodCode,
-      prodPrice: prodPrice,
-      rentalPeriod: rentalPeriod,
-      prodShipping: prodShipping,
-      usedSavedMoney: usedSavedMoney,
-      odrEmail: odrEmail,
-      // check: check,
-    });
+  const cancelOrderBtn = async () => {
+    if (await checkOdrState()) {
+      if (window.confirm(`${prodName}\n해당 상품을 주문 취소 하시겠습니까?`)) {
+        await cancelOrder();
+        window.location.reload();
+      } else {
+        return false;
+      }
+    }
   };
 
   const changeDeliveryCompany = (e) => {
@@ -602,7 +599,7 @@ const AdminOrdersProductsTable = ({
             {odrState === '취소 요청' && (
               <Button
                 variant="contained"
-                onClick={cancelOrderAfter}
+                onClick={cancelOrderBtn}
                 sx={{
                   mx: 1,
                   width: '100px',
