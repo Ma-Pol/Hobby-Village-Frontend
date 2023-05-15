@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import SimpleImageSlider from 'react-simple-image-slider';
 import {
   Container,
@@ -34,6 +35,39 @@ const AdminProductsDetails = () => {
   const prodTagRef = useRef();
 
   const navigate = useNavigate();
+  const { param } = useParams();
+  const prodCode = decodeURIComponent(param);
+
+  const [product, setProduct] = useState({
+    prodCode: '',
+    prodBrand: '',
+    prodPrice: 0,
+    prodCategory: '',
+    prodRegiDate: '',
+    prodName: '',
+    rentalCount: 0,
+    prodIsRental: 0,
+    prodContent: '',
+    prodDibs: 0,
+    prodHost: '',
+  });
+
+  const getProductDetail = () => {
+    axios
+      .get(`http://localhost:8080/getProductDetail/prodCode=${prodCode}`)
+      .then((res) => {
+        console.log(param);
+        const { data } = res;
+        setProduct(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getProductDetail();
+  }, []);
 
   const tableHeadStyle = {
     width: 170,
@@ -168,8 +202,9 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="ABC0001"
-                ></TextField>
+                >
+                  {product.prodCode}
+                </TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
                 <InputLabel for="prodBrand">브랜드</InputLabel>
@@ -185,8 +220,9 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="아레나"
-                ></TextField>
+                >
+                  {product.prodBrand}
+                </TextField>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -205,7 +241,7 @@ const AdminProductsDetails = () => {
                   size="small"
                   ref={prodPriceRef}
                   sx={inputReadOnlyStyle}
-                  value="&#8361;&nbsp;30000"
+                  value={product.prodPrice}
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
@@ -218,7 +254,7 @@ const AdminProductsDetails = () => {
                   size="small"
                   ref={prodCategoryRef}
                   sx={inputReadOnlyStyle}
-                  value="등산"
+                  value={product.prodCategory}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -236,7 +272,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="2023.01.01"
+                  value={product.prodRegiDate}
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
@@ -252,7 +288,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="레몬 수영복"
+                  value={product.prodName}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -271,7 +307,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="11"
+                  value={product.rentalCount}
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
@@ -287,7 +323,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="대여중"
+                  value={product.prodIsRental}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -337,7 +373,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="흔하지 않고 귀여운 디자인. 수영장 베스트 드레서 가능."
+                  value={product.prodContent}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -371,7 +407,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="88"
+                  value={product.prodDibs}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -389,7 +425,7 @@ const AdminProductsDetails = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="초록바다"
+                  value={product.prodHost}
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
@@ -422,11 +458,21 @@ const AdminProductsDetails = () => {
             삭제
           </Button>
           &nbsp;&nbsp;&nbsp;
-          <Button variant="outlined" sx={btnListStyle}>
+          <Button
+            variant="outlined"
+            sx={btnListStyle}
+            onClick={() =>
+              navigate(`/lists?sort=-prodRegiDate&filter=none&pages=1`)
+            }
+          >
             목록
           </Button>
           &nbsp;&nbsp;&nbsp;
-          <Button variant="outlined" sx={btnUpdateStyle}>
+          <Button
+            variant="outlined"
+            sx={btnUpdateStyle}
+            onClick={() => navigate(`/modify/${product.prodCode}`)}
+          >
             수정
           </Button>
         </Box>
