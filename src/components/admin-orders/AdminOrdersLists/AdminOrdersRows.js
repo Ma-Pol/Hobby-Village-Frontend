@@ -20,6 +20,8 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
   const today = new Date();
   const deliDateObj = new Date(deliDate);
   const deadlineObj = new Date(deadline);
+  const remainingDays =
+    rentalPeriod - Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24));
 
   const tableLine = {
     px: 1,
@@ -41,68 +43,45 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
     },
   };
 
-  // [0]: 잔여 일수 1일 이상
-  // [1]: 잔여 일수 0일 이하 및 반납 기한 남음
-  // [2]: 반납 기한 지남
-  const tableData = [
-    {
-      px: 1,
-      py: 0.5,
-      textAlign: 'center',
-      color: '#000000',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      '& > a': {
-        color: '#000000',
-      },
+  // 첫 번째: 주문 취소 처리 된 경우: 회색 글씨 + 취소선
+  // 두 번째: 반납 완료인 경우: 회색 글씨
+  // 세 번째: 잔여 일수가 1일 이상 또는 상품 도착 전인 경우: 검은색 글씨
+  // 네 번째: 잔여 일수가 0일 이하이면서 반납 기한이 지나지 않은 경우: 보라색 글씨
+  // 다섯 번째: 잔여 일수가 0일 이하이면서 반납 기한이 지난 경우: 빨간색 글씨
+  const tableData = {
+    px: 1,
+    py: 0.5,
+    textAlign: 'center',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    color:
+      odrState === '반납 완료' || odrState === '취소 처리 완료'
+        ? '#bfbfbf'
+        : remainingDays > 0 || deliDate === '1000-01-01'
+        ? '#000000'
+        : today < deadlineObj
+        ? '#8f00ff'
+        : '#ff0000',
+    textDecoration: odrState === '취소 처리 완료' ? 'line-through' : 'none',
+
+    '& > a': {
+      color:
+        odrState === '반납 완료' || odrState === '취소 처리 완료'
+          ? '#bfbfbf'
+          : remainingDays > 0 || deliDate === '1000-01-01'
+          ? '#000000'
+          : today < deadlineObj
+          ? '#8f00ff'
+          : '#ff0000',
+      textDecoration: odrState === '취소 처리 완료' ? 'line-through' : 'none',
     },
-    {
-      px: 1,
-      py: 0.5,
-      textAlign: 'center',
-      color: '#8F00FF',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      '& > a': {
-        color: '#8F00FF',
-      },
-    },
-    {
-      px: 1,
-      py: 0.5,
-      textAlign: 'center',
-      color: '#FF0000',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      '& > a': {
-        color: '#FF0000',
-      },
-    },
-  ];
+  };
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
       <Grid item xs={4}>
-        <Typography
-          title={odrNumber + '\n주문 상세 페이지'}
-          sx={
-            // 잔여 일수가 1 이상이면 검은색 글씨
-            rentalPeriod -
-              Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-              0 ||
-            deliDate === '1000-01-01' ||
-            odrState === '반납 완료'
-              ? tableData[0]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지나지 않았으면 보라색 글씨
-              Math.floor((deadlineObj - today) / (1000 * 60 * 60 * 24)) > 0
-              ? tableData[1]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지났으면 빨간색 글씨
-                tableData[2]
-          }
-        >
+        <Typography title={odrNumber + '\n주문 상세 페이지'} sx={tableData}>
           <Link
             component={RouterLink}
             to={orderLink}
@@ -118,23 +97,7 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
       </Grid>
 
       <Grid item xs={2}>
-        <Typography
-          title={prodCode + '\n상품 상세 페이지'}
-          sx={
-            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
-            rentalPeriod -
-              Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-              0 ||
-            deliDate === '1000-01-01' ||
-            odrState === '반납 완료'
-              ? tableData[0]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지나지 않았으면 보라색 글씨
-              Math.floor((deadlineObj - today) / (1000 * 60 * 60 * 24)) > 0
-              ? tableData[1]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지났으면 빨간색 글씨
-                tableData[2]
-          }
-        >
+        <Typography title={prodCode + '\n상품 상세 페이지'} sx={tableData}>
           <Link href={productLink} underline="hover" sx={{ cursor: 'pointer' }}>
             {prodCode}
           </Link>
@@ -142,23 +105,7 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
       </Grid>
 
       <Grid item xs={2}>
-        <Typography
-          title={nickname + '\n회원 상세 페이지'}
-          sx={
-            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
-            rentalPeriod -
-              Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-              0 ||
-            deliDate === '1000-01-01' ||
-            odrState === '반납 완료'
-              ? tableData[0]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지나지 않았으면 보라색 글씨
-              Math.floor((deadlineObj - today) / (1000 * 60 * 60 * 24)) > 0
-              ? tableData[1]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지났으면 빨간색 글씨
-                tableData[2]
-          }
-        >
+        <Typography title={nickname + '\n회원 상세 페이지'} sx={tableData}>
           <Link href={userLink} underline="hover" sx={{ cursor: 'pointer' }}>
             {nickname}
           </Link>
@@ -166,33 +113,14 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
       </Grid>
 
       <Grid item xs={2}>
-        <Typography
-          sx={
-            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
-            rentalPeriod -
-              Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-              0 ||
-            deliDate === '1000-01-01' ||
-            odrState === '반납 완료'
-              ? tableData[0]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지나지 않았으면 보라색 글씨
-              Math.floor((deadlineObj - today) / (1000 * 60 * 60 * 24)) > 0
-              ? tableData[1]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지났으면 빨간색 글씨
-                tableData[2]
-          }
-        >
+        <Typography sx={tableData}>
           {
             // 배송 전이면 대여일수 그대로 표시
             deliDate === '1000-01-01'
               ? rentalPeriod
-              : rentalPeriod -
-                  Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-                0
+              : remainingDays > 0
               ? // 배송 후면 [대여일수 - (오늘 - 배송일)] 표시
-                rentalPeriod -
-                  Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-                0
+                remainingDays > 0
               : // 잔여 일수가 0일 이하면 0으로 표시
                 0
           }
@@ -200,22 +128,7 @@ const AdminOrdersRows = ({ order, queryString, isLast }) => {
       </Grid>
 
       <Grid item xs={2}>
-        <Typography
-          sx={
-            // 잔여 일수가 1 이상 || 물품 도착 이전 || 반납 완료면 검은색 글씨
-            rentalPeriod -
-              Math.floor((today - deliDateObj) / (1000 * 60 * 60 * 24)) >
-              0 ||
-            deliDate === '1000-01-01' ||
-            odrState === '반납 완료'
-              ? tableData[0]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지나지 않았으면 보라색 글씨
-              Math.floor((deadlineObj - today) / (1000 * 60 * 60 * 24)) > 0
-              ? tableData[1]
-              : // 잔여 일수가 0 이하면서 반납 기한이 지났으면 빨간색 글씨
-                tableData[2]
-          }
-        >
+        <Typography sx={tableData}>
           {deadline === '1000-01-01' ? '-' : deadline}
         </Typography>
       </Grid>

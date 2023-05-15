@@ -60,10 +60,10 @@ const AdminOrdersDetails = () => {
 
       {/* 주문 상세 내용 표기 시작 */}
       <AdminOrdersTable
+        odrNumber={odrNumber}
         orderDetail={orderDetail}
         orderProductList={orderProductList}
         getOrderDetails={getOrderDetails}
-        getOrderProductLists={getOrderProductLists}
       />
       {/* 주문 상세 내용 표기 끝 */}
 
