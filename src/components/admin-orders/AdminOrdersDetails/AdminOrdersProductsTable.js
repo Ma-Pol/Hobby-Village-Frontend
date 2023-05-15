@@ -224,11 +224,11 @@ const AdminOrdersProductsTable = ({
 
   // 주문 취소 처리 2: 주문 상품 개수 확인 및 환불 처리
   const cancelOrder = async () => {
-    let check = 100;
     await axios
       .post(`/m/orders/cancelOrder`, {
         opCode: opCode,
         odrNumber: odrNumber,
+        prodCode: prodCode,
         prodPrice: prodPrice,
         rentalPeriod: rentalPeriod,
         prodShipping: prodShipping,
@@ -239,16 +239,11 @@ const AdminOrdersProductsTable = ({
       .then((res) => {
         if (res.data === 100) {
           alert('알 수 없는 이유로 주문 취소에 실패했습니다.');
-        } else if (res.data === 1) {
-          check = 1;
-        } else {
-          check = 2;
         }
       })
       .catch((err) => {
         console.error(err);
       });
-    return check;
   };
 
   // 주문 취소 처리 3: 취소 후처리
