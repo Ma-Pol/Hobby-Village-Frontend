@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,30 +24,31 @@ const AdminNoticesCreate = () => {
   const noticeTitleRef = useRef();
   const noticeContentRef = useRef();
 
-  // const token = document.getElementById('token');
-
   const navigate = useNavigate();
 
   const insertNotice = () => {
-    axios
-      .post(`/m/notices/noticeCreate`, {
-        notTitle: noticeTitleRef.current.value,
-        notCategory: notCategory,
-        notContent: noticeContentRef.current.value,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data === 1) {
-          navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
-        } else {
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (notCategory !== '전체') {
+      // 카테고리 선택 후 등록 가능하게 if문 사용
+      axios
+        .post(`/m/notices/noticeCreate`, {
+          notTitle: noticeTitleRef.current.value, // 현재 공지사항 제목 값을 저장
+          notCategory: notCategory,
+          notContent: noticeContentRef.current.value,
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.data === 1) {
+            // 입력 받은 데이터가 정상적으로 들어왔으면(값이 1이면) navigate를 통해 페이지 이동
+            navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      alert('카테고리를 선택해주세요!');
+    }
   };
-
-  useEffect(() => {});
 
   const noticeRow = {
     minWidth: '120px',
@@ -85,6 +86,7 @@ const AdminNoticesCreate = () => {
         공지사항 &#62; 등록
       </Typography>
 
+      {/* 공지사항 제목 테이블 표기 시작 */}
       <Box sx={noticeRow}>
         <Box sx={noticeFirstCell}>
           <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
@@ -109,6 +111,7 @@ const AdminNoticesCreate = () => {
         </Box>
       </Box>
 
+      {/* 공지사항 카테고리 테이블 표기 시작 */}
       <Box sx={noticeRow}>
         <Box sx={noticeFirstCell}>
           <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
@@ -137,6 +140,7 @@ const AdminNoticesCreate = () => {
         </FormControl>
       </Box>
 
+      {/* 공지사항 내용 테이블 표기 시작 */}
       <Box sx={noticeRow}>
         <Box sx={noticeContentCell}>
           <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
@@ -169,6 +173,7 @@ const AdminNoticesCreate = () => {
           justifyContent: 'Center',
         }}
       >
+        {/* 취소 버튼 */}
         <Button
           variant="contained"
           size="small"
@@ -189,10 +194,12 @@ const AdminNoticesCreate = () => {
         >
           취소
         </Button>
+
+        {/* 등록 버튼 */}
         <Button
           variant="contained"
           size="small"
-          onClick={insertNotice}
+          onClick={insertNotice} // 클릭 시 insertNotice 함수 호출
           sx={{
             mt: 1,
             mr: 1,

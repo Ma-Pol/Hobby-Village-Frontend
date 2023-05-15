@@ -2,12 +2,14 @@ import { Box, Container, Typography, Button } from '@mui/material';
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 const AdminNoticesDetails = () => {
   const { notCode } = useParams();
   const [noticeDetail, setNoticeDetail] = useState([]);
+  const navigate = useNavigate();
 
+  // 공지사항 등록
   useEffect(() => {
     axios
       .get(`/m/notices/noticeDetails/${notCode}`)
@@ -18,6 +20,23 @@ const AdminNoticesDetails = () => {
         console.error(err);
       });
   }, [notCode]);
+
+  // 공지사항 삭제
+  const deleteNotice = () => {
+    axios
+      .delete(`/m/notices/noticeDelete/${notCode}`)
+      .then((response) => {
+        console.log(response);
+        if (response.data === 1) {
+          alert('삭제가 완료되었습니다.');
+          // 입력 받은 데이터가 정상적으로 들어왔으면(값이 1이면) navigate를 통해 페이지 이동
+          navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const noticeDetailRow = {
     minHeight: '50px',
@@ -148,10 +167,11 @@ const AdminNoticesDetails = () => {
           justifyContent: 'Center',
         }}
       >
+        {/* 삭제 버튼 */}
         <Button
           variant="contained"
           size="small"
-          href="/m/notices/delete"
+          onClick={deleteNotice} // 클릭 시 deleteNotice 함수 호출
           sx={{
             mt: 1,
             mr: 1,
