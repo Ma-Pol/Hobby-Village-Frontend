@@ -5,16 +5,32 @@ import AdminRequestsDetails from './AdminRequestsDetails';
 
 const AdminRequests = () => {
   return (
-    <Routes>
-      <Route
-        path="/m/requests/:category/lists"
-        element={<AdminRequestsLists />}
-      />
-      <Route
-        path="/m/requests/details/reqCode"
-        element={<AdminRequestsDetails />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path=":category/lists" element={<AdminRequestsLists />} />
+        <Route
+          exact
+          path="details/:reqCode"
+          element={<AdminRequestsDetails />}
+        />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
