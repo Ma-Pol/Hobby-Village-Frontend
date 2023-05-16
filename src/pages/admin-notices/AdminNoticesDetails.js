@@ -2,14 +2,15 @@ import { Box, Container, Typography, Button } from '@mui/material';
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AdminNoticesDetails = () => {
   const { notCode } = useParams();
+  const modifyLink = `/m/notices/modify/${notCode}`;
   const [noticeDetail, setNoticeDetail] = useState([]);
   const navigate = useNavigate();
 
-  // 공지사항 등록
+  // 공지사항 상세 조회
   useEffect(() => {
     axios
       .get(`/m/notices/noticeDetails/${notCode}`)
@@ -192,7 +193,7 @@ const AdminNoticesDetails = () => {
         <Button
           variant="contained"
           size="small"
-          href="/m/notices/lists"
+          href="/m/notices/lists?sort=-notDate&filter=none&pages=1"
           sx={{
             mt: 1,
             mr: 1,
@@ -213,7 +214,7 @@ const AdminNoticesDetails = () => {
         <Button
           variant="contained"
           size="small"
-          href="/m/notices/modify"
+          href={modifyLink}
           sx={{
             mt: 1,
             mr: 1,

@@ -27,27 +27,43 @@ const AdminNoticesCreate = () => {
   const navigate = useNavigate();
 
   const insertNotice = () => {
-    if (notCategory !== '전체') {
-      // 카테고리 선택 후 등록 가능하게 if문 사용
-      axios
-        .post(`/m/notices/noticeCreate`, {
-          notTitle: noticeTitleRef.current.value, // 현재 공지사항 제목 값을 저장
-          notCategory: notCategory,
-          notContent: noticeContentRef.current.value,
-        })
-        .then((response) => {
-          console.log(response);
-          if (response.data === 1) {
-            // 입력 받은 데이터가 정상적으로 들어왔으면(값이 1이면) navigate를 통해 페이지 이동
-            navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
+    if (notCategory === '전체') {
       alert('카테고리를 선택해주세요!');
+      return false;
+      // 카테고리 선택 후 등록 가능하게 if문 사용
     }
+    if (
+      noticeTitleRef.current.value === null ||
+      noticeTitleRef.current.value === undefined ||
+      noticeTitleRef.current.value === ''
+    ) {
+      alert('제목을 입력해주세요!');
+      return false;
+    }
+    if (
+      noticeContentRef.current.value === null ||
+      noticeContentRef.current.value === undefined ||
+      noticeContentRef.current.value === ''
+    ) {
+      alert('내용을 입력해주세요!');
+      return false;
+    }
+    axios
+      .post(`/m/notices/noticeCreate`, {
+        notTitle: noticeTitleRef.current.value, // 현재 공지사항 제목 값을 저장
+        notCategory: notCategory,
+        notContent: noticeContentRef.current.value,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data === 1) {
+          // 입력 받은 데이터가 정상적으로 들어왔으면(값이 1이면) navigate를 통해 페이지 이동
+          navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const noticeRow = {
