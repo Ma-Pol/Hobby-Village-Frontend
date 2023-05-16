@@ -111,6 +111,16 @@ const UserFAQDetail = () => {
               </Typography>
             </Grid>
 
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
+
             <LabelItem
               item
               xs={2}
@@ -141,6 +151,16 @@ const UserFAQDetail = () => {
                 {faqDetail.faqCategory}
               </Typography>
             </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
 
             <LabelItem
               item

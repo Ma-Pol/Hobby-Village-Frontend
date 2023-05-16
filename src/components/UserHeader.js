@@ -34,7 +34,8 @@ const SmallTextTypography = styled(Typography)({
 const profileImageUrl = 'https://via.placeholder.com/150';
 
 function UserHeader() {
-  const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
+  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
+  const email = 'bae@naver.com';
 
   return (
     <>

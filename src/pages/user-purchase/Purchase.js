@@ -19,6 +19,8 @@ import UserPurchaseProductCard from '../../components/user-purchase/UserPurchase
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -141,7 +143,7 @@ const PriceLeftBoxRow = styled(Box)({
 
 const Purchase = () => {
   // const email = window.sessionStorage.getItem('email'); // 로그인한 유저의 이메일
-  const email = 'lee@naver.com'; // 테스트용 임시 이메일
+  const email = 'bae@naver.com'; // 테스트용 임시 이메일
 
   const navigate = useNavigate(); // 페이지 이동을 위한 훅
   const location = useLocation(); // 이전 페이지에서 넘겨받은 데이터에 접근하기 위한 훅
@@ -151,6 +153,8 @@ const Purchase = () => {
 
   const ckb1Ref = useRef(); // 1번 약관 동의 체크박스
   const ckb2Ref = useRef(); // 2번 약관 동의 체크박스
+
+  const [productList, setProductList] = useState([]); // 상품 목록
 
   const [userInfo, setUserInfo] = useState(); // 유저 정보
   const [addressList, setAddressList] = useState([]); // 유저의 배송지 목록
@@ -177,7 +181,6 @@ const Purchase = () => {
   const [selectedDeliRequest, setSelectedDeliRequest] = useState('none'); // 배송지 직접 입력 - 배송 요청사항
   const deliRequestRef = useRef(''); // 배송지 직접 입력 - 배송 요청사항(직접 입력하는 경우)
 
-  // 컴포넌트 마운트 시 실행
   useEffect(() => {
     // 이전 페이지에서 넘겨받은 데이터를 체크
     if (location.state !== null && location.state.products !== undefined) {
@@ -203,10 +206,12 @@ const Purchase = () => {
       alert('잘못된 접근입니다.');
       navigate(-1, { replace: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 상품 상태 체크(대여/미대여 체크)
   const checkProductState = async () => {
+    await setProductList([]);
     totalPriceRef.current = 0; // 총 상품 금액 저장을 위한 Ref 초기화
     totalShippingRef.current = 0; // 총 배송비 저장을 위한 Ref 초기화
 
@@ -220,10 +225,11 @@ const Purchase = () => {
         .then((state) => {
           if (state.data === 1) {
             alert(`${product.prodName} 은(는) 이미 대여 중인 상품입니다.`);
-            const i = products.indexOf(product);
-            products.splice(i, 1);
-            prodIndex = i;
           } else {
+            const newProduct = productList;
+            newProduct.push(product);
+            setProductList(newProduct);
+
             totalPriceRef.current += (product.prodPrice * product.period) / 7;
             totalShippingRef.current += product.prodShipping;
 
@@ -234,7 +240,7 @@ const Purchase = () => {
           }
         })
         .finally(() => {
-          if (products.length === 0) {
+          if (productList.length === 0) {
             alert('주문 가능한 상품이 없습니다.');
             navigate(-1, { replace: true });
           }
@@ -546,18 +552,18 @@ const Purchase = () => {
     const odrNumber =
       new Date().getTime() + '-' + Math.floor(Math.random() * 10000 * 10000);
 
-    const { products, prevPage } = location.state;
+    const { prevPage } = location.state;
     const prevOdrNumber =
-      location.state.products[0].prevOdrNumber !== undefined
-        ? location.state.products[0].prevOdrNumber
+      productList[0].prevOdrNumber !== undefined
+        ? productList[0].prevOdrNumber
         : '';
 
     // 추가 결제인지 확인 후 결제 프로세스 진행
     // 추가 결제가 아닌 경우, 상품 목록 관련 프로세스 진행행
     if (prevPage !== 'mypages') {
       // 각 상품들이 대여 상태인지 한번 더 확인
-      for (let i = 0; i < products.length; i++) {
-        const product = products[i];
+      for (let i = 0; i < productList.length; i++) {
+        const product = productList[i];
         await axios
           .get(`/purchase/productState/${product.prodCode}`)
           .then((state) => {
@@ -576,8 +582,8 @@ const Purchase = () => {
       }
 
       // 각 상품들의 prodIsRental을 1로 변경
-      for (let i = 0; i < products.length; i++) {
-        const product = products[i];
+      for (let i = 0; i < productList.length; i++) {
+        const product = productList[i];
 
         await axios
           .patch(`/purchase/productState/${product.prodCode}`)
@@ -587,7 +593,7 @@ const Purchase = () => {
                 '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO UPDATE PRODUCT STATE'
               );
 
-              purchaseFailed(products); // 결제 실패 시 상품 상태를 원래대로 되돌림
+              purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
               failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
             }
           })
@@ -601,7 +607,7 @@ const Purchase = () => {
     await axios
       .post(
         `/purchase/preInsertOrder/${prevPage}`,
-        setOrderData(odrNumber, products, prevOdrNumber, prevPage)
+        setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
       )
       .then((res) => {
         if (res.data !== 1) {
@@ -611,7 +617,7 @@ const Purchase = () => {
           processCheck = false;
 
           if (prevPage !== 'mypages') {
-            purchaseFailed(products); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
           }
           failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
         }
@@ -624,7 +630,7 @@ const Purchase = () => {
     await axios
       .post(
         `/purchase/payments/prepare`,
-        setOrderData(odrNumber, products, prevOdrNumber, prevPage)
+        setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
       )
       .then((res) => {
         if (res.data !== 0) {
@@ -634,7 +640,7 @@ const Purchase = () => {
           processCheck = false;
 
           if (prevPage !== 'mypages') {
-            purchaseFailed(products); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
           }
           failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
         }
@@ -686,7 +692,7 @@ const Purchase = () => {
           escrow: false, // 에스크로 사용 여부
           custom_data: {
             // 주문에 귀속된 상품 정보
-            products: products,
+            products: productList,
           },
         },
 
@@ -708,7 +714,7 @@ const Purchase = () => {
             if (compareSuccess) {
               // 상품 대여 횟수 증가, 유저 적립금 차감, 유저 쿠폰 데이터 삭제, orderProducts 테이블 데이터 추가
               // 5-1-2. 상품 대여 횟수 증가(products > product.period / 7 만큼 증가)
-              await increaseRentalCount(products);
+              await increaseRentalCount(productList);
 
               // 5-1-3. 유저 적립금 차감
               if (exactSavedMoney > 0) {
@@ -722,12 +728,12 @@ const Purchase = () => {
 
               // 5-1-5. 장바구니에서 해당 상품 삭제
               if (prevPage !== 'mypages') {
-                await deleteCart(email, products);
+                await deleteCart(email, productList);
               }
 
               // 5-1-6. orderProducts 테이블 데이터 추가
-              for (let i = 0; i < products.length; i++) {
-                const product = products[i];
+              for (let i = 0; i < productList.length; i++) {
+                const product = productList[i];
 
                 const orderProductData = {
                   odrNumber: odrNumber,
@@ -749,7 +755,7 @@ const Purchase = () => {
               await cancelOrder(imp_uid); // 결제 실패 시 1. 아임포트 결제 취소
 
               if (prevPage !== 'mypages') {
-                await purchaseFailed(products); // 결제 실패 시 2. 상품 상태를 원래대로 되돌림
+                await purchaseFailed(productList); // 결제 실패 시 2. 상품 상태를 원래대로 되돌림
               }
 
               await rollbackOrder(odrNumber, prevPage); // 결제 실패 시 3. 주문 정보를 삭제
@@ -763,7 +769,7 @@ const Purchase = () => {
               `결제에 실패했습니다. 다시 시도해주세요.\n${error_code}: ${error_msg}`
             );
 
-            purchaseFailed(products); // 결제 실패 시 1. 상품 상태를 원래대로 되돌림
+            purchaseFailed(productList); // 결제 실패 시 1. 상품 상태를 원래대로 되돌림
             rollbackOrder(odrNumber, prevPage); // 결제 실패 시 2. 주문 정보를 삭제
             failedNavigate(prevPage); // 결제 실패 시 3. 이전 페이지로 이동
           }
@@ -1090,8 +1096,12 @@ const Purchase = () => {
     },
   };
 
-  if (userInfo === undefined || addressList === undefined) {
-    return <div></div>;
+  if (userInfo === undefined || addressList.length === 0) {
+    return (
+      <Container>
+        <UserHeader />
+      </Container>
+    );
   } else {
     return (
       <Container
@@ -1100,6 +1110,7 @@ const Purchase = () => {
           mb: 10,
         }}
       >
+        <UserHeader />
         <Modal
           open={modalHandler}
           onClose={() => {
@@ -1128,30 +1139,28 @@ const Purchase = () => {
           <HeaderBox>
             <HeaderTypography variant="h5" component="h2">
               주문 상품&nbsp;
-              {location.state !== null && location.state.products.length + '개'}
+              {productList.length !== 0 && productList.length + '개'}
             </HeaderTypography>
           </HeaderBox>
           {/* 주문 상품 헤더 끝 */}
 
           {/* 주문 상품 데이터 리스트 표기 시작 */}
           <DataBox>
-            {location.state !== null &&
-              (location.state.products.length === 0 ? (
-                <></>
-              ) : (
-                <>
-                  {location.state !== null &&
-                    location.state.products.map((product) => {
-                      return (
-                        <UserPurchaseProductCard
-                          key={product.prodCode}
-                          product={product}
-                          prevPage={location.state.prevPage}
-                        />
-                      );
-                    })}
-                </>
-              ))}
+            {productList.length === 0 ? (
+              <></>
+            ) : (
+              <>
+                {productList.map((product) => {
+                  return (
+                    <UserPurchaseProductCard
+                      key={product.prodCode}
+                      product={product}
+                      prevPage={location.state.prevPage}
+                    />
+                  );
+                })}
+              </>
+            )}
           </DataBox>
           {/* 주문 상품 데이터 리스트 표기 끝 */}
 
@@ -1240,7 +1249,7 @@ const Purchase = () => {
                       </Typography>
                     </MenuItem>
 
-                    {addressList !== undefined &&
+                    {addressList.length !== 0 &&
                       addressList.map((address, index) => {
                         const addr =
                           '[' +
@@ -1609,7 +1618,7 @@ const Purchase = () => {
                 </MenuItem>
 
                 {/* 쿠폰 목록 표기 시작 */}
-                {couponList !== undefined &&
+                {couponList.length !== 0 &&
                   couponList.map((coupon, index) => {
                     // 쿠폰의 할인 금액 변수 저장
                     const discount =
@@ -2163,6 +2172,7 @@ const Purchase = () => {
           </PriceContainer>
           {/* 총 결제 금액 및 결제 버튼 표기 끝 */}
         </Container>
+        <UserFooter />
       </Container>
     );
   }
