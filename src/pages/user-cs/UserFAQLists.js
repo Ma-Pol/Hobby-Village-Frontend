@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
   Button,
@@ -11,19 +11,86 @@ import {
   Paper,
   Box,
   Pagination,
+  ToggleButton,
+  ToggleButtonGroup,
+  TextField,
+  NativeSelect,
+  CircularProgress,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import UserHeader from '../../components/UserHeader';
-import UserCsTitle from '../../components/user-cs/UserCsTitle';
-import FaqSearchBar from '../../components/user-cs/FaqSearchBar';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import UserFooter from '../../components/UserFooter';
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: '#000000',
+  backgroundColor: '#ffffff',
+  border: 'none',
+  fontSize: '0.8rem',
+  padding: '6px 12px',
+  boxShadow: 'none',
+  '&:hover': {
+    backgroundColor: '#C3C36A',
+    color: '#000000',
+  },
+  '&.Mui-selected': {
+    backgroundColor: '#C3C36A',
+    color: '#000000',
+  },
+  '&.Mui-selected:hover': {
+    backgroundColor: '#C3C36A',
+  },
+}));
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  boxShadow: 'none',
+  borderTop: '1px solid black',
+  '& table': {
+    borderCollapse: 'collapse',
+    borderRadius: '0',
+    borderSpacing: '0',
+  },
+  '&.MuiPaper-root': {
+    borderRadius: '0',
+  },
+}));
+
+const StyledTableHeadRow = styled(TableRow)({
+  '& th': {
+    borderBottom: '1px solid black',
+    fontWeight: 'bold',
+  },
+});
+
+const StyledTableRow = styled(TableRow)({
+  '&:first-child td': {
+    borderTop: '1px solid black',
+  },
+  '&:last-child td': {
+    borderBottom: '1px solid black',
+  },
+});
+
+const StyledLink = styled(Link)({
+  textDecoration: 'none',
+  color: 'inherit',
+});
 
 const UserFAQLists = () => {
-  const [faqs, setFaqs] = useState([]);
-  const [filter, setFilter] = useState('none');
-  const [page, setPage] = useState(1);
-  const [count, setCount] = useState(0);
-  const [keyword, setKeyword] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const navigate = useNavigate(); // 페이지 이동
+  const location = useLocation(); // 현재 URL 정보
+  const [faqList, setFaqList] = useState([]);
+  const [totalPage, setTotalPage] = useState(0); // 총 페이지 수
+  const [currentPage, setCurrentPage] = useState(searchParams.get('pages'));
+  const [currentFilter, setCurrentFilter] = useState(
+    searchParams.get('filter')
+  );
+  const keywordRef = useRef(); // 현재 검색 키워드
 
   const filters = [
     { name: '전체', value: 'none' },
@@ -35,171 +102,271 @@ const UserFAQLists = () => {
     { name: '기타', value: 'etc' },
   ];
 
-  const StyledButton = styled(Button)(({ theme }) => ({
-    color: '#000000',
+  useEffect(() => {
+    // 검색 조건이 없을 때
+    if (searchParams.get('keyword') === null) {
+      axios
+        .all([
+          axios.get(`/cs/faq/count?filter=${searchParams.get('filter')}`),
+          axios.get(
+            `/cs/faq?filter=${searchParams.get(
+              'filter'
+            )}&pages=${searchParams.get('pages')}`
+          ),
+        ])
+        .then(
+          axios.spread((count, list) => {
+            setTotalPage(Math.ceil(count.data / 10));
+            setFaqList(list.data);
+            setCurrentPage(searchParams.get('pages'));
+            setCurrentFilter(searchParams.get('filter'));
+            keywordRef.current.value = '';
+          })
+        )
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    // 검색 조건이 있을 때
+    else {
+      axios
+        .all([
+          axios.get(
+            `/cs/faq/count?keyword=${searchParams.get(
+              'keyword'
+            )}&filter=${searchParams.get('filter')}`
+          ),
+          axios.get(
+            `/cs/faq?keyword=${searchParams.get(
+              'keyword'
+            )}&filter=${searchParams.get('filter')}&pages=${searchParams.get(
+              'pages'
+            )}`
+          ),
+        ])
+        .then(
+          axios.spread((count, list) => {
+            setTotalPage(Math.ceil(count.data / 10));
+            setFaqList(list.data);
+            setCurrentPage(searchParams.get('pages'));
+            setCurrentFilter(searchParams.get('filter'));
+            keywordRef.current.value = searchParams.get('keyword');
+          })
+        )
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [searchParams]);
+
+  const filterChange = (e, value) => {
+    if (value !== null) {
+      searchParams.set('filter', value);
+      setSearchParams(searchParams);
+      setCurrentFilter(value);
+    }
+  };
+
+  const pageChange = (e, value) => {
+    searchParams.set('pages', value);
+    setSearchParams(searchParams);
+  };
+
+  const search = () => {
+    const keyword = keywordRef.current.value;
+    if (keyword === '') {
+      navigate(`/cs/faq/lists?filter=${currentFilter}&pages=1`);
+    } else {
+      navigate(
+        `/cs/faq/lists?keyword=${keyword}&filter=${currentFilter}&pages=1`
+      );
+    }
+  };
+
+  const filterBox = {
+    height: '30px',
     backgroundColor: '#ffffff',
-    border: 'none',
+    color: '#828282',
+    fontWeight: 'bold',
     fontSize: '0.8rem',
-    padding: '6px 12px',
-    boxShadow: 'none',
+    transition: 'all 0.25s',
     '&:hover': {
-      backgroundColor: '#C3C36A',
-      color: '#000000',
+      backgroundColor: '#c3c36a',
+      color: '#ffffff',
     },
     '&.Mui-selected': {
-      backgroundColor: '#C3C36A',
-      color: '#000000',
+      backgroundColor: '#c3c36a',
+      textDecoration: 'underline',
     },
     '&.Mui-selected:hover': {
-      backgroundColor: '#C3C36A',
+      backgroundColor: '#c3c36a',
+      textDecoration: 'underline',
+      color: '#ffffff',
     },
-  }));
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
   };
 
-  const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-    boxShadow: 'none',
-    borderTop: '1px solid black',
-    '& table': {
-      borderCollapse: 'collapse',
-      borderRadius: '0',
-      borderSpacing: '0',
-    },
-    '&.MuiPaper-root': {
-      borderRadius: '0',
-    },
-  }));
+  if (faqList.length === 0) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Box>
+    );
+  } else {
+    return (
+      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Box sx={{ float: 'right', mb: 1, mt: 1 }}>
+            <ToggleButtonGroup
+              value={String(currentFilter)}
+              exclusive
+              onChange={filterChange}
+            >
+              {filters.map((filter) => {
+                return (
+                  <ToggleButton
+                    key={filter.name}
+                    value={filter.value}
+                    sx={filterBox}
+                  >
+                    {filter.name}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
 
-  const StyledTableHeadRow = styled(TableRow)({
-    '& th': {
-      borderBottom: '1px solid black',
-      fontWeight: 'bold',
-    },
-  });
+        <StyledTableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <StyledTableHeadRow>
+                <TableCell align="center">번호</TableCell>
+                <TableCell align="center">카테고리</TableCell>
+                <TableCell align="center">제목</TableCell>
+                <TableCell align="center">날짜</TableCell>
+              </StyledTableHeadRow>
+            </TableHead>
+            <TableBody>
+              {faqList.length !== 0 &&
+                faqList.map((faq, index) => (
+                  <StyledTableRow key={index}>
+                    <TableCell align="center">{faq.faqCode}</TableCell>
+                    <TableCell align="center">{faq.faqCategory}</TableCell>
+                    <TableCell align="center">
+                      <StyledLink
+                        to={`/cs/faq/details/${faq.faqCode}`}
+                        state={{
+                          queryString: location.search,
+                        }}
+                      >
+                        {faq.faqTitle}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell align="center">{faq.faqDate}</TableCell>
+                  </StyledTableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
 
-  const StyledTableRow = styled(TableRow)({
-    '&:first-child td': {
-      borderTop: '1px solid black',
-    },
-    '&:last-child td': {
-      borderBottom: '1px solid black',
-    },
-  });
+        <Box
+          sx={{
+            mt: 2,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Pagination
+            count={Number(totalPage || 0)}
+            page={Number(currentPage)}
+            onChange={pageChange}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
 
-  const StyledLink = styled(Link)({
-    textDecoration: 'none', 
-    color: 'inherit', 
-  });
-
-  useEffect(() => {
-    axios
-      .get('/cs/faq', {
-        params: {
-          filter: filter,
-          sort: 'faqCode DESC',
-          pages: page,
-        },
-      })
-      .then((response) => {
-        setFaqs(response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
-
-    axios
-      .get('/cs/faq/count', {
-        params: {
-          filter: filter,
-        },
-      })
-      .then((response) => {
-        setCount(response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
-  }, [filter, page]);
-
-  const handleSearch = () => {
-    axios
-      .get('/cs/faq', {
-        params: {
-          filter: filter,
-          sort: 'faqCode DESC',
-          pages: page,
-          keyword: keyword,
-        },
-      })
-      .then((response) => {
-        setFaqs(response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      });
-  };
-
-  return (
-    <div style={{ maxWidth: '1150px', margin: 'auto' }}>
-      <UserHeader />
-      <UserCsTitle />
-      <Box display="flex" justifyContent="flex-end" m={1} p={1}>
-        {filters.map((f) => (
-          <StyledButton
-            key={f.value}
-            onClick={() => setFilter(f.value)}
-            selected={filter === f.value}
+        <Box
+          sx={{
+            mt: 2,
+            mb: 12,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <NativeSelect
+            disabled
+            size="normal"
+            sx={{
+              mx: 1,
+              px: 1,
+              outline: '1px solid #000000',
+              hover: {
+                backgroundColor: '#ffffff',
+              },
+              focus: {
+                backgroundColor: '#fffffff',
+              },
+            }}
+            defaultValue="title-content"
           >
-            {f.name}
-          </StyledButton>
-        ))}
-      </Box>
-      <StyledTableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <StyledTableHeadRow>
-              <TableCell align="center">번호</TableCell>
-              <TableCell align="center">카테고리</TableCell>
-              <TableCell align="center">제목</TableCell>
-              <TableCell align="center">날짜</TableCell>
-            </StyledTableHeadRow>
-          </TableHead>
-          <TableBody>
-            {faqs.map((row, index) => (
-              <StyledTableRow key={index}>
-                <TableCell align="center">{row.faqCode}</TableCell>
-                <TableCell align="center">{row.faqCategory}</TableCell>
-                <TableCell align="center">
-                  <StyledLink to={`/cs/faq/details/${row.faqCode}`}>
-                    {row.faqTitle}
-                  </StyledLink>
-                </TableCell>
-                <TableCell align="center">{row.faqDate}</TableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
-
-      <Box display="flex" justifyContent="center" m={2}>
-        <Pagination
-          count={Math.ceil(count / 10)}
-          page={page}
-          onChange={handlePageChange}
-          color="primary"
-        />
-      </Box>
-      <Box display="flex" justifyContent="center" m={4}>
-        <FaqSearchBar
-          keyword={keyword}
-          setKeyword={setKeyword}
-          onSearch={handleSearch}
-        />
-      </Box>
-    </div>
-  );
+            <option value="title-content">제목 + 내용</option>
+          </NativeSelect>
+          <TextField
+            inputRef={keywordRef}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                search();
+              }
+            }}
+            variant="outlined"
+            size="small"
+            sx={{
+              mx: 1,
+              width: '400px',
+              '&:focus': {
+                outline: 'none',
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={search}
+            sx={{
+              mx: 1,
+              width: '65px',
+              backgroundColor: '#c3c36a',
+              color: '#000000',
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: '#c3c36a',
+                color: '#ffffff',
+              },
+            }}
+          >
+            검색
+          </Button>
+        </Box>
+        <UserFooter />
+      </div>
+    );
+  }
 };
 
 export default UserFAQLists;
