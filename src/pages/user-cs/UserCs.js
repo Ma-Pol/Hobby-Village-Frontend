@@ -5,16 +5,49 @@ import UserQnALists from './UserQnALists';
 import UserFAQDetails from './UserFAQDetails';
 import UserQnADetails from './UserQnADetails';
 import UserQnACreate from './UserQnACreate';
+import { Container } from '@mui/material';
+import UserCsTitle from '../../components/user-cs/UserCsTitle';
+import UserHeader from '../../components/UserHeader';
 
 const UserCs = () => {
   return (
-    <Routes>
-      <Route path="/cs/faq/lists" element={<UserFAQLists />} />
-      <Route path="/cs/qna/:email/lists" element={<UserQnALists />} />
-      <Route path="/cs/faq/details/:faqCode" element={<UserFAQDetails />} />
-      <Route path="/cs/qna/details/:qstCode" element={<UserQnADetails />} />
-      <Route path="/cs/qna/create" element={<UserQnACreate />} />
-    </Routes>
+    <>
+      <Container>
+        <UserHeader />
+        <UserCsTitle />
+        <Routes>
+          <Route exact path="faq/lists" element={<UserFAQLists />} />
+          <Route exact path="qna/:email/lists" element={<UserQnALists />} />
+          <Route
+            exact
+            path="faq/details/:faqCode"
+            element={<UserFAQDetails />}
+          />
+          <Route
+            exact
+            path="qna/:email/details/:qstCode"
+            element={<UserQnADetails />}
+          />
+          <Route exact path="qna/create" element={<UserQnACreate />} />
+          <Route
+            path="*"
+            element={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100vh',
+                  fontSize: '3rem',
+                }}
+              >
+                에러페이지
+              </div>
+            }
+          />
+        </Routes>
+      </Container>
+    </>
   );
 };
 
