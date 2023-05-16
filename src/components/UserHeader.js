@@ -1,39 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  InputBase,
-  Avatar,
-  Box,
-} from '@mui/material';
-import { styled, alpha, display } from '@mui/system';
+import { Typography, Button, InputBase, Avatar, Box } from '@mui/material';
+import { styled, alpha } from '@mui/system';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-const StyledAppBar = styled(AppBar)({
-  backgroundColor: '#ffffff',
-  boxShadow: 'none',
-  borderBottom: 'none',
-  marginBottom: '1rem',
-});
-
-const StyledToolbar = styled(Toolbar)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '1150px',
-  margin: '0',
-  padding: '1.5rem 0 0 0',
-});
-
-const MenuItems = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: '1rem',
-  width: '1150px',
-});
 
 const Search = styled('div')({
   position: 'relative',
@@ -54,16 +23,6 @@ const SearchInput = styled(InputBase)({
 
 const BlackTextTypography = styled(Typography)({
   color: '#000000',
-});
-
-const UserInfo = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: '1rem',
-  position: 'absolute',
-  top: 0,
-  right: '2rem',
 });
 
 const SmallTextTypography = styled(Typography)({
@@ -181,6 +140,10 @@ function UserHeader() {
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
                 }}
+                disableRipple
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = 'transparent')
+                }
               >
                 취미 물품
               </Button>
@@ -195,6 +158,10 @@ function UserHeader() {
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
                 }}
+                disableRipple
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = 'transparent')
+                }
               >
                 브랜드관
               </Button>
@@ -209,6 +176,10 @@ function UserHeader() {
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
                 }}
+                disableRipple
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = 'transparent')
+                }
               >
                 내 취미 찾기
               </Button>

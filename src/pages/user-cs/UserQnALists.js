@@ -343,7 +343,9 @@ const UserQnALists = () => {
                 },
               }}
               onClick={() => {
-                navigate(`/cs/qna/create`);
+                navigate(`/cs/qna/create`, {
+                  state: { queryString: location.search },
+                });
               }}
             >
               문의 남기기

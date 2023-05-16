@@ -15,7 +15,6 @@ import {
   ToggleButtonGroup,
   TextField,
   NativeSelect,
-  CircularProgress,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
@@ -27,26 +26,6 @@ import {
 } from 'react-router-dom';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFooter from '../../components/UserFooter';
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  color: '#000000',
-  backgroundColor: '#ffffff',
-  border: 'none',
-  fontSize: '0.8rem',
-  padding: '6px 12px',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: '#C3C36A',
-    color: '#000000',
-  },
-  '&.Mui-selected': {
-    backgroundColor: '#C3C36A',
-    color: '#000000',
-  },
-  '&.Mui-selected:hover': {
-    backgroundColor: '#C3C36A',
-  },
-}));
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   boxShadow: 'none',

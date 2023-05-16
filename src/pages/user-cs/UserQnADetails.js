@@ -101,37 +101,6 @@ const UserQnADetails = () => {
                   fontWeight: 'bold',
                 }}
               >
-                카테고리 <Divider orientation="vertical" flexItem />
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {questionDetail.qstCategory}
-              </Typography>
-            </Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
                 제목 <Divider orientation="vertical" flexItem />
               </Typography>
             </LabelItem>
@@ -155,6 +124,37 @@ const UserQnADetails = () => {
                 }}
               >
                 {questionDetail.qstTitle}
+              </Typography>
+            </Grid>
+
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                카테고리 <Divider orientation="vertical" flexItem />
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" component="h2">
+                {questionDetail.qstCategory}
               </Typography>
             </Grid>
 
