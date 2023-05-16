@@ -24,6 +24,7 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
+import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFooter from '../../components/UserFooter';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
@@ -191,146 +192,224 @@ const UserQnALists = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1150px', margin: 'auto' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-        }}
-      >
-        <Box sx={{ float: 'right', my: 2 }}>
-          <ToggleButtonGroup
-            value={String(currentFilter)}
-            exclusive
-            onChange={filterChange}
-          >
-            {filters.map((filter) => {
-              return (
-                <ToggleButton
-                  key={filter.name}
-                  value={filter.value}
-                  sx={filterBox}
-                >
-                  {filter.name}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        </Box>
-      </Box>
-      <StyledTableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <StyledTableHeadRow>
-              <TableCell align="center">번호</TableCell>
-              <TableCell align="center">카테고리</TableCell>
-              <TableCell align="center">제목</TableCell>
-              <TableCell align="center">작성일</TableCell>
-              <TableCell align="center">처리 상태</TableCell>
-            </StyledTableHeadRow>
-          </TableHead>
-
-          {questionList.length !== 0 &&
-            questionList.map((question, index) => (
-              <TableBody>
-                <StyledTableRow key={index}>
-                  <TableCell align="center">{question.qstCode}</TableCell>
-                  <TableCell align="center">{question.qstCategory}</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      maxWidth: '300px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
+    <>
+      <UserCsTitle />
+      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Box sx={{ float: 'right', my: 2 }}>
+            <ToggleButtonGroup
+              value={String(currentFilter)}
+              exclusive
+              onChange={filterChange}
+            >
+              {filters.map((filter) => {
+                return (
+                  <ToggleButton
+                    key={filter.name}
+                    value={filter.value}
+                    sx={filterBox}
                   >
-                    <StyledLink
-                      title={question.qstTitle}
-                      to={`/cs/qna/${email}/details/${question.qstCode}`}
-                      state={{
-                        queryString: location.search,
-                      }}
+                    {filter.name}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
+        <StyledTableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <StyledTableHeadRow>
+                <TableCell align="center">번호</TableCell>
+                <TableCell align="center">카테고리</TableCell>
+                <TableCell align="center">제목</TableCell>
+                <TableCell align="center">작성일</TableCell>
+                <TableCell align="center">처리 상태</TableCell>
+              </StyledTableHeadRow>
+            </TableHead>
+
+            {questionList.length !== 0 &&
+              questionList.map((question, index) => (
+                <TableBody key={index}>
+                  <StyledTableRow>
+                    <TableCell align="center">{question.qstCode}</TableCell>
+                    <TableCell align="center">{question.qstCategory}</TableCell>
+                    <TableCell
+                      align="center"
                       sx={{
-                        textDecoration: 'none',
-                        color: '#000000',
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        },
+                        maxWidth: '300px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {question.qstTitle}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell align="center">{question.qstDate}</TableCell>
-                  <TableCell align="center">
-                    {question.qstState === 1 ? '답변 완료' : '답변 대기'}
-                  </TableCell>
-                </StyledTableRow>
-              </TableBody>
-            ))}
-        </Table>
-      </StyledTableContainer>
-      {searchParams.get('keyword') !== null && questionList.length === 0 && (
-        <Box>
-          <Typography
-            variant="h5"
-            component="h6"
+                      <StyledLink
+                        title={question.qstTitle}
+                        to={`/cs/qna/${email}/details/${question.qstCode}`}
+                        state={{
+                          queryString: location.search,
+                        }}
+                        sx={{
+                          textDecoration: 'none',
+                          color: '#000000',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {question.qstTitle}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell align="center">{question.qstDate}</TableCell>
+                    <TableCell align="center">
+                      {question.qstState === 1 ? '답변 완료' : '답변 대기'}
+                    </TableCell>
+                  </StyledTableRow>
+                </TableBody>
+              ))}
+          </Table>
+        </StyledTableContainer>
+        {searchParams.get('keyword') !== null && questionList.length === 0 && (
+          <Box>
+            <Typography
+              variant="h5"
+              component="h6"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 5,
+                mb: 5,
+              }}
+            >
+              검색 결과가 없습니다.
+            </Typography>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Box
             sx={{
+              width: '120px',
+            }}
+          ></Box>
+
+          <Box
+            sx={{
+              mt: 2,
+              width: '700px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              mt: 5,
-              mb: 5,
             }}
           >
-            검색 결과가 없습니다.
-          </Typography>
+            <Pagination
+              count={Number(totalPage || 0)}
+              page={Number(currentPage)}
+              onChange={pageChange}
+              showFirstButton
+              showLastButton
+            />
+          </Box>
+          <Box
+            sx={{
+              width: 'auto',
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                my: 2,
+                width: '110px',
+                height: '30px',
+                backgroundColor: '#c3c36a',
+                color: '#000000',
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: '#c3c36a',
+                  color: '#ffffff',
+                },
+              }}
+              onClick={() => {
+                navigate(`/cs/qna/create`);
+              }}
+            >
+              문의 남기기
+            </Button>
+          </Box>
         </Box>
-      )}
-
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            width: '120px',
-          }}
-        ></Box>
 
         <Box
           sx={{
             mt: 2,
-            width: '700px',
+            mb: 12,
+            width: '100%',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Pagination
-            count={Number(totalPage || 0)}
-            page={Number(currentPage)}
-            onChange={pageChange}
-            showFirstButton
-            showLastButton
+          <NativeSelect
+            disabled
+            size="normal"
+            sx={{
+              mx: 1,
+              px: 1,
+              width: '120px',
+              outline: '1px solid #000000',
+              hover: {
+                backgroundColor: '#ffffff',
+              },
+              focus: {
+                backgroundColor: '#fffffff',
+              },
+            }}
+            defaultValue="title"
+          >
+            <option
+              value="title"
+              style={{
+                textAlign: 'center',
+              }}
+            >
+              제목
+            </option>
+          </NativeSelect>
+          <TextField
+            inputRef={keywordRef}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                search();
+              }
+            }}
+            variant="outlined"
+            size="small"
+            sx={{
+              mx: 1,
+              width: '400px',
+              '&:focus': {
+                outline: 'none',
+              },
+            }}
           />
-        </Box>
-        <Box
-          sx={{
-            width: 'auto',
-          }}
-        >
           <Button
             variant="contained"
+            onClick={search}
             sx={{
-              my: 2,
-              width: '110px',
-              height: '30px',
+              mx: 1,
+              width: '65px',
               backgroundColor: '#c3c36a',
               color: '#000000',
               fontWeight: 'bold',
@@ -339,88 +418,13 @@ const UserQnALists = () => {
                 color: '#ffffff',
               },
             }}
-            onClick={() => {
-              navigate(`/cs/qna/create`);
-            }}
           >
-            문의 남기기
+            검색
           </Button>
         </Box>
-      </Box>
-
-      <Box
-        sx={{
-          mt: 2,
-          mb: 12,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <NativeSelect
-          disabled
-          size="normal"
-          sx={{
-            mx: 1,
-            px: 1,
-            width: '120px',
-            outline: '1px solid #000000',
-            hover: {
-              backgroundColor: '#ffffff',
-            },
-            focus: {
-              backgroundColor: '#fffffff',
-            },
-          }}
-          defaultValue="title"
-        >
-          <option
-            value="title"
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            제목
-          </option>
-        </NativeSelect>
-        <TextField
-          inputRef={keywordRef}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              search();
-            }
-          }}
-          variant="outlined"
-          size="small"
-          sx={{
-            mx: 1,
-            width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          onClick={search}
-          sx={{
-            mx: 1,
-            width: '65px',
-            backgroundColor: '#c3c36a',
-            color: '#000000',
-            fontWeight: 'bold',
-            '&:hover': {
-              backgroundColor: '#c3c36a',
-              color: '#ffffff',
-            },
-          }}
-        >
-          검색
-        </Button>
-      </Box>
-      <UserFooter />
-    </div>
+        <UserFooter />
+      </div>
+    </>
   );
 };
 
