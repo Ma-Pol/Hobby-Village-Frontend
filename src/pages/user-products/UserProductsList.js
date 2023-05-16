@@ -1,23 +1,57 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Container, Link, MenuItem, Select } from '@mui/material';
+import {
+  Box,
+  Container,
+  Link,
+  MenuItem,
+  Select,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+} from '@mui/material';
 
 const UserProductsList = () => {
-  const [productsList, setProductsList] = useState([]);
   const navigate = useNavigate();
 
-  const [categories, setCategories] = useState([
-    '등산',
-    '수영',
-    '웨이트',
-    '캠핑',
-    '테니스',
-    '뜨개',
-    '사진',
-    '악기',
-    '기타',
-  ]);
+  const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링
+  const [productsList, setProductsList] = useState([]); // 상품 목록
+  const [categories, setCategories] = useState([]);
+  const [filter, setFilter] = useState();
+  const [filterIsRental, setFilterIsRental] = useState();
+
+  // 카테고리 불러오기 ?
+  const getCategories = () => {
+    axios
+      .post('http://localhost:8080/products/lists')
+      .then((res) => {
+        const { data } = res;
+        setCategories(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const getProductList = () => {
+    axios
+      .get('http://localhost:8080/products/lists')
+      .then((res) => {
+        const { data } = res;
+        setProductsList(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getProductList();
+    getCategories();
+  }, []);
 
   const categoryNameStyle = {
     margin: '0 40px 0 0',
@@ -29,10 +63,6 @@ const UserProductsList = () => {
     height: 40,
     margin: '10px 0 120px 20px',
   };
-
-  const [filter, setFilter] = useState();
-
-  const [filterIsRental, setFilterIsRental] = useState();
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -55,7 +85,17 @@ const UserProductsList = () => {
           </Link>
         ))}
       </Box>
-      <Box id="filters" sx={{ display: 'grid', gridAutoFlow: 'column' }}>
+      <Box id="filters" sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+        <Select
+          sx={selectStyle}
+          defaultValue={0}
+          value={filterIsRental}
+          onChange={handleFilterIsRentalChange}
+        >
+          <MenuItem value={0}>전체</MenuItem>
+          <MenuItem value={1}>미대여</MenuItem>
+          <MenuItem value={2}>대여중</MenuItem>
+        </Select>
         <Select
           sx={selectStyle}
           defaultValue={0}
@@ -68,17 +108,17 @@ const UserProductsList = () => {
           <MenuItem value={3}>가격높은순</MenuItem>
           <MenuItem value={4}>가격낮은순</MenuItem>
         </Select>
-        <Select
-          sx={selectStyle}
-          defaultValue={0}
-          value={filterIsRental}
-          onChange={handleFilterIsRentalChange}
-        >
-          <MenuItem value={0}>전체</MenuItem>
-          <MenuItem value={1}>미대여</MenuItem>
-          <MenuItem value={2}>대여중</MenuItem>
-        </Select>
       </Box>
+      <Card sx={{ maxWidth: 220, maxHeight: 330 }}>
+        <CardMedia sx={{ height: 220 }} image="" title="" />
+        <CardActions>
+          <Link>상품명</Link>
+        </CardActions>
+        <CardContent>
+          <Box>상품가격</Box>
+          <Box>관심 관심수</Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

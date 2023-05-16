@@ -1679,7 +1679,14 @@
   resolved "https://registry.npmjs.org/@mui/core-downloads-tracker/-/core-downloads-tracker-5.12.3.tgz"
   integrity sha512-yiJZ+knaknPHuRKhRk4L6XiwppwkAahVal3LuYpvBH7GkA2g+D9WLEXOEnNYtVFUggyKf6fWGLGnx0iqzkU5YA==
 
-"@mui/material@^5.12.3":
+"@mui/icons-material@^5.11.16":
+  version "5.11.16"
+  resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.11.16.tgz"
+  integrity sha512-oKkx9z9Kwg40NtcIajF9uOXhxiyTZrrm9nmIJ4UjkU2IdHpd4QVLbCc/5hZN/y0C6qzi2Zlxyr9TGddQx2vx2A==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+
+"@mui/material@^5.0.0", "@mui/material@^5.12.3":
   version "5.12.3"
   resolved "https://registry.npmjs.org/@mui/material/-/material-5.12.3.tgz"
   integrity sha512-xNmKlrEN4HsTaKFNLZfc7ie7CXx2YqEeO//hsXZx2p3MGtDdeMr2sV3jC4hsFs57RhQlF79weY7uVvC8xSuVbg==
@@ -8076,6 +8083,11 @@ react-scripts@5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-simple-image-slider@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/react-simple-image-slider/-/react-simple-image-slider-2.4.1.tgz"
+  integrity sha512-9T/WjsRThJup43QxzH202rLVNqaUK9P8izTiWOfLcc5w3QygU44a9IQUuIwGYiXtWvw2spRRGLRc5Xd62/vfDg==
 
 react-transition-group@^4.4.5:
   version "4.4.5"
