@@ -2,6 +2,11 @@ import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const requestDataRow = {
   py: 2,
@@ -39,7 +44,7 @@ const requestFileValueCol = {
   py: '1px',
   backgroundColor: '#f1f1f1',
   borderRadius: '5px',
-  width: 'calc(100% - 190px)',
+  width: 'calc(100% - 170px)',
   minHeight: '40px',
   height: 'auto',
   display: 'flex',
@@ -54,6 +59,18 @@ const reqProgressExact = {
 const reqProgressNotExact = {
   color: '#525252',
 };
+
+const images = [
+  {
+    url: process.env.PUBLIC_URL + '/BrandLogo/arena.png',
+  },
+  {
+    url: process.env.PUBLIC_URL + '/BrandLogo/brandyarn.png',
+  },
+  {
+    url: process.env.PUBLIC_URL + '/BrandLogo/excider.png',
+  },
+];
 
 const AdminRequestsDetails = () => {
   const location = useLocation();
@@ -327,23 +344,40 @@ const AdminRequestsDetails = () => {
                 </Typography>
               </Box>
             ) : (
-              <Box sx={requestFileValueCol}>
+              <Swiper
+                pagination={{
+                  type: 'fraction',
+                }}
+                navigation={true}
+                modules={[Navigation, Pagination]}
+                style={requestFileValueCol}
+              >
                 {reqFileList.map((fileName) => {
-                  const fileSrc = `http://localhost:8080/m/requests/upload/${fileName}`;
+                  const fileSrc = `http://localhost:8080/m/requests/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
                   return (
-                    <Box
-                      component="img"
-                      alt={fileName}
-                      src={fileSrc}
-                      sx={{
-                        my: 1,
-                        maxWidth: '100%',
+                    <SwiperSlide
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}
-                    />
+                    >
+                      <Box
+                        component="img"
+                        alt={fileName}
+                        src={fileSrc}
+                        sx={{
+                          my: 5,
+                          width: '90%',
+                          height: '90%',
+                        }}
+                      />
+                    </SwiperSlide>
                   );
                 })}
-              </Box>
+              </Swiper>
             )}
+
             {/* 첨부파일 출력부 끝 */}
           </Grid>
           {/* 첨부파일 표기 끝 */}
