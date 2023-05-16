@@ -15,7 +15,6 @@ import {
   ToggleButtonGroup,
   TextField,
   NativeSelect,
-  CircularProgress,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
@@ -25,27 +24,8 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
+import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFooter from '../../components/UserFooter';
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  color: '#000000',
-  backgroundColor: '#ffffff',
-  border: 'none',
-  fontSize: '0.8rem',
-  padding: '6px 12px',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: '#C3C36A',
-    color: '#000000',
-  },
-  '&.Mui-selected': {
-    backgroundColor: '#C3C36A',
-    color: '#000000',
-  },
-  '&.Mui-selected:hover': {
-    backgroundColor: '#C3C36A',
-  },
-}));
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   boxShadow: 'none',
@@ -207,186 +187,198 @@ const UserFAQLists = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1150px', margin: 'auto' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-        }}
-      >
-        <Box sx={{ float: 'right', mb: 1, mt: 1 }}>
-          <ToggleButtonGroup
-            value={String(currentFilter)}
-            exclusive
-            onChange={filterChange}
-          >
-            {filters.map((filter) => {
-              return (
-                <ToggleButton
-                  key={filter.name}
-                  value={filter.value}
-                  sx={filterBox}
-                >
-                  {filter.name}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        </Box>
-      </Box>
+    <>
+      <UserCsTitle />
 
-      <StyledTableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <StyledTableHeadRow>
-              <TableCell align="center">번호</TableCell>
-              <TableCell align="center">카테고리</TableCell>
-              <TableCell align="center">제목</TableCell>
-              <TableCell align="center">날짜</TableCell>
-            </StyledTableHeadRow>
-          </TableHead>
-
-          {faqList.length !== 0 &&
-            faqList.map((faq, index) => (
-              <TableBody>
-                <StyledTableRow key={index}>
-                  <TableCell align="center">{faq.faqCode}</TableCell>
-                  <TableCell align="center">{faq.faqCategory}</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      maxWidth: '300px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
+      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Box sx={{ float: 'right', my: 2 }}>
+            <ToggleButtonGroup
+              value={String(currentFilter)}
+              exclusive
+              onChange={filterChange}
+            >
+              {filters.map((filter) => {
+                return (
+                  <ToggleButton
+                    key={filter.name}
+                    value={filter.value}
+                    sx={filterBox}
                   >
-                    <StyledLink
-                      title={faq.faqTitle}
-                      to={`/cs/faq/details/${faq.faqCode}`}
-                      state={{
-                        queryString: location.search,
-                      }}
+                    {filter.name}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
+
+        <StyledTableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <StyledTableHeadRow>
+                <TableCell align="center">번호</TableCell>
+                <TableCell align="center">카테고리</TableCell>
+                <TableCell align="center">제목</TableCell>
+                <TableCell align="center">날짜</TableCell>
+              </StyledTableHeadRow>
+            </TableHead>
+
+            {faqList.length !== 0 &&
+              faqList.map((faq, index) => (
+                <TableBody key={index}>
+                  <StyledTableRow>
+                    <TableCell align="center">{faq.faqCode}</TableCell>
+                    <TableCell align="center">{faq.faqCategory}</TableCell>
+                    <TableCell
+                      align="center"
                       sx={{
-                        textDecoration: 'none',
-                        color: '#000000',
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        },
+                        maxWidth: '300px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {faq.faqTitle}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell align="center">{faq.faqDate}</TableCell>
-                </StyledTableRow>
-              </TableBody>
-            ))}
-        </Table>
-      </StyledTableContainer>
+                      <StyledLink
+                        title={faq.faqTitle}
+                        to={`/cs/faq/details/${faq.faqCode}`}
+                        state={{
+                          queryString: location.search,
+                        }}
+                        sx={{
+                          textDecoration: 'none',
+                          color: '#000000',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {faq.faqTitle}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell align="center">{faq.faqDate}</TableCell>
+                  </StyledTableRow>
+                </TableBody>
+              ))}
+          </Table>
+        </StyledTableContainer>
 
-      {searchParams.get('keyword') !== null && faqList.length === 0 && (
-        <Box>
-          <Typography
-            variant="h5"
-            component="h6"
+        {searchParams.get('keyword') !== null && faqList.length === 0 && (
+          <Box>
+            <Typography
+              variant="h5"
+              component="h6"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 5,
+                mb: 5,
+              }}
+            >
+              검색 결과가 없습니다.
+            </Typography>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            mt: 2,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Pagination
+            count={Number(totalPage || 0)}
+            page={Number(currentPage)}
+            onChange={pageChange}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
+
+        <Box
+          sx={{
+            mt: 2,
+            mb: 12,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <NativeSelect
+            disabled
+            size="normal"
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mt: 5,
-              mb: 5,
+              mx: 1,
+              px: 1,
+              width: '120px',
+              outline: '1px solid #000000',
+              hover: {
+                backgroundColor: '#ffffff',
+              },
+              focus: {
+                backgroundColor: '#fffffff',
+              },
+            }}
+            defaultValue="title-content"
+          >
+            <option
+              value="title-content"
+              style={{
+                textAlign: 'center',
+              }}
+            >
+              제목 + 내용
+            </option>
+          </NativeSelect>
+          <TextField
+            inputRef={keywordRef}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                search();
+              }
+            }}
+            variant="outlined"
+            size="small"
+            sx={{
+              mx: 1,
+              width: '400px',
+              '&:focus': {
+                outline: 'none',
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={search}
+            sx={{
+              mx: 1,
+              width: '65px',
+              backgroundColor: '#c3c36a',
+              color: '#000000',
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: '#c3c36a',
+                color: '#ffffff',
+              },
             }}
           >
-            검색 결과가 없습니다.
-          </Typography>
+            검색
+          </Button>
         </Box>
-      )}
-
-      <Box
-        sx={{
-          mt: 2,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Pagination
-          count={Number(totalPage || 0)}
-          page={Number(currentPage)}
-          onChange={pageChange}
-          showFirstButton
-          showLastButton
-        />
-      </Box>
-
-      <Box
-        sx={{
-          mt: 2,
-          mb: 12,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <NativeSelect
-          disabled
-          size="normal"
-          sx={{
-            mx: 1,
-            px: 1,
-            outline: '1px solid #000000',
-            hover: {
-              backgroundColor: '#ffffff',
-            },
-            focus: {
-              backgroundColor: '#fffffff',
-            },
-          }}
-          defaultValue="title-content"
-        >
-          <option value="title-content">제목 + 내용</option>
-        </NativeSelect>
-        <TextField
-          inputRef={keywordRef}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              search();
-            }
-          }}
-          variant="outlined"
-          size="small"
-          sx={{
-            mx: 1,
-            width: '400px',
-            '&:focus': {
-              outline: 'none',
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          onClick={search}
-          sx={{
-            mx: 1,
-            width: '65px',
-            backgroundColor: '#c3c36a',
-            color: '#000000',
-            fontWeight: 'bold',
-            '&:hover': {
-              backgroundColor: '#c3c36a',
-              color: '#ffffff',
-            },
-          }}
-        >
-          검색
-        </Button>
-      </Box>
-      <UserFooter />
-    </div>
+        <UserFooter />
+      </div>
+    </>
   );
 };
 

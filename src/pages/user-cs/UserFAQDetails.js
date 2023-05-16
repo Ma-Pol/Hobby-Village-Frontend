@@ -17,7 +17,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const StyledButton = styled(Button)(({ theme }) => ({
   border: '1px solid black',
   color: 'black',
-  fontSize: 'large',
+  fontSize: '1.0rem',
+  height: '35px',
   fontWeight: 'bold',
   padding: theme.spacing(1),
 }));
@@ -25,7 +26,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const LabelItem = styled(Grid)(({ theme }) => ({
   minHeight: '50px',
   display: 'flex',
-  justifyContent: 'center',
+  paddingLeft: '10px',
 }));
 
 const UserFAQDetail = () => {
@@ -50,39 +51,26 @@ const UserFAQDetail = () => {
   } else {
     return (
       <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+        <Box
+          sx={{
+            my: 5,
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '1.6rem',
+            }}
+          >
+            FAQ 자주 묻는 질문
+          </Typography>
+        </Box>
+
         <StyledPaper style={{ marginTop: '40px' }}>
           <Grid container>
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                카테고리 <Divider orientation="vertical" flexItem />
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {faqDetail.faqCategory}
-              </Typography>
-            </Grid>
-
             <LabelItem
               item
               xs={2}
@@ -127,6 +115,37 @@ const UserFAQDetail = () => {
               item
               xs={2}
               sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                카테고리 <Divider orientation="vertical" flexItem />
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" component="h2">
+                {faqDetail.faqCategory}
+              </Typography>
+            </Grid>
+
+            <LabelItem
+              item
+              xs={2}
+              sx={{
                 alignItems: 'flex-start',
                 pt: 1,
               }}
@@ -152,7 +171,6 @@ const UserFAQDetail = () => {
               }}
             >
               <Typography variant="h6" component="h2">
-                {/* {faqDetail.faqContent} */}
                 <div
                   dangerouslySetInnerHTML={{ __html: faqDetail.faqContent }}
                 ></div>

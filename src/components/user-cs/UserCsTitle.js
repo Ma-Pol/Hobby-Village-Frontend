@@ -7,14 +7,16 @@ import { styled } from '@mui/system';
 // Styled Link component
 const StyledLink = styled(RouterLink)(({ theme }) => ({
   textDecoration: 'none',
-  color: 'inherit',
+  color: '#797979',
   '&.active': {
     color: '#C3C36A',
+    textDecoration: 'underline',
   },
 }));
 
 const UserCsTitle = () => {
-  const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
+  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
+  const email = 'bae@naver.com'; // 테스트용 임시 메일
   const location = useLocation(); // 현재 URL 위치 확인
   const pathName = location.pathname.split('/')[2];
 
@@ -84,7 +86,7 @@ const UserCsTitle = () => {
           }}
         />
         <StyledLink
-          to={`/cs/qna/lee@naver.com/lists?filter=none&pages=1`}
+          to={`/cs/qna/${email}/lists?filter=none&pages=1`}
           className={isQnaPage ? 'active' : ''}
         >
           <Typography variant="h5" sx={{ fontWeight: 'bold', marginLeft: 3 }}>

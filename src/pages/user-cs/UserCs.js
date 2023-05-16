@@ -6,7 +6,6 @@ import UserFAQDetails from './UserFAQDetails';
 import UserQnADetails from './UserQnADetails';
 import UserQnACreate from './UserQnACreate';
 import { Container } from '@mui/material';
-import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserHeader from '../../components/UserHeader';
 
 const UserCs = () => {
@@ -14,7 +13,6 @@ const UserCs = () => {
     <>
       <Container>
         <UserHeader />
-        <UserCsTitle />
         <Routes>
           <Route exact path="faq/lists" element={<UserFAQLists />} />
           <Route exact path="qna/:email/lists" element={<UserQnALists />} />
@@ -25,7 +23,7 @@ const UserCs = () => {
           />
           <Route
             exact
-            path="qna/details/:qstCode"
+            path="qna/:email/details/:qstCode"
             element={<UserQnADetails />}
           />
           <Route exact path="qna/create" element={<UserQnACreate />} />
