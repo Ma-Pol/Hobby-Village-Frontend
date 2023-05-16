@@ -15,7 +15,7 @@ import AdminHeader from '../components/AdminHeader';
 const Admin = () => {
   return (
     <>
-    <AdminHeader />
+      <AdminHeader />
       <Routes>
         <Route exact path="" element={<AdminMain />} />
         <Route exact path="users/*" element={<AdminUsers />} />

@@ -8,7 +8,11 @@ const AdminOrders = () => {
     <>
       <Routes>
         <Route exact path="lists" element={<AdminOrdersLists />} />
-        <Route exact path="details/:odrCode" element={<AdminOrdersDetails />} />
+        <Route
+          exact
+          path="details/:odrNumber"
+          element={<AdminOrdersDetails />}
+        />
         <Route
           path="*"
           element={

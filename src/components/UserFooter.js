@@ -1,44 +1,44 @@
-import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import PhoneIcon from "@mui/icons-material/Phone";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Box, Typography, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import PhoneIcon from '@mui/icons-material/Phone';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   footerContainer: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
   },
   footer: {
-    padding: "1rem",
-    width: "1150px",
-    marginTop: "0.3rem",
-    marginLeft: "15rem",
+    padding: '1rem',
+    width: '1150px',
+    marginTop: '0.3rem',
+    marginLeft: '15rem',
   },
   line: {
-    borderTop: "1px solid #BCB5B5",
-    marginTop: "3rem",
+    borderTop: '1px solid #BCB5B5',
+    marginTop: '3rem',
   },
   left: {
-    textAlign: "left",
+    textAlign: 'left',
   },
   middle: {
-    textAlign: "left",
+    textAlign: 'left',
   },
   right: {
-    textAlign: "left",
+    textAlign: 'left',
   },
   phoneIcon: {
-    verticalAlign: "bottom",
-    marginRight: "0.3rem",
+    verticalAlign: 'bottom',
+    marginRight: '0.3rem',
   },
   textColor: {
-    color: "#555555",
-    textDecoration: "none",
+    color: '#555555',
+    textDecoration: 'none',
   },
 }));
 
-const Footer = () => {
+const UserFooter = () => {
   const classes = useStyles();
 
   return (
@@ -124,4 +124,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default UserFooter;
