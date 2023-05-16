@@ -16,6 +16,7 @@ import {
   TextField,
   NativeSelect,
   CircularProgress,
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
 import {
@@ -205,168 +206,188 @@ const UserFAQLists = () => {
     },
   };
 
-  if (faqList.length === 0) {
-    return (
+  return (
+    <div style={{ maxWidth: '1150px', margin: 'auto' }}>
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '50vh',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
         }}
       >
-        <CircularProgress color="inherit" />
+        <Box sx={{ float: 'right', mb: 1, mt: 1 }}>
+          <ToggleButtonGroup
+            value={String(currentFilter)}
+            exclusive
+            onChange={filterChange}
+          >
+            {filters.map((filter) => {
+              return (
+                <ToggleButton
+                  key={filter.name}
+                  value={filter.value}
+                  sx={filterBox}
+                >
+                  {filter.name}
+                </ToggleButton>
+              );
+            })}
+          </ToggleButtonGroup>
+        </Box>
       </Box>
-    );
-  } else {
-    return (
-      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'flex-end',
-          }}
-        >
-          <Box sx={{ float: 'right', mb: 1, mt: 1 }}>
-            <ToggleButtonGroup
-              value={String(currentFilter)}
-              exclusive
-              onChange={filterChange}
-            >
-              {filters.map((filter) => {
-                return (
-                  <ToggleButton
-                    key={filter.name}
-                    value={filter.value}
-                    sx={filterBox}
+
+      <StyledTableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <StyledTableHeadRow>
+              <TableCell align="center">번호</TableCell>
+              <TableCell align="center">카테고리</TableCell>
+              <TableCell align="center">제목</TableCell>
+              <TableCell align="center">날짜</TableCell>
+            </StyledTableHeadRow>
+          </TableHead>
+
+          {faqList.length !== 0 &&
+            faqList.map((faq, index) => (
+              <TableBody>
+                <StyledTableRow key={index}>
+                  <TableCell align="center">{faq.faqCode}</TableCell>
+                  <TableCell align="center">{faq.faqCategory}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      maxWidth: '300px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
                   >
-                    {filter.name}
-                  </ToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
-          </Box>
-        </Box>
+                    <StyledLink
+                      title={faq.faqTitle}
+                      to={`/cs/faq/details/${faq.faqCode}`}
+                      state={{
+                        queryString: location.search,
+                      }}
+                      sx={{
+                        textDecoration: 'none',
+                        color: '#000000',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      {faq.faqTitle}
+                    </StyledLink>
+                  </TableCell>
+                  <TableCell align="center">{faq.faqDate}</TableCell>
+                </StyledTableRow>
+              </TableBody>
+            ))}
+        </Table>
+      </StyledTableContainer>
 
-        <StyledTableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <StyledTableHeadRow>
-                <TableCell align="center">번호</TableCell>
-                <TableCell align="center">카테고리</TableCell>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">날짜</TableCell>
-              </StyledTableHeadRow>
-            </TableHead>
-            <TableBody>
-              {faqList.length !== 0 &&
-                faqList.map((faq, index) => (
-                  <StyledTableRow key={index}>
-                    <TableCell align="center">{faq.faqCode}</TableCell>
-                    <TableCell align="center">{faq.faqCategory}</TableCell>
-                    <TableCell align="center">
-                      <StyledLink
-                        to={`/cs/faq/details/${faq.faqCode}`}
-                        state={{
-                          queryString: location.search,
-                        }}
-                      >
-                        {faq.faqTitle}
-                      </StyledLink>
-                    </TableCell>
-                    <TableCell align="center">{faq.faqDate}</TableCell>
-                  </StyledTableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-
-        <Box
-          sx={{
-            mt: 2,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Pagination
-            count={Number(totalPage || 0)}
-            page={Number(currentPage)}
-            onChange={pageChange}
-            showFirstButton
-            showLastButton
-          />
-        </Box>
-
-        <Box
-          sx={{
-            mt: 2,
-            mb: 12,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <NativeSelect
-            disabled
-            size="normal"
+      {searchParams.get('keyword') !== null && faqList.length === 0 && (
+        <Box>
+          <Typography
+            variant="h5"
+            component="h6"
             sx={{
-              mx: 1,
-              px: 1,
-              outline: '1px solid #000000',
-              hover: {
-                backgroundColor: '#ffffff',
-              },
-              focus: {
-                backgroundColor: '#fffffff',
-              },
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 5,
+              mb: 5,
             }}
-            defaultValue="title-content"
           >
-            <option value="title-content">제목 + 내용</option>
-          </NativeSelect>
-          <TextField
-            inputRef={keywordRef}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                search();
-              }
-            }}
-            variant="outlined"
-            size="small"
-            sx={{
-              mx: 1,
-              width: '400px',
-              '&:focus': {
-                outline: 'none',
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={search}
-            sx={{
-              mx: 1,
-              width: '65px',
+            검색 결과가 없습니다.
+          </Typography>
+        </Box>
+      )}
+
+      <Box
+        sx={{
+          mt: 2,
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Pagination
+          count={Number(totalPage || 0)}
+          page={Number(currentPage)}
+          onChange={pageChange}
+          showFirstButton
+          showLastButton
+        />
+      </Box>
+
+      <Box
+        sx={{
+          mt: 2,
+          mb: 12,
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <NativeSelect
+          disabled
+          size="normal"
+          sx={{
+            mx: 1,
+            px: 1,
+            outline: '1px solid #000000',
+            hover: {
+              backgroundColor: '#ffffff',
+            },
+            focus: {
+              backgroundColor: '#fffffff',
+            },
+          }}
+          defaultValue="title-content"
+        >
+          <option value="title-content">제목 + 내용</option>
+        </NativeSelect>
+        <TextField
+          inputRef={keywordRef}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              search();
+            }
+          }}
+          variant="outlined"
+          size="small"
+          sx={{
+            mx: 1,
+            width: '400px',
+            '&:focus': {
+              outline: 'none',
+            },
+          }}
+        />
+        <Button
+          variant="contained"
+          onClick={search}
+          sx={{
+            mx: 1,
+            width: '65px',
+            backgroundColor: '#c3c36a',
+            color: '#000000',
+            fontWeight: 'bold',
+            '&:hover': {
               backgroundColor: '#c3c36a',
-              color: '#000000',
-              fontWeight: 'bold',
-              '&:hover': {
-                backgroundColor: '#c3c36a',
-                color: '#ffffff',
-              },
-            }}
-          >
-            검색
-          </Button>
-        </Box>
-        <UserFooter />
-      </div>
-    );
-  }
+              color: '#ffffff',
+            },
+          }}
+        >
+          검색
+        </Button>
+      </Box>
+      <UserFooter />
+    </div>
+  );
 };
 
 export default UserFAQLists;

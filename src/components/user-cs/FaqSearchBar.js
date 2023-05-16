@@ -19,7 +19,7 @@ const SearchBarContainer = styled('div')({
 
 const SearchLabel = styled(Typography)(({ theme }) => ({
   display: 'flex',
-  justifyContent: 'center', 
+  justifyContent: 'center',
   marginRight: theme.spacing(1),
   border: '1px solid',
   padding: theme.spacing(1),
@@ -50,14 +50,17 @@ const FaqSearchBar = ({ keyword, setKeyword, onSearch }) => {
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
         size="small"
-        style={{ flexGrow: 1, width: '80%' }} 
+        style={{ flexGrow: 1, width: '80%' }}
       />
-      <StyledSearchButton variant="contained" color="primary" onClick={onSearch}>
+      <StyledSearchButton
+        variant="contained"
+        color="primary"
+        onClick={onSearch}
+      >
         <SearchIcon />
       </StyledSearchButton>
     </SearchBarContainer>
   );
 };
-
 
 export default FaqSearchBar;
