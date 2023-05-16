@@ -37,10 +37,9 @@ const UserLogin = () => {
         .then((res) => {
             console.log.apply("handleLogin =>", res);
             if(res.data === 1){
-                window.sessionStorage.setItem("email", emailRef.current.value);
                 navigate(`/`);
             }else{
-                navigate(`/login`);
+              
              }
         })
         .catch((e)=> {

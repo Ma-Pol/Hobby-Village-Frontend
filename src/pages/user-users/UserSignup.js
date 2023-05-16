@@ -54,13 +54,14 @@ const UserSignup = () => {
                }) );
    }
 
+   //이메일 중복확인
     const onCheckEmail = async (e) => {
     e.preventDefault();
 
     try { 
-      const res = axios.post("/users/register/email", { email: e.current.value });
+      const res = await axios.post("/users/register/email", { email: e.current.value });
 
-      const  result  = res.data;
+      const  result  = await res.data;
 
       if (!result) {
           setEmail("이미 등록된 메일입니다. 다시 입력해주세요.");
@@ -75,13 +76,14 @@ const UserSignup = () => {
     }
   }
 
+  //닉네임 중복확인
   const onCheckNickname = async (e) => {
     e.preventDefault();
 
     try { 
-      const res = axios.post("/users/register/nickname", { nickname: e.current.value })
+      const res = await axios.post("/users/register/nickname", { nickname: e.current.value })
       
-      const  result = res.data;
+      const  result = await res.data;
 
       if (!result) {
           setNickname("이미 등록된 닉네임입니다. 다시 입력해주세요.");
@@ -97,7 +99,7 @@ const UserSignup = () => {
   }
     
    
-    
+  //비밀번호 일치확인
   const hasNotSameError = passwordEntered =>
         // eslint-disable-next-line eqeqeq
         Password != confirmPassword ? true : false;    
@@ -134,21 +136,33 @@ const UserSignup = () => {
 
   
   const handleMember = () => { 
-  
-    if (emailRef.current.value === "" || emailRef.current.value === false) {
-      alert("이미 존재하는 이메일입니다.");
+    
+    if (emailRef.current.value === "" ) {
+      alert("이메일을 입력해 주세요");
       emailRef.current.focus();
       return false;
     }
 
-    if (nickRef.current.value === "" || nickRef.current.value === false) {
+    if (nickRef.current.value === "") {
+      alert("닉네임을 입력해 주세요");
+      nickRef.current.focus();
+      return false;
+    }
+
+    if (!checkNickname ){
       alert("이미 존재하는 닉네임입니다.");
+      nickRef.current.focus();
+      return false;
+    }
+
+    if (!checkEmail ){
+      alert("이미 존재하는 이메일입니다.");
       nickRef.current.focus();
       return false;
     }
    
     axios   
-            .post("/signup/insertMember", {
+            .post("/signup", {
                 email: emailRef.current.value,
                 pw: pwRef.current.value,
                 name:nameRef ,
@@ -189,7 +203,8 @@ const UserSignup = () => {
             />        
             <Text1>
                 <TextField 
-                    id="standard-basic" label="이름" variant="standard" autoFocus style={{width:"50%", marginTop:"50px", marginLeft:"30px"}} inputRef={nameRef}/>
+                    id="standard-basic" label="이름" variant="standard" autoFocus style={{width:"50%", marginTop:"50px", marginLeft:"30px"}} 
+                    inputRef={nameRef}/>
             </Text1>
             <Text1>
                 <TextField 

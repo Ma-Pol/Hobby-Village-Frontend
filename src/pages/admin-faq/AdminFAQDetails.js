@@ -13,7 +13,7 @@ const AdminFAQDetails = () => {
    useEffect (()=> {
     axios
     .get(`/m/faqs/faqdetails/${faqCode}`,{
-      
+    
     })
     .then((res)=> {
       setDetails(res.data)
@@ -53,7 +53,7 @@ const AdminFAQDetails = () => {
           <Text>
             제목&nbsp;&nbsp;|
             <Typography
-              // defaultValue = {details.faqTitle}
+               defaultValue = {details.faqTitle}
               style={{width:"70%", marginLeft:"20px", marginTop:"30px"}}
             />
             </Text>
@@ -61,7 +61,7 @@ const AdminFAQDetails = () => {
          <Text1>
           구분&nbsp;&nbsp;| 
             <Typography
-                // defaultValue = {details.faqCategory} 
+                defaultValue = {details.faqCategory}
                 style={{ width:"150px", marginLeft:"20px", marginTop:"30px", fontSize:"20px"}}
             />
           </Text1>
@@ -69,7 +69,7 @@ const AdminFAQDetails = () => {
           <Text2>
             내용&nbsp;&nbsp;| 
             <Typography
-              // defaultValue = {details.faqContent}
+              defaultValue = {details.faqContent}
               multiline
               rows={10}
               style={{width:"70%", marginTop:"30px",  marginLeft:"20px"}}

@@ -1,17 +1,28 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 import styled from 'styled-components';
-import { Navigate, useNavigate } from "react-router-dom";
-import TextField  from "@mui/material/TextField";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import Typography  from "@mui/material/Typography";
 import Button  from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import axios from "axios";
 
 const AdminUsersDetails = () => {
-   const navigate = useNavigate();
-    
-    const handleMemberForm = () => {
-      // useHistory
-        navigate('lists');
+  const navigate = useNavigate();
+  const [details, setDetails] = useState();
+  const { userCode } = useParams();
+
+  useEffect (()=> {
+    axios
+    .get(`/m/users/details/${userCode}`,{
+      
+    })
+    .then((res)=> {
+      setDetails(res.data)
+    })
+   })
+
+  const handleMemberForm = () => {
+        navigate(`m/users`);
     }
 
   return (
@@ -23,85 +34,61 @@ const AdminUsersDetails = () => {
      
           <Text>
             이름&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"50px"}}
+              defaultValue= {details.name}
             />
             </Text>
             <Text>
             닉네임&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"20px"}}
+              defaultValue= {details.nickname}
             />
             </Text>
           </Wrapper1>
           
           <TextArea>
-          <Text>
+          <Text >
             이메일&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"50px"}}
+              defaultValue= {details.email}
             />
             </Text>
              <Text>
                 생년월일&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"20px"}}
+              defaultValue= {details.birthday}
             />
             </Text>
              <Text>
             전화번호&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"20px"}}
+              defaultValue= {details.phone}
             />
             </Text>
              <Text>
             우편번호&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"20px"}}
+              defaultValue= {details.zipCode}
             />
             </Text>
              <Text>
             주소&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"70px"}}
+              defaultValue= {details.address1}
             />
             </Text>
              <Text>
             적립금&nbsp;&nbsp;
-            <TextField
-              variant="outlined"
-              sx={{
-                    "& fieldset": { border: 'none' },
-                    }}
+            <Typography
               style={{width:"70%", marginLeft:"40px", }}
+              defaultValue= {details.savedMoney}
             />
             </Text>
            
@@ -151,7 +138,7 @@ const Text = styled.div`
     align-items: center;
     justify-content: left;
     font-size:20pt;
-    margin-top:50px;
+    margin-top:80px;
     margin-left:100px;
 `
 const Group = styled.div`
