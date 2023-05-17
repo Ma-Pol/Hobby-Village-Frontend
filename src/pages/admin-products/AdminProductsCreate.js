@@ -17,6 +17,7 @@ import {
   InputAdornment,
   Grid,
 } from '@mui/material';
+import axios from 'axios';
 
 const AdminProductsCreate = () => {
   const prodCodeRef = useRef();
@@ -25,15 +26,85 @@ const AdminProductsCreate = () => {
   const prodCategoryRef = useRef();
   const prodShippingRef = useRef(); // 배송비
   const prodNameRef = useRef();
-  const prodPictureRef = useRef();
   const prodContentRef = useRef();
   const prodHostRef = useRef();
+
+  const prodPictureRef = useRef();
   const prodTagRef = useRef();
+
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate();
 
+  const getBrandList = () => {
+    axios
+      .get(`/m/products/getBrandList`)
+      .then((res) => {
+        const { data } = res;
+        setBrands(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const getCategoryList = () => {
+    axios
+      .get(`/m/products/getCategoryList`)
+      .then((res) => {
+        const { data } = res;
+        setCategories(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getBrandList();
+    getCategoryList();
+  }, []);
+
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleSubmit = () => {
+    axios
+      .post('/m/products/addProduct', {
+        prodCode: prodCodeRef.current.value,
+        prodBrand: prodBrandRef.current.value,
+        prodPrice: prodPriceRef.current.value,
+        prodCategory: prodCategoryRef.current.value,
+        prodShipping: prodShippingRef.current.value,
+        prodName: prodNameRef.current.value,
+        prodContent: prodContentRef.current.value,
+        prodHost: prodHostRef.current.value,
+      })
+      .catch((e) => {
+        console.log(prodCodeRef.current.value);
+        console.error(e);
+      });
+    // 연관검색어 쉼표와 공백 제거
+    let str = prodTagRef.current.value;
+    const arr = str
+      .replace(/[,\s]+/g, ' ')
+      .trim()
+      .split(' ');
+    console.log(arr); // test
+    axios
+      .post('/m/products/addProdTags', {
+        prodCode: prodCodeRef.current.value,
+        prodTag: arr,
+      })
+      .then((res) => {
+        navigate(`/m/products/details/${prodCodeRef.current.value}`);
+      })
+      .catch((e) => {
+        console.log(prodCodeRef.current.value);
+        console.error(e);
+      });
   };
 
   const tableHeadStyle = {
@@ -147,7 +218,7 @@ const AdminProductsCreate = () => {
                   id="prodCode"
                   fullWidth
                   size="small"
-                  ref={prodCodeRef}
+                  inputRef={prodCodeRef}
                   sx={inputStyle}
                 ></TextField>
               </TableCell>
@@ -158,18 +229,17 @@ const AdminProductsCreate = () => {
                 <TextField
                   id="prodBrand"
                   select
-                  defaultValue={1}
+                  label="브랜드 선택"
                   fullWidth
                   size="small"
-                  ref={prodBrandRef}
+                  inputRef={prodBrandRef}
                   sx={inputStyle}
                 >
-                  <MenuItem key={1} value={1}>
-                    브랜드 선택
-                  </MenuItem>
-                  <MenuItem key="아레나" value="아레나">
-                    아레나
-                  </MenuItem>
+                  {brands.map((brand) => (
+                    <MenuItem key={brand} value={brand}>
+                      {brand}
+                    </MenuItem>
+                  ))}
                 </TextField>
               </TableCell>
             </TableRow>
@@ -187,7 +257,7 @@ const AdminProductsCreate = () => {
                   id="prodPrice"
                   fullWidth
                   size="small"
-                  ref={prodPriceRef}
+                  inputRef={prodPriceRef}
                   sx={inputStyle}
                   label="숫자만 입력"
                   InputProps={{
@@ -204,18 +274,17 @@ const AdminProductsCreate = () => {
                 <TextField
                   id="prodCategory"
                   select
-                  defaultValue={0}
+                  label="카테고리 선택"
                   fullWidth
                   size="small"
-                  ref={prodCategoryRef}
+                  inputRef={prodCategoryRef}
                   sx={inputStyle}
                 >
-                  <MenuItem key={0} value={0}>
-                    카테고리 선택
-                  </MenuItem>
-                  <MenuItem key="등산" value="등산">
-                    등산
-                  </MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
                 </TextField>
               </TableCell>
             </TableRow>
@@ -228,7 +297,7 @@ const AdminProductsCreate = () => {
                   id="prodShipping"
                   fullWidth
                   size="small"
-                  ref={prodShippingRef}
+                  inputRef={prodShippingRef}
                   sx={inputStyle}
                   label="숫자만 입력"
                   InputProps={{
@@ -246,7 +315,7 @@ const AdminProductsCreate = () => {
                   id="prodName"
                   fullWidth
                   size="small"
-                  ref={prodNameRef}
+                  inputRef={prodNameRef}
                   sx={inputStyle}
                 ></TextField>
               </TableCell>
@@ -264,7 +333,7 @@ const AdminProductsCreate = () => {
                 </InputLabel>
                 <Input
                   id="prodPicture"
-                  ref={prodPictureRef}
+                  inputRef={prodPictureRef}
                   type="file"
                   accept="image/*"
                   inputProps={{ multiple: true }}
@@ -290,7 +359,7 @@ const AdminProductsCreate = () => {
                   id="prodContent"
                   fullWidth
                   size="small"
-                  ref={prodContentRef}
+                  inputRef={prodContentRef}
                   sx={inputStyle}
                   multiline
                   inputProps={{ style: { height: '200px' } }}
@@ -306,7 +375,7 @@ const AdminProductsCreate = () => {
                   id="prodHost"
                   fullWidth
                   size="small"
-                  ref={prodHostRef}
+                  inputRef={prodHostRef}
                   sx={inputStyle}
                 ></TextField>
               </TableCell>
@@ -318,7 +387,7 @@ const AdminProductsCreate = () => {
                   id="prodTag"
                   fullWidth
                   size="small"
-                  ref={prodTagRef}
+                  inputRef={prodTagRef}
                   sx={inputStyle}
                   multiline
                 ></TextField>
@@ -332,7 +401,13 @@ const AdminProductsCreate = () => {
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           mt={5}
         >
-          <Button type="submit" variant="outlined" mr={3} sx={btnSubmitStyle}>
+          <Button
+            type="submit"
+            onClick={handleSubmit}
+            variant="outlined"
+            mr={3}
+            sx={btnSubmitStyle}
+          >
             등록
           </Button>
           &nbsp;&nbsp;&nbsp;

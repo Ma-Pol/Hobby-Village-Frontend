@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import SimpleImageSlider from 'react-simple-image-slider';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import {
   Container,
   Box,
@@ -12,31 +17,14 @@ import {
   TableRow,
   InputLabel,
   TextField,
-  MenuItem,
   Button,
-  Input,
   Grid,
+  InputAdornment,
 } from '@mui/material';
 
 const AdminProductsDetails = () => {
-  const prodCodeRef = useRef();
-  const prodBrandRef = useRef();
-  const prodPriceRef = useRef();
-  const prodCategoryRef = useRef();
-  const prodRegiDateRef = useRef();
-  const prodNameRef = useRef();
-  const rentalCountRef = useRef();
-  const prodIsRentalRef = useRef();
-  const prodPictureRef = useRef();
-  const prodContentRef = useRef();
-  const revwRateAvgRef = useRef();
-  const prodDibsRef = useRef();
-  const prodHostRef = useRef();
-  const prodTagRef = useRef();
-
   const navigate = useNavigate();
-  const { param } = useParams();
-  const prodCode = decodeURIComponent(param);
+  const { prodCode } = useParams();
 
   const [product, setProduct] = useState({
     prodCode: '',
@@ -48,17 +36,60 @@ const AdminProductsDetails = () => {
     rentalCount: 0,
     prodIsRental: 0,
     prodContent: '',
+    revwRate: 0.0,
     prodDibs: 0,
     prodHost: '',
   });
 
+  // 임시 이미지
+  const imagesTmp = [
+    {
+      url: process.env.PUBLIC_URL + '/BrandLogo/arena.png',
+    },
+    {
+      url: process.env.PUBLIC_URL + '/BrandLogo/brandyarn.png',
+    },
+    {
+      url: process.env.PUBLIC_URL + '/BrandLogo/excider.png',
+    },
+  ];
+
+  const [prodPics, setProdPics] = useState([]);
+  const [prodTag, setProdTag] = useState('');
+
   const getProductDetail = () => {
     axios
-      .get(`http://localhost:8080/getProductDetail/prodCode=${prodCode}`)
+      .get(`/m/products/getProductDetail?prodCode=${prodCode}`)
       .then((res) => {
-        console.log(param);
+        console.log(prodCode);
         const { data } = res;
         setProduct(data);
+        console.log(res.data.revwRate);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const getProdPics = () => {
+    axios
+      .get(`/m/products/getProdPictures?prodCode=${prodCode}`)
+      .then((res) => {
+        const { data } = res;
+        setProdPics(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const getProdTag = () => {
+    axios
+      .get(`/m/products/getProdTag?prodCode=${prodCode}`)
+      .then((res) => {
+        console.log(prodCode);
+        const { data } = res;
+        setProdTag(data);
       })
       .catch((e) => {
         console.error(e);
@@ -67,6 +98,8 @@ const AdminProductsDetails = () => {
 
   useEffect(() => {
     getProductDetail();
+    getProdPics();
+    getProdTag();
   }, []);
 
   const tableHeadStyle = {
@@ -84,6 +117,29 @@ const AdminProductsDetails = () => {
     input: { color: '#626262' },
     textarea: { color: '#626262' },
     overflow: 'auto',
+  };
+
+  const noImgaeBox = {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '5px',
+    width: '220px',
+    minHeight: '220px',
+    height: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
+  const swiperStyle = {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '5px',
+    width: '220px',
+    minHeight: '220px',
+    height: 'auto',
+    display: 'flex',
+    // flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
 
   const btnUploadImageStyle = {
@@ -149,18 +205,6 @@ const AdminProductsDetails = () => {
     },
   };
 
-  const images = [
-    {
-      url: "process.env.PUBLIC_URL + '/arena.png'",
-    },
-    {
-      url: "process.env.PUBLIC_URL + '/brandyarn.png'",
-    },
-    {
-      url: "process.env.PUBLIC_URL + '/excider.png'",
-    },
-  ];
-
   return (
     <Container>
       {/* 타이틀 */}
@@ -195,16 +239,14 @@ const AdminProductsDetails = () => {
               <TableCell sx={tableBodyStyle}>
                 <TextField
                   id="prodCode"
+                  value={product.prodCode}
                   fullWidth
                   size="small"
-                  ref={prodCodeRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
                   }}
-                >
-                  {product.prodCode}
-                </TextField>
+                ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
                 <InputLabel for="prodBrand">브랜드</InputLabel>
@@ -212,17 +254,14 @@ const AdminProductsDetails = () => {
               <TableCell sx={tableBodyStyle}>
                 <TextField
                   id="prodBrand"
-                  defaultValue={1}
                   fullWidth
                   size="small"
-                  ref={prodBrandRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
                   }}
-                >
-                  {product.prodBrand}
-                </TextField>
+                  value={product.prodBrand}
+                ></TextField>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -239,8 +278,12 @@ const AdminProductsDetails = () => {
                   id="prodPrice"
                   fullWidth
                   size="small"
-                  ref={prodPriceRef}
                   sx={inputReadOnlyStyle}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">&#8361;</InputAdornment>
+                    ),
+                  }}
                   value={product.prodPrice}
                 ></TextField>
               </TableCell>
@@ -252,7 +295,6 @@ const AdminProductsDetails = () => {
                   id="prodCategory"
                   fullWidth
                   size="small"
-                  ref={prodCategoryRef}
                   sx={inputReadOnlyStyle}
                   value={product.prodCategory}
                 ></TextField>
@@ -267,7 +309,6 @@ const AdminProductsDetails = () => {
                   id="prodRegiDate"
                   fullWidth
                   size="small"
-                  ref={prodRegiDateRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -283,7 +324,6 @@ const AdminProductsDetails = () => {
                   id="prodName"
                   fullWidth
                   size="small"
-                  ref={prodNameRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -302,7 +342,6 @@ const AdminProductsDetails = () => {
                   id="rentalCount"
                   fullWidth
                   size="small"
-                  ref={rentalCountRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -318,7 +357,6 @@ const AdminProductsDetails = () => {
                   id="prodIsRental"
                   fullWidth
                   size="small"
-                  ref={prodIsRentalRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -331,33 +369,59 @@ const AdminProductsDetails = () => {
             <TableRow>
               <TableCell sx={tableHeadStyle}>
                 <InputLabel>상품 사진</InputLabel>
-                {/* 파일선택 버튼: label로 연결, 실제 input은 숨김 */}
-                <InputLabel
-                  id="btnUploadImage"
-                  for="prodPicture"
-                  sx={btnUploadImageStyle}
-                >
-                  파일선택
-                </InputLabel>
-                <Input
-                  id="prodPicture"
-                  ref={prodPictureRef}
-                  type="file"
-                  accept="image/*"
-                  inputProps={{ multiple: true }}
-                  sx={{ display: 'none' }}
-                ></Input>
               </TableCell>
               <TableCell sx={tableBodyStyle}>
-                <SimpleImageSlider
+                {/* <SimpleImageSlider
                   width={220}
                   height={220}
-                  images={images}
+                  images={imagesTmp}
                   showBullets={true}
                   showNavs={true}
                   navSize={15}
                   navMargin={10}
-                />
+                /> */}
+                {prodPics.length === 0 ? (
+                  <Box sx={noImgaeBox}>
+                    <Typography variant="h6" component="h2">
+                      첨부 파일이 없습니다.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Swiper
+                    pagination={{
+                      type: 'fraction',
+                    }}
+                    navigation={true}
+                    modules={[Navigation, Pagination]}
+                    style={swiperStyle}
+                  >
+                    {prodPics.map((prodPicture) => {
+                      const fileSrc = `/Users/neung/desktop/devStudy/KDTProject/Hobby-Village/Uploaded/ProductsImage/${prodPicture}`; // 여기에 이미지 요청 경로 넣기
+                      console.log(prodPicture);
+                      console.log(prodPics);
+                      return (
+                        <SwiperSlide
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            alt={prodCode}
+                            src={fileSrc}
+                            sx={{
+                              my: 5,
+                              width: '90%',
+                              height: '90%',
+                            }}
+                          />
+                        </SwiperSlide>
+                      );
+                    })}
+                  </Swiper>
+                )}
               </TableCell>
               <TableCell sx={tableHeadStyle}>
                 <InputLabel for="prodContent">상품 설명</InputLabel>
@@ -368,7 +432,6 @@ const AdminProductsDetails = () => {
                   fullWidth
                   multiline
                   size="small"
-                  ref={prodContentRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -386,12 +449,11 @@ const AdminProductsDetails = () => {
                   id="revwRateAvg"
                   fullWidth
                   size="small"
-                  ref={revwRateAvgRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="4.8"
+                  value={product.revwRate}
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
@@ -402,7 +464,6 @@ const AdminProductsDetails = () => {
                   id="prodDibs"
                   fullWidth
                   size="small"
-                  ref={prodDibsRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -420,7 +481,6 @@ const AdminProductsDetails = () => {
                   id="prodHost"
                   fullWidth
                   size="small"
-                  ref={prodHostRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
@@ -437,12 +497,11 @@ const AdminProductsDetails = () => {
                   fullWidth
                   multiline
                   size="small"
-                  ref={prodTagRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
                     readOnly: true,
                   }}
-                  value="수영, 수영복, 아레나, 레몬"
+                  value={prodTag}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -462,7 +521,9 @@ const AdminProductsDetails = () => {
             variant="outlined"
             sx={btnListStyle}
             onClick={() =>
-              navigate(`/lists?sort=-prodRegiDate&filter=none&pages=1`)
+              navigate(
+                `/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`
+              )
             }
           >
             목록
@@ -471,7 +532,7 @@ const AdminProductsDetails = () => {
           <Button
             variant="outlined"
             sx={btnUpdateStyle}
-            onClick={() => navigate(`/modify/${product.prodCode}`)}
+            onClick={() => navigate(`/m/products/modify/${product.prodCode}`)}
           >
             수정
           </Button>
