@@ -272,7 +272,7 @@ const AdminOrdersLists = () => {
           >
             <option value="-odrDate">최근 주문 순</option>
             <option value="odrDate">오래된 주문 순</option>
-            <option value="-deadline">반납 기한 순</option>
+            <option value="deadline">반납 기한 순</option>
           </NativeSelect>
         </Box>
         {/* 정렬 기준 선택용 Select Box 표기 끝 */}

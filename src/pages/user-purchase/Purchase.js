@@ -1573,14 +1573,6 @@ const Purchase = () => {
                     >
                       2. 주문 취소 시 사용한 쿠폰은 복구되지 않습니다.
                     </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                      }}
-                    >
-                      3. 사용한 적립금은 함께 주문한 모든 상품이 주문 취소되어야
-                      복구됩니다.
-                    </Typography>
                   </>
                 }
               >

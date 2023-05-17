@@ -36,15 +36,15 @@ const useStyles = makeStyles({
 const AdminMain = () => {
   const classes = useStyles();
   const urls = [
-    '/m/users',
-    '/m/coupons',
-    '/m/products',
-    '/m/orders',
-    '/m/reviews',
-    '/m/requests',
-    '/m/notices',
-    '/m/faqs',
-    '/m/qnas',
+    '/m/users/lists?sort=-userCode&pages=1',
+    '/m/coupons/lists?sort=-startDate&filter=none&pages=1',
+    '/m/products/lists?sort=-prodRegiDate&filter=none&pages=1',
+    '/m/orders/lists?sort=-odrDate&filter=none&pages=1',
+    '/m/reviews/lists?sort=-revwRegiDate&filter=none&pages=1',
+    '/m/requests/sell/lists?sort=-reqDate&filter=none&pages=1',
+    '/m/notices/lists?sort=-notDate&filter=none&pages=1',
+    '/m/faqs/lists?sort=-faqDate&filter=none&pages=1',
+    '/m/qnas/lists?sort=-qstDate&filter=none&pages=1',
   ];
 
   const texts = [
@@ -65,7 +65,13 @@ const AdminMain = () => {
     return (
       <Link component={RouterLink} to={url} style={{ textDecoration: 'none' }}>
         <Box className={`${classes.box} ${boxClass}`}>
-          <Typography variant="h6" align="center" style={{ fontWeight: 'bold', color: 'black' }}> {/* Black text and increased size */}
+          <Typography
+            variant="h6"
+            align="center"
+            style={{ fontWeight: 'bold', color: 'black' }}
+          >
+            {' '}
+            {/* Black text and increased size */}
             {text.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {line}
@@ -81,6 +87,13 @@ const AdminMain = () => {
   return (
     <Box className={classes.container}>
       {urls.map((url, index) => renderBox(url, index, texts[index]))}
+      <button
+        onClick={() => {
+          window.location.href = '/';
+        }}
+      >
+        사용자 메인 페이지
+      </button>
     </Box>
   );
 };

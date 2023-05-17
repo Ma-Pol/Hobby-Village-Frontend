@@ -3,7 +3,7 @@ import React from 'react';
 const AdminUsersDetails = () => {
   return (
     <div>
-      <div></div>
+      <div>관리자 회원 상세</div>
     </div>
   );
 };

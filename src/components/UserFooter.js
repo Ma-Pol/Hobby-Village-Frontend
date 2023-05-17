@@ -91,7 +91,7 @@ const UserFooter = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} className={classes.middle}>
-              <Link to="/notices/list" className={classes.textColor}>
+              <Link to="/notices/lists" className={classes.textColor}>
                 <Typography variant="body2">공지사항</Typography>
               </Link>
               <Link to="/guide" className={classes.textColor}>
@@ -109,7 +109,10 @@ const UserFooter = () => {
               </a>
             </Grid>
             <Grid item xs={4} className={classes.right}>
-              <Link to="/cs" className={classes.textColor}>
+              <Link
+                to="/cs/faq/lists?filter=none&pages=1"
+                className={classes.textColor}
+              >
                 <Typography variant="body2">고객센터</Typography>
               </Link>
               <Typography variant="body2" className={classes.textColor}>
