@@ -5,13 +5,28 @@ import UserNoticesDetails from './UserNoticesDetails';
 
 const UserNotices = () => {
   return (
-    <Routes>
-      <Route path="/notices/lists" element={<UserNoticesLists />} />
-      <Route
-        path="/notices/details/:notCode"
-        element={<UserNoticesDetails />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path="lists" element={<UserNoticesLists />} />
+        <Route exact path="details/:notCode" element={<UserNoticesDetails />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 
