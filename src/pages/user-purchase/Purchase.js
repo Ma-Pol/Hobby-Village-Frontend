@@ -192,6 +192,7 @@ const Purchase = () => {
         checkProductState(); // 상품 상태 체크(대여/미대여 체크)
         getAddressList(email); // 유저의 배송지 목록 가져오기
       } else {
+        setProductList([location.state.products[0]]); // 마이페이지 접근일 때 상품 목록 저장
         totalPriceRef.current =
           (location.state.products[0].prodPrice *
             location.state.products[0].period) /
@@ -1096,7 +1097,7 @@ const Purchase = () => {
     },
   };
 
-  if (userInfo === undefined || addressList.length === 0) {
+  if (userInfo === undefined || productList.length === 0) {
     return (
       <Container>
         <UserHeader />
@@ -1150,15 +1151,16 @@ const Purchase = () => {
               <></>
             ) : (
               <>
-                {productList.map((product) => {
-                  return (
-                    <UserPurchaseProductCard
-                      key={product.prodCode}
-                      product={product}
-                      prevPage={location.state.prevPage}
-                    />
-                  );
-                })}
+                {productList !== null &&
+                  productList.map((product) => {
+                    return (
+                      <UserPurchaseProductCard
+                        key={product.prodCode}
+                        product={product}
+                        prevPage={location.state.prevPage}
+                      />
+                    );
+                  })}
               </>
             )}
           </DataBox>

@@ -206,13 +206,14 @@ const UserQnADetails = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography variant="h6" component="h2">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: questionDetail.qstContent,
-                  }}
-                ></div>
-              </Typography>
+              <div
+                style={{
+                  fontSize: '1.1rem',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: questionDetail.qstContent,
+                }}
+              ></div>
             </Grid>
           </Grid>
         </StyledPaper>
@@ -259,7 +260,7 @@ const UserQnADetails = () => {
                       fontWeight: 'bold',
                     }}
                   >
-                    내용 <Divider orientation="vertical" flexItem />
+                    내용
                   </Typography>
                 </LabelItem>
                 <Grid
@@ -272,11 +273,12 @@ const UserQnADetails = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="h6" component="h2">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: answerContent }}
-                    ></div>
-                  </Typography>
+                  <div
+                    style={{
+                      fontSize: '1.1rem',
+                    }}
+                    dangerouslySetInnerHTML={{ __html: answerContent }}
+                  ></div>
                 </Grid>
               </Grid>
             </StyledPaper>
