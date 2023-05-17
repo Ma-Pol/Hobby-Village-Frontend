@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Container,
   Box,
@@ -22,11 +23,44 @@ import dayjs from 'dayjs';
 const AdminCouponsCreate = () => {
   const couponNameRef = useRef();
   const couponTypeRef = useRef();
-  const discountPerRef = useRef();
-  const discountFixRef = useRef();
+  const discountRef = useRef();
   const deadlineRef = useRef();
 
   const navigate = useNavigate();
+
+  // 쿠폰 등록
+  const handleSubmit = () => {
+    if (couponTypeRef.current.value == '고정금액') {
+      axios
+        .post('/m/coupons/addCouponFix', {
+          couponName: couponNameRef.current.value,
+          discountPer: 0,
+          discountFix: discountRef.current.value,
+          deadline: deadlineRef.current.value,
+        })
+        .then((res) => {
+          navigate(`/m/coupons/lists?sort=-startDate&filter=none&pages=1`);
+        })
+        .catch((e) => {
+          console.log(couponNameRef.current.value);
+          console.error(e);
+        });
+    } else {
+      axios
+        .post('/m/coupons/addCouponPer', {
+          couponName: couponNameRef.current.value,
+          discountPer: discountRef.current.value,
+          discountFix: 0,
+          deadline: deadlineRef.current.value,
+        })
+        .then((res) => {
+          navigate(`/m/coupons/lists?sort=-startDate&filter=none&pages=1`);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1);
@@ -160,7 +194,7 @@ const AdminCouponsCreate = () => {
                 <TextField
                   id="couponName"
                   size="small"
-                  ref={couponNameRef}
+                  inputRef={couponNameRef}
                   sx={inputCouponNameStyle}
                 ></TextField>
               </TableCell>
@@ -175,14 +209,11 @@ const AdminCouponsCreate = () => {
                 <TextField
                   id="couponType"
                   select
-                  defaultValue={0}
+                  label="할인 종류 선택"
                   size="small"
-                  ref={couponTypeRef}
+                  inputRef={couponTypeRef}
                   sx={inputStyle}
                 >
-                  <MenuItem key={0} value={0}>
-                    할인 종류 선택
-                  </MenuItem>
                   <MenuItem key="퍼센트" value="퍼센트">
                     퍼센트
                   </MenuItem>
@@ -203,14 +234,9 @@ const AdminCouponsCreate = () => {
                   id="discountNum"
                   fullWidth
                   size="small"
-                  // ref= : 할인 종류 선택 값에 따라 ref 달라짐
+                  inputRef={discountRef}
                   sx={inputStyle}
                   label="숫자만 입력"
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">&#8361;</InputAdornment>
-                  //   ),
-                  // }} : 할인종류 선택값에 따라 원화 기호 (position start) 또는 퍼센트 기호 (position end) 변경
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -224,7 +250,7 @@ const AdminCouponsCreate = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     id="deadline"
-                    ref={deadlineRef}
+                    inputRef={deadlineRef}
                     sx={datePickerStyle}
                     format="YYYY-MM-DD"
                   />
@@ -239,7 +265,12 @@ const AdminCouponsCreate = () => {
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           mt={5}
         >
-          <Button type="submit" variant="outlined" sx={btnSubmitStyle}>
+          <Button
+            type="submit"
+            variant="outlined"
+            sx={btnSubmitStyle}
+            onClick={handleSubmit}
+          >
             발행
           </Button>
           &nbsp;&nbsp;&nbsp;

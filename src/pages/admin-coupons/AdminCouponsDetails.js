@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import {
   Container,
   Box,
@@ -12,26 +13,82 @@ import {
   TextField,
   MenuItem,
   Button,
-  InputAdornment
+  InputAdornment,
 } from '@mui/material';
 
 const AdminCouponsDetails = () => {
-  const couponNameRef = useRef();
-  const couponTypeRef = useRef();
-  const discountPerRef = useRef();
-  const discountFixRef = useRef();
-  const startDateRef = useRef();
-  const deadlineRef = useRef();
-
   const navigate = useNavigate();
+  const { couponCode } = useParams();
+
+  const [coupon, setCoupon] = useState({
+    couponCode: 0,
+    couponName: '',
+    discountPer: 0,
+    discountFix: 0,
+    startDate: '',
+    deadline: '',
+  });
+
+  const [discountType, setDiscountType] = useState();
+  const [discount, setDiscount] = useState();
+
+  const getCouponDetail = () => {
+    axios
+      .get(`/m/coupons/getCouponDetails?couponCode=${couponCode}`)
+      .then((res) => {
+        const { data } = res;
+        setCoupon(data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  // 할인 유형
+  const discountFilter = () => {
+    if (coupon.discountPer == 0) {
+      setDiscountType('고정 금액');
+      setDiscount('₩ ' + coupon.discountFix);
+    } else {
+      setDiscountType('퍼센트');
+      setDiscount(coupon.discountPer + ' %');
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('정말 해당 쿠폰을 삭제하시겠습니까?')) {
+      axios
+        .delete(`/m/coupons/delete?couponCode=${couponCode}`)
+        .then(() => {
+          alert('쿠폰이 삭제되었습니다.');
+          navigate(`/m/coupons/lists?sort=-startDate&filter=none&pages=1`);
+        })
+        .catch((e) => {
+          console.log(couponCode);
+          console.error(e);
+        });
+    } else {
+      return false;
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1);
   };
 
+  useEffect(() => {
+    getCouponDetail();
+    console.log('detail');
+  }, []);
+
+  useEffect(() => {
+    discountFilter();
+    console.log('filter');
+  });
+
   const tableHeadStyle = {
     width: 200,
-    border: '1px solid #FFFFFF'
+    border: '1px solid #FFFFFF',
   };
 
   const tableBodyStyle = { width: 500, border: '1px solid #FFFFFF' };
@@ -39,18 +96,18 @@ const AdminCouponsDetails = () => {
   const inputLabelStyle = {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000000'
+    color: '#000000',
   };
 
   const inputReadOnlyStyle = {
     width: 500,
     '& .MuiInputBase-input': {
-      overflow: 'visible'
+      overflow: 'visible',
     },
     '& fieldset': {
-      border: 'none'
+      border: 'none',
     },
-    input: { color: '#000000', fontSize: 20, padding: 0 }
+    input: { color: '#000000', fontSize: 20, padding: 0 },
   };
 
   const btnDeleteStyle = {
@@ -64,8 +121,8 @@ const AdminCouponsDetails = () => {
     '&:hover': {
       bgcolor: '#FE8484',
       border: '1px solid #626262',
-      color: '#000000'
-    }
+      color: '#000000',
+    },
   };
 
   const btnCancelStyle = {
@@ -79,8 +136,8 @@ const AdminCouponsDetails = () => {
     '&:hover': {
       bgcolor: '#ffffff',
       border: '1px solid #626262',
-      color: '#000000'
-    }
+      color: '#000000',
+    },
   };
 
   return (
@@ -94,7 +151,7 @@ const AdminCouponsDetails = () => {
           mb: 5,
           pl: 1,
           pr: 1,
-          fontWeight: 'bold'
+          fontWeight: 'bold',
         }}
       >
         쿠폰 목록 &#62; 쿠폰 상세
@@ -104,14 +161,14 @@ const AdminCouponsDetails = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <TableContainer
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <Table sx={{ width: 800 }}>
@@ -125,12 +182,11 @@ const AdminCouponsDetails = () => {
                 <TextField
                   id="couponName"
                   size="small"
-                  ref={couponNameRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
-                    readOnly: true
+                    readOnly: true,
                   }}
-                  value="[2023] 봄 맞이 기념 할인 쿠폰"
+                  value={coupon.couponName}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -144,23 +200,12 @@ const AdminCouponsDetails = () => {
                 <TextField
                   id="couponType"
                   size="small"
-                  ref={couponTypeRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
-                    readOnly: true
+                    readOnly: true,
                   }}
-                  value="퍼센트"
-                >
-                  <MenuItem key={0} value={0}>
-                    할인 종류 선택
-                  </MenuItem>
-                  <MenuItem key="퍼센트" value="퍼센트">
-                    퍼센트
-                  </MenuItem>
-                  <MenuItem key="고정금액" value="고정금액">
-                    고정 금액
-                  </MenuItem>
-                </TextField>
+                  value={discountType}
+                ></TextField>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -173,14 +218,11 @@ const AdminCouponsDetails = () => {
                 <TextField
                   id="discountNum"
                   size="small"
-                  // ref= : 할인 종류 선택 값에 따라 ref 달라짐
                   sx={inputReadOnlyStyle}
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">&#8361;</InputAdornment>
-                  //   ),
-                  // }} : 할인종류 선택값에 따라 원화 기호 (position start) 또는 퍼센트 기호 (position end) 변경
-                  value="15%"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  value={discount}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -194,12 +236,11 @@ const AdminCouponsDetails = () => {
                 <TextField
                   id="couponName"
                   size="small"
-                  ref={startDateRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
-                    readOnly: true
+                    readOnly: true,
                   }}
-                  value="2023-03-26"
+                  value={coupon.startDate}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -213,12 +254,11 @@ const AdminCouponsDetails = () => {
                 <TextField
                   id="deadline"
                   size="small"
-                  ref={deadlineRef}
                   sx={inputReadOnlyStyle}
                   InputProps={{
-                    readOnly: true
+                    readOnly: true,
                   }}
-                  value="2023-04-26"
+                  value={coupon.deadline}
                 ></TextField>
               </TableCell>
             </TableRow>
@@ -230,11 +270,11 @@ const AdminCouponsDetails = () => {
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           mt={5}
         >
-          <Button variant="outlined" sx={btnDeleteStyle}>
+          <Button variant="outlined" sx={btnDeleteStyle} onClick={handleDelete}>
             삭제
           </Button>
           &nbsp;&nbsp;&nbsp;
-          <Button variant="outlined" onClick={handleGoBack} sx={btnCancelStyle}>
+          <Button variant="outlined" sx={btnCancelStyle} onClick={handleGoBack}>
             목록
           </Button>
         </Box>
