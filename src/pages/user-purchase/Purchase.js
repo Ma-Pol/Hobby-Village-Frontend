@@ -241,7 +241,7 @@ const Purchase = () => {
           }
         })
         .finally(() => {
-          if (productList.length === 0) {
+          if (prodIndex === products.length - 1 && productList.length === 0) {
             alert('주문 가능한 상품이 없습니다.');
             navigate(-1, { replace: true });
           }
@@ -748,7 +748,7 @@ const Purchase = () => {
               }
 
               alert(`결제가 완료되었습니다!`);
-              await navigate(`/carts/${email}/lists/all`, { replace: true });
+              await navigate(`/mypages/${email}/orders`, { replace: true });
             }
 
             // 결제 후처리 실패
