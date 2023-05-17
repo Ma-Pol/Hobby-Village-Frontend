@@ -7,15 +7,34 @@ import UserReviewsModify from './UserReviewsModify';
 
 const UserReviews = () => {
   return (
-    <Routes>
-      <Route path="/reviews/:email/lists" element={<UserReviewsLists />} />
-      <Route
-        path="/reviews/details/:revwCode"
-        element={<UserReviewsDetails />}
-      />
-      <Route path="/reviews/create/:prodCode" element={<UserReviewsCreate />} />
-      <Route path="/reviews/modify/:revwCode" element={<UserReviewsModify />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route exact path=":email/lists" element={<UserReviewsLists />} />
+        <Route
+          exact
+          path="details/:revwCode"
+          element={<UserReviewsDetails />}
+        />
+        <Route exact path="create/:prodCode" element={<UserReviewsCreate />} />
+        <Route exact path="modify/:revwCode" element={<UserReviewsModify />} />
+        <Route
+          path="*"
+          element={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                fontSize: '3rem',
+              }}
+            >
+              에러페이지
+            </div>
+          }
+        />
+      </Routes>
+    </>
   );
 };
 

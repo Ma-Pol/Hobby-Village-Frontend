@@ -1,0 +1,18 @@
+.popularbrd {
+    text-align : center;
+    font-size : 32px;
+    font-weight : 700;
+    margin-top : 10px;
+}
+
+.brandlist {
+    text-align : center;
+}
+.brandlist-btn {
+    text-decoration : underline;
+    font-size : 12px;
+    line-height : 29px;
+    border : 0;
+    background-color : white;
+    cursor: pointer;
+}

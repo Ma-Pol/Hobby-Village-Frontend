@@ -1,0 +1,87 @@
+
+/* 인기 취미 물품 */
+.popularprod {
+    text-align : center;
+    font-size : 32px;
+    font-weight : 700;
+    margin-top : 10px;
+}
+
+#popularproducts {
+    text-align : left;
+}
+
+#popularproducts:nth-childe(3){margin-right:0;}
+.productpictures {
+    width:100%;
+    height:180px;
+    border-radius:1.5vw 1.5vw 0px 0px;
+    overflow:hidden;
+    align-items:center;
+}
+
+.productpictures .pp-pictures {
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    object-position:center;
+}
+
+.pp-text {
+    clear: both;
+    float: left;
+    width: 100%;
+    height: 120px;
+    padding: 2.5vh 10% 3vh;
+    border-radius: 0px 0px 1.5vw 1.5vw;
+}
+
+.pp-text .pp-title {
+    clear: both;
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 35px;
+    overflow: hidden;
+    font-weight:700;
+    font-size:1.2vw;
+    text-align: left;
+    color:#333333;
+}
+
+.pp-text .pp-price {
+    clear: both;
+    float: left;
+    height: 25px;
+    margin-bottom:5px;
+    padding: 0;
+    overflow: hidden;
+    font-weight: 400;
+    font-size: 0.85vw;
+    line-height: 1vw;
+    text-align: left;
+    color:#666666;
+}
+
+.pp-text .pp-proDibs {
+    clear: both;
+    float: right;
+    font-weight: 700;
+    font-size: 0.85vw;
+    color: #ff6700;
+    right:7%;
+    bottom:1.5vh;
+}
+
+.productslist {
+    text-align : center;
+}
+.productslist-btn {
+    text-decoration : underline;
+    font-size : 12px;
+    line-height : 29px;
+    border : 0;
+    background-color : white;
+    cursor: pointer;
+}
+

@@ -1,0 +1,16 @@
+/* 메인 광고 리스트 */
+.MainAdslayout {
+    height : 150px;
+}
+.MainAds {
+    margin : 0;
+    padding : 0;
+    width : 100%;
+    height : 150px;
+    left : 0px;
+}
+
+.MainAds img {
+    width : 100%;
+    height : 150px;
+}

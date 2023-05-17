@@ -1,0 +1,294 @@
+* {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+    list-style-type : none;
+}
+
+.bannerlayout {
+    height : 586px;
+}
+.banner {
+    margin : 0;
+    padding : 0;
+    width : 100%;
+    height : 460px;
+    left : 0px;
+    top : 126px;
+}
+
+.swiper-button-next::after {
+    display : none;
+}
+.swiper-button-prev::after {
+    display : none;
+}
+
+/* 배너 슬라이드 #1 */
+.banner .slide01 {
+    width : 100%;
+    height : 460px;
+    background : rgba(240, 240, 220, 0.5);
+}
+.banner .slide01 ul {
+    width:100%;
+    height:100%;
+}
+.banner .slide01 ul li {
+    list-style-type: none;
+    width : 33%;
+}
+.banner .slide01 ul li.s01-left {
+    width : 50%;
+    float : left;
+    padding : 150px 0 0 15%;
+    white-space : nowrap;
+}
+.banner .slide01 ul li.s01-left p:nth-child(1) {
+    font-weight : 700;
+    font-size : 32px;
+    line-height : 39px;
+}
+.banner .slide01 ul li.s01-left p:nth-child(2) {
+    font-weight : 400;
+    font-size : 18px;
+    line-height : 22px;
+}
+.banner .slide01 ul li.s01-left p:nth-child(3) {
+    margin-top : 10px;
+}
+.banner .slide01 ul li.s01-left p:nth-child(3) button {
+    width : 139px;
+    height : 54px;
+    left : 445px;
+    top : 461px;
+    font-size : 18px;
+    line-height : 22px;
+    color : #7A7A7A;
+    background : rgba(217, 217, 217, 0.6);
+    border-width : 0px;
+    border-radius: 10px;
+}
+.banner .slide01 ul li.s01-left p:nth-child(3) button:hover {
+    color : #FFFFFF;
+    background-color : #7A7A7A;
+    cursor : pointer;
+}
+.banner .slide01 ul li.s01-right {
+    margin : 0;
+    width : 50%;
+    float : right;
+    padding : 90px 15% 0 10px;
+}
+.banner .slide01 ul li.s01-right img {
+    object-fit:cover;
+    width : 400px;
+    height : 298px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    overflow : hidden;
+}
+
+/* 배너 슬라이드 #2 */
+.banner .slide02 {
+    width : 100%;
+    height : 460px;
+    background : rgba(255, 255, 255, 0.5);;
+}
+.banner .slide02 ul {
+    width:100%;
+    height:100%;
+}
+.banner .slide02 ul li {
+    list-style-type: none;
+}
+.banner .slide02 ul li.s02-left {
+    margin : 0;
+    width : 50%;
+    float : left;
+    padding : 50px 10px 0 15%;
+}
+.banner .slide02 ul li.s02-left img {
+    width : 277px;
+    height : 340px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    overflow : hidden;
+}
+.banner .slide02 ul li.s02-right {
+    padding : 80px 15% 0 10px;
+    white-space : nowrap;
+    overflow : hidden;
+}
+.banner .slide02 ul li.s02-right p:nth-child(1) {
+    font-weight : 700;
+    font-size : 32px;
+    line-height : 39px;
+}
+.banner .slide02 ul li.s02-right p:nth-child(2) {
+    font-weight : 400;
+    font-size : 18px;
+    line-height : 22px;
+}
+.banner .slide02 ul li.s02-right p:nth-child(3) {
+    margin-top : 10px;
+    overflow : hidden;
+    white-space : nowrap;
+}
+.banner .slide02 ul li.s02-right p:nth-child(3) ul {
+    padding-left : 0px;
+
+}
+.banner .slide02 ul li.s02-right p:nth-child(3) ul li {
+    float : left;
+    margin-right : 15px;
+}
+.banner .slide02 ul li.s02-right p:nth-child(3) button {
+    width : 139px;
+    height : 54px;
+    font-size : 18px;
+    line-height : 22px;
+    color : #7A7A7A;
+    background : rgba(217, 217, 217, 0.6);
+    border-width : 0px;
+    border-radius: 10px;
+}
+.banner .slide02 ul li.s02-right p:nth-child(3) button:hover {
+    color : #FFFFFF;
+    background-color : #7A7A7A;
+}
+
+/* 배너 슬라이드 #3 */
+.banner .slide03 {
+    width : 100%;
+    height : 460px;
+    background : rgba(240, 240, 220, 0.5);
+}
+.banner .slide03 ul {
+    width:100%;
+    height:100%;
+}
+.banner .slide03 ul li {
+    list-style-type: none;
+    width : 33%;
+}
+.banner .slide03 ul li.s03-left {
+    width : 50%;
+    float : left;
+    padding : 150px 0 0 15%;
+    white-space:nowrap;
+}
+.banner .slide03 ul li.s03-left p:nth-child(1) {
+    font-weight : 700;
+    font-size : 32px;
+    line-height : 39px;
+}
+.banner .slide03 ul li.s03-left p:nth-child(2) {
+    font-weight : 400;
+    font-size : 18px;
+    line-height : 22px;
+}
+.banner .slide03 ul li.s03-left p:nth-child(3) {
+    margin-top : 10px;
+}
+.banner .slide03 ul li.s03-left p:nth-child(3) button {
+    width : 139px;
+    height : 54px;
+    left : 445px;
+    top : 461px;
+    font-size : 18px;
+    line-height : 22px;
+    color : #7A7A7A;
+    background : rgba(217, 217, 217, 0.6);
+    border-width : 0px;
+    border-radius: 10px;
+}
+.banner .slide03 ul li.s03-left p:nth-child(3) button:hover {
+    color : #FFFFFF;
+    background-color : #7A7A7A;
+}
+.banner .slide03 ul li.s03-right {
+    margin : 0;
+    width : 50%;
+    float : right;
+    padding : 90px 15% 0 10px;
+}
+.banner .slide03 ul li.s03-right img {
+    object-fit:cover;
+    width : 400px;
+    height : 298px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    overflow : hidden;
+}
+
+/* 배너 슬라이드 #4 */
+.banner .slide04 {
+    width : 100%;
+    height : 460px;
+    background : rgba(255, 255, 255, 0.5);;
+}
+.banner .slide04 ul {
+    width:100%;
+    height:100%;
+}
+.banner .slide04 ul li {
+    list-style-type: none;
+}
+.banner .slide04 ul li.s04-left {
+    margin : 0;
+    width : 50%;
+    float : left;
+    padding : 50px 15% 0 15%;
+}
+.banner .slide04 ul li.s04-left img {
+    width : 277px;
+    height : 340px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    overflow : hidden;
+}
+.banner .slide04 ul li.s04-right {
+    padding : 80px 300px 0 10px;
+    white-space : nowrap;
+    overflow : hidden;
+}
+.banner .slide04 ul li.s04-right p:nth-child(1) {
+    font-weight : 700;
+    font-size : 32px;
+    line-height : 39px;
+}
+.banner .slide04 ul li.s04-right p:nth-child(2) {
+    font-weight : 400;
+    font-size : 18px;
+    line-height : 22px;
+}
+.banner .slide04 ul li.s04-right p:nth-child(3) {
+    margin-top : 10px;
+    overflow : hidden;
+    white-space : nowrap;
+}
+.banner .slide04 ul li.s04-right p:nth-child(3) ul {
+    padding-left : 0px;
+
+}
+.banner .slide04 ul li.s04-right p:nth-child(3) ul li {
+    float : left;
+    margin-right : 15px;
+}
+.banner .slide04 ul li.s04-right p:nth-child(3) button {
+    width : 139px;
+    height : 54px;
+    font-size : 18px;
+    line-height : 22px;
+    color : #7A7A7A;
+    background : rgba(217, 217, 217, 0.6);
+    border-width : 0px;
+    border-radius: 10px;
+}
+.banner .slide04 ul li.s04-right p:nth-child(3) button:hover {
+    color : #FFFFFF;
+    background-color : #7A7A7A;
+}
+
+
