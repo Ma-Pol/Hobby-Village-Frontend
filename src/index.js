@@ -20,7 +20,6 @@ import ListNoticeComponent from './components/admin-notices/list/ListNoticeCompo
 import CreateNoticeComponent from './components/admin-notices/list/CreateNoticeComponent';
 import ReadNoticeComponent from './components/admin-notices/list/ReadNoticeComponent';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
@@ -42,10 +41,7 @@ root.render(
       <Route exact path="/products/*" element={<UserProducts />} />
       <Route exact path="/purchase" element={<Purchase />} />
       <Route exact path="/requests" element={<UserRequests />} />
-      <Route exact path="/notice" Component = {ListNoticeComponent}/>
-      <Route exact path="/notice/create" Component = {CreateNoticeComponent}/>
-      <Route exact path="/notice/read" Component={ReadNoticeComponent}/>
-      <Route exact path="/notices/*" element={<UserNotices />} />
+      <Route exact path="/notice" Component={ListNoticeComponent} />
       <Route exact path="/cs/*" element={<UserCs />} />
       <Route exact path="/m/*" element={<Admin />} />
       <Route
