@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import SimpleImageSlider from 'react-simple-image-slider';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
@@ -61,16 +60,15 @@ const AdminProductsDetails = () => {
     axios
       .get(`/m/products/getProductDetail?prodCode=${prodCode}`)
       .then((res) => {
-        console.log(prodCode);
         const { data } = res;
         setProduct(data);
-        console.log(res.data.revwRate);
       })
       .catch((e) => {
         console.error(e);
       });
   };
 
+  // 이미지 파일명 조회
   const getProdPics = () => {
     axios
       .get(`/m/products/getProdPictures?prodCode=${prodCode}`)
@@ -87,7 +85,6 @@ const AdminProductsDetails = () => {
     axios
       .get(`/m/products/getProdTag?prodCode=${prodCode}`)
       .then((res) => {
-        console.log(prodCode);
         const { data } = res;
         setProdTag(data);
       })
@@ -102,6 +99,22 @@ const AdminProductsDetails = () => {
     getProdTag();
   }, []);
 
+  const handleDelete = () => {
+    if (window.confirm('정말 해당 상품을 삭제하시겠습니까?')) {
+      axios
+        .delete(`/m/products/delete?prodCode=${prodCode}`)
+        .then(() => {
+          alert('상품이 삭제되었습니다.');
+          navigate(`/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      return false;
+    }
+  };
+
   const tableHeadStyle = {
     width: 170,
     fontSize: 18,
@@ -109,6 +122,13 @@ const AdminProductsDetails = () => {
   };
 
   const tableBodyStyle = { width: 400, border: '1px solid #E0E0E0' };
+
+  const tableBodyImageStyle = {
+    width: 400,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
 
   const inputReadOnlyStyle = {
     '& fieldset': {
@@ -119,10 +139,10 @@ const AdminProductsDetails = () => {
     overflow: 'auto',
   };
 
-  const noImgaeBox = {
+  const noImageBox = {
     backgroundColor: '#f1f1f1',
     borderRadius: '5px',
-    width: '220px',
+    width: '350px',
     minHeight: '220px',
     height: 'auto',
     display: 'flex',
@@ -133,31 +153,12 @@ const AdminProductsDetails = () => {
   const swiperStyle = {
     backgroundColor: '#f1f1f1',
     borderRadius: '5px',
-    width: '220px',
+    width: '350px',
     minHeight: '220px',
-    height: 'auto',
+    height: '350px',
     display: 'flex',
-    // flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-  };
-
-  const btnUploadImageStyle = {
-    display: 'block',
-    width: '60px',
-    height: '20px',
-    bgcolor: '#ECECEC',
-    fontSize: '12px',
-    color: '#4E4E4E',
-    border: 'none',
-    borderRadius: '5px',
-    textAlign: 'center',
-    lineHeight: '190%',
-    boxShadow: '2px 2px 2px 1px #b0b0b0',
-    display: 'none',
-    '&:hover': {
-      cursor: 'pointer',
-    },
   };
 
   const btnDeleteStyle = {
@@ -370,20 +371,11 @@ const AdminProductsDetails = () => {
               <TableCell sx={tableHeadStyle}>
                 <InputLabel>상품 사진</InputLabel>
               </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                {/* <SimpleImageSlider
-                  width={220}
-                  height={220}
-                  images={imagesTmp}
-                  showBullets={true}
-                  showNavs={true}
-                  navSize={15}
-                  navMargin={10}
-                /> */}
+              <TableCell sx={tableBodyImageStyle}>
                 {prodPics.length === 0 ? (
-                  <Box sx={noImgaeBox}>
-                    <Typography variant="h6" component="h2">
-                      첨부 파일이 없습니다.
+                  <Box sx={noImageBox}>
+                    <Typography color="#626262">
+                      등록된 사진이 없습니다.
                     </Typography>
                   </Box>
                 ) : (
@@ -395,10 +387,8 @@ const AdminProductsDetails = () => {
                     modules={[Navigation, Pagination]}
                     style={swiperStyle}
                   >
-                    {prodPics.map((prodPicture) => {
-                      const fileSrc = `/Users/neung/desktop/devStudy/KDTProject/Hobby-Village/Uploaded/ProductsImage/${prodPicture}`; // 여기에 이미지 요청 경로 넣기
-                      console.log(prodPicture);
-                      console.log(prodPics);
+                    {prodPics.map((fileName) => {
+                      const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
                       return (
                         <SwiperSlide
                           style={{
@@ -409,10 +399,9 @@ const AdminProductsDetails = () => {
                         >
                           <Box
                             component="img"
-                            alt={prodCode}
+                            alt={fileName}
                             src={fileSrc}
                             sx={{
-                              my: 5,
                               width: '90%',
                               height: '90%',
                             }}
@@ -444,7 +433,7 @@ const AdminProductsDetails = () => {
               <TableCell sx={tableHeadStyle}>
                 <InputLabel for="revwRateAvg">평균 별점</InputLabel>
               </TableCell>
-              <TableCell sx={tableBodyStyle}>
+              <TableCell>
                 <TextField
                   id="revwRateAvg"
                   fullWidth
@@ -513,7 +502,7 @@ const AdminProductsDetails = () => {
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           mt={5}
         >
-          <Button variant="outlined" sx={btnDeleteStyle}>
+          <Button variant="outlined" sx={btnDeleteStyle} onClick={handleDelete}>
             삭제
           </Button>
           &nbsp;&nbsp;&nbsp;
