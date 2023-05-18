@@ -9,7 +9,7 @@ const AdminNoticesRows = ({
   isLast,
 }) => {
   const notLink = `/m/notices/details/${notCode}`;
-
+  
   const tableLine = {
     px: 1,
     py: 0.5,
