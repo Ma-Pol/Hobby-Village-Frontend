@@ -37,7 +37,7 @@ const tableRow4ColFirstCell = {
 };
 
 const tableRow4ColSecondCell = {
-  minWidth: '395px',
+  minWidth: '495px',
   padding: '0 15px',
   borderRight: '1px solid #7a7a7a',
   overflow: 'hidden',
@@ -62,7 +62,7 @@ const tableRow3ColFirstCell = {
 };
 
 const tableRow3ColSecondCell = {
-  minWidth: '550px',
+  minWidth: '650px',
   padding: '0 15px',
   overflow: 'hidden',
   display: 'flex',
@@ -94,7 +94,7 @@ const tableBody = {
 };
 
 const deliverySelectBox = {
-  width: '150px',
+  width: '180px',
   mr: 2,
 };
 
@@ -285,9 +285,8 @@ const AdminOrdersProductsTable = ({
       container
       sx={{
         mx: 'auto',
-        my: 2,
-        width: '900px',
-        border: '1px solid #000000',
+        mb: 3,
+        width: '1000px',
       }}
     >
       {/* 1행 시작 */}
@@ -382,7 +381,10 @@ const AdminOrdersProductsTable = ({
         {/* 3행 2열 시작 */}
         <Box sx={tableRow4ColSecondCell}>
           <Typography variant="h6" component="h2" sx={tableBody}>
-            {prodPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}&nbsp;원
+            {((prodPrice * rentalPeriod) / 7)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            &nbsp;원
           </Typography>
         </Box>
         {/* 3행 2열 끝 */}
@@ -450,7 +452,7 @@ const AdminOrdersProductsTable = ({
                       variant="outlined"
                       size="small"
                       placeholder="운송장 번호를 입력하세요."
-                      sx={{ width: '380px', mr: '10px' }}
+                      sx={{ width: '450px', mr: '10px' }}
                     />
                   </Box>
                   {/* 4행 2열 끝 */}

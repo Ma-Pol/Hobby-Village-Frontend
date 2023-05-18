@@ -348,6 +348,7 @@ const AdminRequestsDetails = () => {
                 pagination={{
                   type: 'fraction',
                 }}
+                loop={true}
                 navigation={true}
                 modules={[Navigation, Pagination]}
                 style={requestFileValueCol}
