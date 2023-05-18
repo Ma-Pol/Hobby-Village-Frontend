@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
+import { Box, Typography, Paper, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
-import UserFooter from '../../components/UserFooter';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -45,9 +44,9 @@ const AdminQnADetails = () => {
 
   const checkQuestion = () => {
     axios
-      .get(`/m/qnas/count/${qstCode}`)
-      .then((count) => {
-        if (count.data === 0) {
+      .get(`/m/qnas/check/${qstCode}`)
+      .then((check) => {
+        if (check.data === 0) {
           alert('존재하지 않는 문의입니다.');
           navigate(-1, { replace: true });
         } else {
@@ -124,15 +123,18 @@ const AdminQnADetails = () => {
           }}
         >
           <Typography
-            variant="h5"
+            variant="h4"
+            component="h1"
             sx={{
+              mt: 5,
+              mb: 1,
+              pl: 1,
+              pr: 1,
               fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: '1.6rem',
+              userSelect: 'none',
             }}
           >
-            1:1 문의
+            1:1 문의 &gt; 상세
           </Typography>
         </Box>
 
@@ -152,7 +154,7 @@ const AdminQnADetails = () => {
                   fontWeight: 'bold',
                 }}
               >
-                제목 <Divider orientation="vertical" flexItem />
+                제목
               </Typography>
             </LabelItem>
             <Grid
@@ -202,7 +204,7 @@ const AdminQnADetails = () => {
                   fontWeight: 'bold',
                 }}
               >
-                카테고리 <Divider orientation="vertical" flexItem />
+                카테고리
               </Typography>
             </LabelItem>
             <Grid
@@ -244,7 +246,7 @@ const AdminQnADetails = () => {
                   fontWeight: 'bold',
                 }}
               >
-                내용 <Divider orientation="vertical" flexItem />
+                내용
               </Typography>
             </LabelItem>
             <Grid
@@ -291,7 +293,7 @@ const AdminQnADetails = () => {
                   fontSize: '1.5rem',
                 }}
               >
-                관리자의 답변
+                작성한 답변
               </Typography>
             </Box>
             <StyledPaper style={{ marginTop: '30px' }}>
@@ -390,7 +392,6 @@ const AdminQnADetails = () => {
             {questionDetail.qstState === 0 ? '답글' : '수정'}
           </Button>
         </Box>
-        <UserFooter />
       </Box>
     );
   }
