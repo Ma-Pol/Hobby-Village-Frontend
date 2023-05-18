@@ -60,18 +60,6 @@ const reqProgressNotExact = {
   color: '#525252',
 };
 
-const images = [
-  {
-    url: process.env.PUBLIC_URL + '/BrandLogo/arena.png',
-  },
-  {
-    url: process.env.PUBLIC_URL + '/BrandLogo/brandyarn.png',
-  },
-  {
-    url: process.env.PUBLIC_URL + '/BrandLogo/excider.png',
-  },
-];
-
 const AdminRequestsDetails = () => {
   const location = useLocation();
   const prevCategory = location.state?.category;
