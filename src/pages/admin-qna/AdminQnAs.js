@@ -10,9 +10,9 @@ const AdminQnAs = () => {
     <>
       <Routes>
         <Route exact path="lists" element={<AdminQnALists />} />
-        <Route exact path="details/:qnaCode" element={<AdminQnADetails />} />
-        <Route exact path="create" element={<AdminQnACreate />} />
-        <Route exact path="modify/:aswCode" element={<AdminQnAModify />} />
+        <Route exact path="details/:qstCode" element={<AdminQnADetails />} />
+        <Route exact path="create/:qstCode" element={<AdminQnACreate />} />
+        <Route exact path="modify/:qstCode" element={<AdminQnAModify />} />
         <Route
           path="*"
           element={

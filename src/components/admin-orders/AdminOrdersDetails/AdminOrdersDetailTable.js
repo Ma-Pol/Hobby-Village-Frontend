@@ -285,7 +285,7 @@ const AdminOrdersDetailTable = ({
             mx: 'auto',
             my: 4,
             width: '1000px',
-            border: '1px solid #000000',
+            // border: '1px solid #000000',
           }}
         >
           {/* 1행 시작 */}
@@ -651,6 +651,16 @@ const AdminOrdersDetailTable = ({
           )}
           {/* 6행 끝 */}
         </Grid>
+
+        <Box
+          sx={{
+            mt: odrState === '결제 완료' ? 0 : 6,
+            mb: odrState === '결제 완료' ? 10 : 6,
+            width: '100%',
+            height: '1px',
+            borderBottom: '1px solid #7a7a7a',
+          }}
+        />
 
         {orderProductList.map((orderProduct) => {
           return (
