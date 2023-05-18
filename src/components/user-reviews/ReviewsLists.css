@@ -17,50 +17,9 @@
     display : flex;
 }
 
-.sort {
-    float : right;
-    width : 10%;
-    height : 40px;
-    z-index : 1;
-    margin-right : 10%;
-}
-.sortMain {
-    text-align : right;
-}
-.sortMain span {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 3px;
-    color: #666666;
-    cursor : pointer;
-    border: 1px solid;
-    padding :0 5px 2px 5px;
-    white-space: nowrap;
-}
-  .sortlist {
-    display : none;
-    text-align : right;
-    width : 100%;
-    color : #666666;
-    z-index : 1;
-    cursor : pointer;
-    font-size : 16px;
-    white-space: nowrap;
-}
-.sort:hover .sortlist { display:block; }
-.sort:focus .sortlist { display:block; }
-.sortlist .sortlist-sub {
-    clear: both;
-    height: 40px;
-    text-decoration: none;
-    z-index: 1;
-    cursor: pointer;
-}
-
 .listTable {
     white-space : nowrap;
-    margin-top : 50px;
+    margin-top : 35px;
     width : 80%;
     border-bottom : 1px solid;
     border-collapse : collapse;

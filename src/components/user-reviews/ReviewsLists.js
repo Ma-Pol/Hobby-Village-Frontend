@@ -1,22 +1,47 @@
 import React from 'react';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "./ReviewsLists.css";
+import { Pagination } from '@mui/material';
+import { Box, InputLabel, NativeSelect } from '@material-ui/core';
 
 function ReviewsLists(props) {
+   
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [totalpage, setTotalPage] = useState([]);
+    const [currentPage, setCurrentPage] = useState(searchParams.get('pages'));
 
-    const [sort, setSort] = useState("revwRegiDate");
+    const sortRef = useRef();
 
-    const sortmain = () => {
-        return sort === "new" 
-        ? "최근 작성 순" 
-        : "오래된 작성 순";
-    };
-    const sortlist = () => {
-        return sort === "new" 
-        ? "오래된 작성 순" 
-        : "최근 작성 순";
-    };
+    useEffect(() => {
+        axios
+            .all([
+                axios.get(`/reviewslists?pages=${searchParams.get('pages')}`),
+                axios.get(`/reviewslists?sort=${searchParams.get('sort')}`),
+            ])
+            .then(
+                axios.spread((count) => {
+                    setTotalPage(Math.ceil(count.data / 10));
+                    setCurrentPage(searchParams.get('pages'));
+                    sortRef.current.value = searchParams.get('sort');
+                })
+            )
+            .catch((err) => {
+                console.error(err);
+            });
+    }, [searchParams]); 
+
+    const pageChange = (e, value) => {
+        searchParams.set('pages', value);
+        setSearchParams(searchParams);
+    }
+
+    const sortChange = () => {
+        const sort = sortRef.current.value;
+        searchParams.set('sort', sort);
+        setSearchParams(searchParams);
+    }
 
     const [lists, setLists] = useState([{
         email : '',
@@ -45,37 +70,43 @@ function ReviewsLists(props) {
     useEffect(() => {
         getLists();
     }, []);
-
-    const sortDate = (a, b) => {
-        setSort(() => {
-            return sort === "new" ? "last" : "new";
-        });
-        return props.sort === "new"
-            ? (new Date(a.revwRegiDate) - new Date(b.revwRegiDate))
-            : (new Date(b.revwRegiDate) - new Date(a.revwRegiDate))
-    };
-
-    
+   
     return (
         <div className = "listpage">
             <div className = "pagetitle">
                 리뷰 관리
             </div>
-            <ul className = "sort">
-                <li className = "sortMain">
-                    <span href = "#">{sortmain()}</span>
-                </li>
-                <li>
-                    <ul className = "sortlist">
-                        <li className = "sortlist-sub"
-                            href = "#"
-                            onClick = {sortDate}
-                        >
-                            {sortlist()}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <Box sx = {{ float : 'right', pr : 11.3, mb : 0 }}>
+                <InputLabel
+                    sx = {{
+                        fontSize : '0.8rem',
+                    }}
+                variant = "standard"
+                htmlFor = "adminFaqListSort"
+                >
+                </InputLabel>
+                <NativeSelect
+                    inputRef = {sortRef}
+                    onChange = {sortChange}
+                    sx = {{
+                        px : 1,
+                        hover : {
+                            background : '#ffffff',
+                        },
+                        focus : {
+                            backgroundColor : '#ffffff',
+                        },
+                    }}
+                    defaultValue = "-revwRegiDate"
+                    inputProps = {{
+                        name : 'sort',
+                        id : 'userReviewsListsSort'
+                    }}
+                >
+                    <option value = "-revwRegiDate">최근 작성 순</option>
+                    <option value = "revwRegiDate">오래된 작성 순</option>
+                </NativeSelect>
+            </Box>
             <div>
                 <table className = "listTable">
                     <thead>
@@ -118,6 +149,24 @@ function ReviewsLists(props) {
                     </tbody>
                 </table>
             </div>
+            <Box
+            sx={{
+                mt : 2,
+                width : '100%',
+                display : 'flex',
+                justofycontent: 'center',
+                alignItems : 'center',
+            }}
+            >
+                <Pagination
+                count = {Number(totalpage || 0)}
+                defaultPage = {1}
+                page = {Number(currentPage)}
+                onchange = {pageChange}
+                showFirstButton 
+                showLastButton
+                />
+            </Box>
         </div>
     );
 }
