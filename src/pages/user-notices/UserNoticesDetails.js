@@ -2,7 +2,7 @@ import { Box, Container, Typography, Button } from '@mui/material';
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const UserNoticesDetails = () => {
   const { notCode } = useParams();
@@ -18,6 +18,10 @@ const UserNoticesDetails = () => {
       .catch((err) => {
         console.error(err);
       });
+
+    axios.post(`/notices/noticeUpdateView/${notCode}`).catch((err) => {
+      console.error(err);
+    });
   }, [notCode]);
 
   const noticeDetailRow = {
@@ -33,163 +37,167 @@ const UserNoticesDetails = () => {
     width: 'calc(100% - 100px)',
   };
 
-  return (
-    <Container>
-      {/* 공지사항 목록 글씨 표기 시작 */}
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{
-          mt: 5,
-          mb: 1,
-          pl: 2,
-          pr: 1,
-          fontWeight: 'bold',
-          userSelect: 'none',
-        }}
-      >
-        공지사항 &#62; 상세
-      </Typography>
-
-      <Box
-        sx={{
-          mt: 2,
-          mx: 'auto',
-          px: 2,
-          width: '1100px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Box
+  if (!noticeDetail) {
+    return <></>;
+  } else {
+    return (
+      <Container>
+        {/* 공지사항 목록 글씨 표기 시작 */}
+        <Typography
+          variant="h4"
+          component="h1"
           sx={{
-            backgroundColor: '#DDDDDD',
-            width: '1100px',
+            mt: 5,
+            mb: 1,
+            pl: 2,
+            pr: 1,
+            fontWeight: 'bold',
+            userSelect: 'none',
           }}
         >
-          <Box sx={noticeDetailRow}>
-            <Box sx={noticeDetailFirstCell}>
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{ fontWeight: 'bold' }}
-              >
-                제목
-              </Typography>
-            </Box>
-            <Box sx={noticeDetailSecondCell}>
-              <Typography variant="h6" component="h2">
-                {noticeDetail.notTitle}
-              </Typography>
-            </Box>
-          </Box>
+          공지사항 &#62; 상세
+        </Typography>
 
-          <Box sx={noticeDetailRow}>
-            <Box sx={noticeDetailFirstCell}>
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{ fontWeight: 'bold' }}
-              >
-                카테고리
-              </Typography>
-            </Box>
-
-            <Box sx={noticeDetailSecondCell}>
-              <Typography variant="h6" component="h2">
-                {noticeDetail.notCategory}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box sx={noticeDetailRow}>
-            <Box sx={noticeDetailFirstCell}>
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{ fontWeight: 'bold' }}
-              >
-                작성일
-              </Typography>
+        <Box
+          sx={{
+            mt: 2,
+            mx: 'auto',
+            px: 2,
+            width: '1100px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: '#DDDDDD',
+              width: '1100px',
+            }}
+          >
+            <Box sx={noticeDetailRow}>
+              <Box sx={noticeDetailFirstCell}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  제목
+                </Typography>
+              </Box>
+              <Box sx={noticeDetailSecondCell}>
+                <Typography variant="h6" component="h2">
+                  {noticeDetail.notTitle}
+                </Typography>
+              </Box>
             </Box>
 
-            <Box sx={noticeDetailSecondCell}>
-              <Typography variant="h6" component="h2">
-                {noticeDetail.notDate}
-              </Typography>
-            </Box>
-          </Box>
+            <Box sx={noticeDetailRow}>
+              <Box sx={noticeDetailFirstCell}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  카테고리
+                </Typography>
+              </Box>
 
-          <Box sx={noticeDetailRow}>
-            <Box sx={noticeDetailFirstCell}>
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{ fontWeight: 'bold' }}
-              >
-                내용
-              </Typography>
-            </Box>
-
-            <Box sx={noticeDetailSecondCell}>
-              <Typography
-                dangerouslySetInnerHTML={{ __html: noticeDetail.notContent }}
-                variant="h6"
-                component="h2"
-              ></Typography>
-            </Box>
-          </Box>
-
-          <Box sx={noticeDetailRow}>
-            <Box sx={noticeDetailFirstCell}>
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{ fontWeight: 'bold' }}
-              >
-                첨부파일
-              </Typography>
+              <Box sx={noticeDetailSecondCell}>
+                <Typography variant="h6" component="h2">
+                  {noticeDetail.notCategory}
+                </Typography>
+              </Box>
             </Box>
 
-            <Box sx={noticeDetailSecondCell}>
-              <Typography variant="h6" component="h2">
-                {noticeDetail.notFiles}
-              </Typography>
+            <Box sx={noticeDetailRow}>
+              <Box sx={noticeDetailFirstCell}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  작성일
+                </Typography>
+              </Box>
+
+              <Box sx={noticeDetailSecondCell}>
+                <Typography variant="h6" component="h2">
+                  {noticeDetail.notDate}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box sx={noticeDetailRow}>
+              <Box sx={noticeDetailFirstCell}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  내용
+                </Typography>
+              </Box>
+
+              <Box sx={noticeDetailSecondCell}>
+                <Typography
+                  dangerouslySetInnerHTML={{ __html: noticeDetail.notContent }}
+                  variant="h6"
+                  component="h2"
+                ></Typography>
+              </Box>
+            </Box>
+
+            <Box sx={noticeDetailRow}>
+              <Box sx={noticeDetailFirstCell}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  첨부파일
+                </Typography>
+              </Box>
+
+              <Box sx={noticeDetailSecondCell}>
+                <Typography variant="h6" component="h2">
+                  {noticeDetail.notFiles}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'Center',
-        }}
-      >
-        <Button
-          variant="contained"
-          size="small"
-          href="/m/notices/lists?sort=-notDate&filter=none&pages=1"
+        <Box
           sx={{
-            mt: 1,
-            mr: 1,
-            height: '25px',
-            float: 'center',
-            backgroundColor: '#FFFFFF',
-            color: '#000000',
-            border: '1px solid #000000',
-            '&:hover': {
-              backgroundColor: '#c6c6c6',
-              color: '#000000',
-            },
+            display: 'flex',
+            justifyContent: 'Center',
           }}
         >
-          목록
-        </Button>
-      </Box>
-    </Container>
-  );
+          <Button
+            variant="contained"
+            size="small"
+            href="/notices/lists?sort=-notDate&filter=none&pages=1"
+            sx={{
+              mt: 1,
+              mr: 1,
+              height: '25px',
+              float: 'center',
+              backgroundColor: '#FFFFFF',
+              color: '#000000',
+              border: '1px solid #000000',
+              '&:hover': {
+                backgroundColor: '#c6c6c6',
+                color: '#000000',
+              },
+            }}
+          >
+            목록
+          </Button>
+        </Box>
+      </Container>
+    );
+  }
 };
 
 export default UserNoticesDetails;

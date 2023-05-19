@@ -26,6 +26,65 @@ const AdminNoticesCreate = () => {
 
   const navigate = useNavigate();
 
+  const [files, setFiles] = useState([]);
+  const filesRef = useRef();
+
+  // 파일 업로드 버튼 클릭 후 파일 선택 시 실행되는 함수
+  const fileChange = (e) => {
+    // input에 저장된 파일 목록을 가져옴
+    const notFiles = e.target.files;
+
+    // 만약 이미지 파일만을 저장하고 싶은 경우, 확장자 명을 확인할 것
+    // 예시문) jpg, png, jpeg만 저장하고, 파일명의 특수문자를 체크하는 for문
+    // 파일명 특문체크는 필수입니다!
+    for (let i = 0; i < notFiles.length; i++) {
+      let check = false;
+      const regExp = /[\[\]\{\}\/\?\\\*\|\<\>\"\'\:\;\`\^]/g;
+
+      if (regExp.test(notFiles[i].name)) {
+        alert('파일 이름에 특수문자가 포함되어 있습니다.');
+        check = true;
+      }
+
+      if (check) {
+        filesRef.current.value = '';
+        return false;
+      }
+    }
+
+    // 가져온 파일 목록을 imgFile에 저장
+    setFiles(notFiles); // 여기까지는 이미지 업로드만을 위한 코드
+  };
+
+  const notFilesUpload = (notCode) => {
+    console.log(files);
+    // <form></form> 형식으로 데이터를 보내기 위해 사용
+    const formData = new FormData();
+
+    // imgFile에 저장된 파일 목록을 formData에 저장
+    for (let i = 0; i < files.length; i++) {
+      formData.append('uploadImg', files[i]);
+    }
+
+    // 이미지 업로드 요청
+    axios
+      .post(`/m/notices/upload/img/${notCode}`, formData)
+      .then((res) => {
+        if (res.data !== 0) {
+          alert('이미지 업로드 성공!');
+
+          filesRef.current.value = '';
+        } else {
+          alert('이미지 업로드 실패!');
+
+          filesRef.current.value = '';
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   const insertNotice = () => {
     if (notCategory === '전체') {
       alert('카테고리를 선택해주세요!');
@@ -56,8 +115,9 @@ const AdminNoticesCreate = () => {
       })
       .then((response) => {
         console.log(response);
-        if (response.data === 1) {
+        if (response.data !== 0) {
           // 입력 받은 데이터가 정상적으로 들어왔으면(값이 1이면) navigate를 통해 페이지 이동
+          notFilesUpload(response.data);
           navigate('/m/notices/lists?sort=-notDate&filter=none&pages=1');
         }
       })
@@ -179,6 +239,27 @@ const AdminNoticesCreate = () => {
               rows={6}
               inputRef={noticeContentRef}
             />
+          </div>
+        </Box>
+      </Box>
+
+      {/* 공지사항 제목 테이블 표기 시작 */}
+      <Box sx={noticeRow}>
+        <Box sx={noticeFirstCell}>
+          <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
+            첨부파일
+          </Typography>
+        </Box>
+        <Box
+          component="form"
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '25ch' },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <div>
+            <input type="file" multiple onChange={fileChange} />
           </div>
         </Box>
       </Box>

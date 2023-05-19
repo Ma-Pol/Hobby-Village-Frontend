@@ -7,6 +7,7 @@ const UserNoticesRows = ({
   notTitle,
   notDate,
   notFiles,
+  notView,
   isLast,
 }) => {
   const notLink = `/notices/details/${notCode}`;
@@ -76,7 +77,7 @@ const UserNoticesRows = ({
       </Grid>
 
       <Grid item xs={1}>
-        <Typography sx={tableData}>{notFiles}</Typography>
+        <Typography sx={tableData}>{notView}</Typography>
       </Grid>
     </Grid>
   );
