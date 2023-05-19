@@ -11,7 +11,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#f5f5f5',
+  backgroundColor: '#dddddd',
   minHeight: '300px',
 }));
 

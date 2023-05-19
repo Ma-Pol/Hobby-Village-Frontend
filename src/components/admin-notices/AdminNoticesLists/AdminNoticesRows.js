@@ -1,15 +1,17 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminNoticesRows = ({
   notCode,
   notCategory,
   notTitle,
   notDate,
+  queryString,
   isLast,
 }) => {
   const notLink = `/m/notices/details/${notCode}`;
-  
+
   const tableLine = {
     px: 1,
     py: 0.5,
@@ -60,7 +62,9 @@ const AdminNoticesRows = ({
           }}
         >
           <Link
-            href={notLink}
+            component={RouterLink}
+            to={notLink}
+            state={{ queryString: queryString }}
             title={notTitle + '\n공지사항 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}

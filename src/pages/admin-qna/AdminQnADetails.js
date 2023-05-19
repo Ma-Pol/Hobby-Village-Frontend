@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#f5f5f5',
+  backgroundColor: '#dddddd',
   minHeight: '300px',
 }));
 
@@ -287,7 +287,7 @@ const AdminQnADetails = () => {
               <Typography
                 variant="h5"
                 sx={{
-                  // fontWeight: 'bold',
+                  fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: '1.5rem',
@@ -389,7 +389,7 @@ const AdminQnADetails = () => {
               },
             }}
           >
-            {questionDetail.qstState === 0 ? '답글' : '수정'}
+            {questionDetail.qstState === 0 ? '답변' : '수정'}
           </Button>
         </Box>
       </Box>

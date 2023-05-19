@@ -12,12 +12,13 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminNoticesRows from '../../components/admin-notices/AdminNoticesLists/AdminNoticesRows';
 
 const AdminNoticesLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation();
   const navigate = useNavigate(); // 페이지 이동
   const [noticeList, setNoticeList] = useState([]); // 공지사항 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
@@ -212,7 +213,7 @@ const AdminNoticesLists = () => {
           </ToggleButtonGroup>
         </Box>
         {/* 필터 선택용 Toggle Button 표기 끝 */}
-        
+
         {/* 정렬 기준 선택용 Select Box 표기 시작 */}
         <Box sx={{ float: 'right', pr: 1, mb: 1 }}>
           <InputLabel
@@ -310,6 +311,7 @@ const AdminNoticesLists = () => {
               notCategory={notice.notCategory}
               notTitle={notice.notTitle}
               notDate={notice.notDate}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
