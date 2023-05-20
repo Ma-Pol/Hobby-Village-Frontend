@@ -11,7 +11,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 950,
   boxShadow: 'none',
   backgroundColor: '#dfdfdf',
-  minHeight: '300px',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -322,6 +321,7 @@ const AdminNoticesDetails = () => {
                 px: 1,
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'center',
                 alignItems: 'flex-start',
               }}
             >
@@ -357,7 +357,13 @@ const AdminNoticesDetails = () => {
           </Grid>
         </StyledPaper>
 
-        <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Box
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
+          }}
+        >
           <Button
             onClick={deleteNotice}
             variant="contained"

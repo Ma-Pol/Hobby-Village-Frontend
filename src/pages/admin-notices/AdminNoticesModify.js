@@ -22,7 +22,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 950,
   boxShadow: 'none',
   backgroundColor: '#ffffff',
-  minHeight: '300px',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({

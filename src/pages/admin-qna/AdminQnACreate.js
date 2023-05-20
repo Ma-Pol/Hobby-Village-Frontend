@@ -12,7 +12,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 950,
   boxShadow: 'none',
   backgroundColor: '#dddddd',
-  minHeight: '300px',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -324,7 +323,13 @@ const AdminQnACreate = () => {
           </StyledPaper>
         </>
 
-        <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Box
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
+          }}
+        >
           <Button
             onClick={() => {
               navigate(`/m/qnas/details/${qstCode}`);

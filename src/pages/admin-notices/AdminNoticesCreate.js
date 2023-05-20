@@ -22,7 +22,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 950,
   boxShadow: 'none',
   backgroundColor: '#ffffff',
-  minHeight: '300px',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -393,7 +392,9 @@ const AdminNoticesCreate = () => {
         </Grid>
       </StyledPaper>
 
-      <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+      <Box
+        style={{ textAlign: 'center', marginTop: '20px', marginBottom: '50px' }}
+      >
         <Button
           onClick={() => {
             navigate(-1);
