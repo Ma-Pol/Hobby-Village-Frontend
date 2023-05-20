@@ -91,7 +91,10 @@ const UserFooter = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} className={classes.middle}>
-              <Link to="/notices/lists" className={classes.textColor}>
+              <Link
+                to="/notices/lists?sort=-notDate&filter=none&pages=1"
+                className={classes.textColor}
+              >
                 <Typography variant="body2">공지사항</Typography>
               </Link>
               <Link to="/guide" className={classes.textColor}>
