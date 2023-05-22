@@ -15,7 +15,6 @@ import {
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import UserQnARows from '../../components/user-cs/UserQnARows';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
-import UserFooter from '../../components/UserFooter';
 
 const UserQnALists = () => {
   // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
@@ -393,7 +392,6 @@ const UserQnALists = () => {
             검색
           </Button>
         </Box>
-        <UserFooter />
       </Container>
     </>
   );

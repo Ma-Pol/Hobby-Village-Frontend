@@ -14,7 +14,6 @@ import {
   MenuItem,
 } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
-import UserFooter from '../../components/UserFooter';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -304,7 +303,6 @@ const UserQnACreate = () => {
           등록
         </Button>
       </Box>
-      <UserFooter />
     </Box>
   );
 };

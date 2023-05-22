@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
-import UserFooter from '../../components/UserFooter';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -296,7 +295,6 @@ const UserQnADetails = () => {
             <StyledButton>목록</StyledButton>
           </Link>
         </Box>
-        <UserFooter />
       </Box>
     );
   }
