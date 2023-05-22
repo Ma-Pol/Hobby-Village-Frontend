@@ -12,18 +12,22 @@ const AdminFAQDetails = () => {
    
    useEffect (()=> {
     axios
-    .get(`/m/faqs/faqdetails/${faqCode}`,{
+    .get(`/m/faqs/faqdetails/${faqCode}`
     
-    })
+    )
     .then((res)=> {
+      console.log(res.data)
       setDetails(res.data)
+    }).catch((err)=>{
+      console.error(err)
     })
-   })
-    const handleList = () => {
+   },[faqCode])
+    
+   const handleList = () => {
         navigate(`/m/faqs/lists`);
     }
-    
-    const handleModify = () => {
+     
+   const handleModify = () => {
         navigate(`/m/faqs/modify/${faqCode}`);
     }
 
@@ -34,7 +38,7 @@ const AdminFAQDetails = () => {
         faqCode : faqCode
       })
       .then((res)=> {
-        if( res === 1 ){
+        if( res.data === 1 ){
           navigate(`/m/faqs/lists`)
         }else{
 
@@ -45,35 +49,34 @@ const AdminFAQDetails = () => {
       });
   };
 
-  
-  return (
+  if(!details){
+    return <></>
+  }else
+ { return (
     <Wrapper>
         <Header style={{ marginBottom:"50px", fontSize:"36px"}}>FAQ 자주 묻는 질문 | 상세</Header>
           <TextArea>
           <Text>
             제목&nbsp;&nbsp;|
-            <Typography
-               defaultValue = {details.faqTitle}
+             <Typography
               style={{width:"70%", marginLeft:"20px", marginTop:"30px"}}
-            />
+            > {details.faqTitle} </Typography> 
             </Text>
   
          <Text1>
           구분&nbsp;&nbsp;| 
             <Typography
-                defaultValue = {details.faqCategory}
                 style={{ width:"150px", marginLeft:"20px", marginTop:"30px", fontSize:"20px"}}
-            />
+            >{details.faqCategory}</Typography>
           </Text1>
 
           <Text2>
             내용&nbsp;&nbsp;| 
             <Typography
-              defaultValue = {details.faqContent}
-              multiline
+              multiline="true"
               rows={10}
               style={{width:"70%", marginTop:"30px",  marginLeft:"20px"}}
-            />        
+            >{details.faqContent}</Typography>        
         
           </Text2>
         </TextArea>
@@ -93,7 +96,7 @@ const AdminFAQDetails = () => {
           onClick={handleModify} >수정</Button>   
         </Group>
     </Wrapper>
-  );
+  );}
 };
 
 export default AdminFAQDetails;
@@ -126,7 +129,7 @@ const TextArea = styled.div`
 const Text = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: end;
     justify-content: center;
     font-size:20pt;
     margin-top:30px;
@@ -134,7 +137,7 @@ const Text = styled.div`
 const Text1 = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: end;
     justify-content: center;
     font-size:20pt;
     margin-right:570px;
@@ -143,10 +146,11 @@ const Text1 = styled.div`
 const Text2 = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: top;
+    align-items: center;
     justify-content: center;
     font-size:20pt;
-    margin-top:30px;
+     margin-top:30px;
+    
 `
 const Group = styled.div`
     margin-top: 80px;

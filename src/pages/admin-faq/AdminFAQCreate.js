@@ -5,12 +5,13 @@ import TextField  from "@mui/material/TextField";
 import Button  from '@mui/material/Button';
 import axios from "axios";
 
+
 const AdminFAQCreate = () => {
   const faqTitleRef = useRef();
   const faqContentRef = useRef();
-  const selectList = ["결제", "로그인/정보", "상품문의", "판매/대여", "기타"];
-  const [Selected, setSelected] = useState("");
-  const selectRef = useRef();
+  const selectList = ["결제", "로그인/정보", "상품 문의", "배송 문의", "판매/위탁", "기타"];
+  const [Selected, setSelected] = useState("결제");
+
 
   const navigate = useNavigate();
     
@@ -21,6 +22,8 @@ const AdminFAQCreate = () => {
   const handleSelect = (e) => {
       setSelected(e.target.value);
   };
+
+  
   
   const handleInsert = () => {
     console.log("handleInsert =>", faqTitleRef.current.value);
@@ -42,11 +45,16 @@ const AdminFAQCreate = () => {
       .post(`/m/faqs/create`, {
         faqTitle: faqTitleRef.current.value,
         faqContent: faqContentRef.current.value,
-        faqCategory: selectRef,
+        faqCategory: Selected,
       })
-      .then(response => {
-        console.log(response.data);
-        setSelected(response.data);
+      .then((response) => {
+        // console.log(response.data);
+        // setSelected(response.data);
+        if(response.data === 1){
+                navigate(`/m/faqs/lists`);
+            }else{
+              
+             }
       }
        
       )
@@ -61,6 +69,7 @@ const AdminFAQCreate = () => {
           <Text>
             제목
             <TextField
+              id="outlined-basic"
               variant="outlined"
               inputRef={faqTitleRef}
               defaultValue="제목을 입력해주세요."
@@ -70,7 +79,7 @@ const AdminFAQCreate = () => {
   
          <Text1>
           구분
-          <select onChange={handleSelect} inputRef={selectRef} style={{height:"40px", width:"150px", borderColor:"#C8C8C8", borderRadius:"5px", marginLeft:"20px"}}>
+          <select onChange={handleSelect} value={Selected} style={{height:"40px", width:"150px", borderColor:"#C8C8C8", borderRadius:"5px", marginLeft:"20px"}}>
             {selectList.map((item) => (
               <option value={item} key={item}>
                 {item}
@@ -82,6 +91,7 @@ const AdminFAQCreate = () => {
           <Text2>
             내용
             <TextField
+              id="outlined-basic"
               variant="outlined"
               inputRef={faqContentRef}
               multiline
@@ -91,7 +101,7 @@ const AdminFAQCreate = () => {
             />        
         
           </Text2>
-        
+          
         <Group>  
         
         <Button type="submit" variant="outlined" 

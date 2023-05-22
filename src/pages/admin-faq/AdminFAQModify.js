@@ -8,26 +8,30 @@ import axios from "axios";
 const AdminFAQModify = () => {
   const navigate = useNavigate();
   const [details, setDetails] = useState();
-   const { faqCode } = useParams(); 
-  const selectList = ["결제", "로그인/정보", "상품문의", "판매/대여", "기타"];
-  const [Selected, setSelected] = useState("");
+  const { faqCode } = useParams(); 
+  const selectList = ["결제", "로그인/정보", "상품 문의", "배송 문의", "판매/위탁", "기타"];
+  const [Selected, setSelected] = useState();
   const faqTitleRef = useRef();
   const faqContentRef = useRef();
-  const faqCategory = useRef();
+ 
+
   
   useEffect (()=> {
     axios
-    .get(`/m/faqs/modify/${faqCode}`,{
-      
-    })
+    .get(`/m/faqs/faqdetails/${faqCode}`
+    )
     .then((res)=> {
-      setDetails(res.data)
-    })
-   })
+      setDetails(res.data);
+      setSelected(res.data.faqCategory);
+      // if(Selected == null || Selected === undefined || Selected === "") {
+      //   setSelected(res.data.faqCategory);
+      // }
+    });
+  }, [faqCode]);
 
   const handleList = () => {
         navigate(`/m/faqs/lists`);
-    }
+  }
 
   const handleSelect = (e) => {
     setSelected(e.target.value);
@@ -37,16 +41,16 @@ const AdminFAQModify = () => {
     e.preventDefault();
 
     axios
-      .post(`/m/faqs/modify/${faqCode}`, {
+      .post(`/m/faqs/modify`, {
         
-        title: faqTitleRef.current.value,
+        faqTitle: faqTitleRef.current.value,
         faqContent: faqContentRef.current.value,        
-        faqCategory: faqCategory.current.value,
-
+        faqCategory: Selected,
+        faqCode: faqCode
       })
       .then((res)=> {
-        if( res === 1 ){
-          navigate(`/m/faqs/lists`)
+        if( res.data === 1 ){
+          navigate(`/m/faqs/faqdetails/${faqCode}`)
         }else{
 
         }
@@ -56,24 +60,29 @@ const AdminFAQModify = () => {
       });
   };
   
-
+ if(!details){
+    return <></>
+ } else { 
   return (
     <Wrapper>
         <Header style={{ marginBottom:"50px", fontSize:"36px"}}>FAQ 자주 묻는 질문 | 수정</Header>
           <Text>
             제목
             <TextField
+              id="outlined-basic"
               variant="outlined"
               defaultValue= {details.faqTitle}
-              ref={faqTitleRef.current.value}
+              inputRef={faqTitleRef}
               style={{width:"70%", marginLeft:"20px"}}
             />
             </Text>
   
          <Text1>
           구분
-          <select onChange={handleSelect} defaultValue={details.faqCategory} style={{height:"40px", width:"150px", borderColor:"#C8C8C8", borderRadius:"5px", marginLeft:"20px"}}
-           ref={faqCategory.current.value}>
+          <select onChange={handleSelect} defaultValue={details.faqCategory}
+          // ref={faqCategoryRef} 
+           style={{height:"40px", width:"150px", borderColor:"#C8C8C8", borderRadius:"5px", marginLeft:"20px"}}
+          >
             {selectList.map((item) => (
               <option value={item} key={item}>
                 {item}
@@ -85,10 +94,11 @@ const AdminFAQModify = () => {
           <Text2>
             내용
             <TextField
+              id="outlined-basic"
               variant="outlined"
               multiline
               rows={10}
-              ref={faqContentRef.current.value}
+              inputRef={faqContentRef}
               defaultValue= {details.faqContent}
               style={{width:"70%",  marginLeft:"20px"}}
             />        
@@ -106,7 +116,7 @@ const AdminFAQModify = () => {
           onClick={handleModify} >등록</Button> 
         </Group>
     </Wrapper>
-  );
+  );}
 };
 
 export default AdminFAQModify;
