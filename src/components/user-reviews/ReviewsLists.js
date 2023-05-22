@@ -1,13 +1,14 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import axios from "axios";
 import "./ReviewsLists.css";
 import { Pagination } from '@mui/material';
 import { Box, InputLabel, NativeSelect } from '@material-ui/core';
 
 function ReviewsLists(props) {
-   
+    
+    const { email } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [totalpage, setTotalPage] = useState([]);
     const [currentPage, setCurrentPage] = useState(searchParams.get('pages'));
@@ -56,15 +57,17 @@ function ReviewsLists(props) {
 
     const getLists = () => {
         axios
-          .get("/reviewslists", {
-            // params: {
-            //   id: nickname
-            // },
-          })
-          .then((res) => setLists(res.data))
+        //   .get(`/reviews${email}lists`)
+        //   .then((res) => {
+        //     setLists(res.data);
+        // })
+        .get(`/reviewslists`)
+        .then((list) => {
+          setLists(list.data);
+      })
           .catch((e) => {
             console.error(e);
-          });
+        })
     };
 
     useEffect(() => {
@@ -76,7 +79,7 @@ function ReviewsLists(props) {
             <div className = "pagetitle">
                 리뷰 관리
             </div>
-            <Box sx = {{ float : 'right', pr : 11.3, mb : 0 }}>
+            <Box sx = {{ float : 'right', pr : '10%', mb : 0 }}>
                 <InputLabel
                     sx = {{
                         fontSize : '0.8rem',
@@ -122,7 +125,7 @@ function ReviewsLists(props) {
                         {lists.map(rowData => (    
                             <tr className = "listdata" key = {rowData.revwCode}>
                                 <td>
-                                    <a href={`/products/details/:prodCode=${rowData.prodCode}`}>{rowData.prodName}</a>
+                                    <a href={`/products/details/${rowData.prodCode}`}>{rowData.prodName}</a>
                                 </td>
                                 <td className = "listRate"> 
                                     {rowData.revwRate === 0
@@ -135,11 +138,13 @@ function ReviewsLists(props) {
                                         ? "★★★☆☆"
                                         :rowData.revwRate === 4
                                         ? "★★★★☆"
-                                        : "★★★★★"
+                                        :rowData.revwRate === 5
+                                        ? "★★★★★"
+                                        : ""
                                     }
                                 </td>
                                 <td>
-                                    <a href={`/reviews/details/:revwCode=${rowData.revwTitle}`}>{rowData.revwTitle}</a>
+                                    <a href={`/reviews/details/${rowData.revwCode}`}>{rowData.revwTitle}</a>
                                 </td>
                                 <td className = "listdate"> {rowData.revwRegiDate} </td>
                                 <td className = "listreport"> {rowData.revwReport} </td>
