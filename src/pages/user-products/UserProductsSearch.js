@@ -107,6 +107,9 @@ const UserProductsSearch = () => {
     if (keyword === null || keyword === ' ') {
       window.alert('검색어를 입력하세요');
     } else {
+      if (searchParams.get('category') == null) {
+        searchParams.set('category', 'all');
+      }
       navigate(
         `/products/lists/search?category=${category}&sort=${sort}&array=${array}&pages=1&keyword=${keyword}`
       );
