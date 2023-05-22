@@ -27,7 +27,7 @@ const AdminLogin = () => {
     
 
      axios
-        .post(`/m/login`, {
+        .post("/m/login", {
             id: adminIdRef.current.value, //MemberVO를 통해 저장
             password: pwRef.current.value,
         })
@@ -35,7 +35,7 @@ const AdminLogin = () => {
             console.log.apply("handleLogin =>", res);
             if(res.data === 1){
                 window.sessionStorage.setItem("id", adminIdRef.current.value);
-                navigate("/m/");//admin main
+                navigate("/m");//admin main
             }else{
               
              }
