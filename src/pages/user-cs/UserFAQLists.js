@@ -2,13 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Box,
   Pagination,
   ToggleButton,
@@ -16,55 +9,17 @@ import {
   TextField,
   NativeSelect,
   Typography,
+  Container,
+  Grid,
 } from '@mui/material';
-import { styled } from '@mui/system';
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
-import UserFooter from '../../components/UserFooter';
-
-const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  boxShadow: 'none',
-  borderTop: '1px solid black',
-  '& table': {
-    borderCollapse: 'collapse',
-    borderRadius: '0',
-    borderSpacing: '0',
-  },
-  '&.MuiPaper-root': {
-    borderRadius: '0',
-  },
-}));
-
-const StyledTableHeadRow = styled(TableRow)({
-  '& th': {
-    borderBottom: '1px solid black',
-    fontWeight: 'bold',
-  },
-});
-
-const StyledTableRow = styled(TableRow)({
-  '&:first-child td': {
-    borderTop: '1px solid black',
-  },
-  '&:last-child td': {
-    borderBottom: '1px solid black',
-  },
-});
-
-const StyledLink = styled(Link)({
-  textDecoration: 'none',
-  color: 'inherit',
-});
+import UserFAQRows from '../../components/user-cs/UserFAQRows';
 
 const UserFAQLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const navigate = useNavigate(); // 페이지 이동
-  const location = useLocation(); // 현재 URL 정보
   const [faqList, setFaqList] = useState([]);
   const [totalPage, setTotalPage] = useState(0); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages'));
@@ -72,16 +27,6 @@ const UserFAQLists = () => {
     searchParams.get('filter')
   );
   const keywordRef = useRef(); // 현재 검색 키워드
-
-  const filters = [
-    { name: '전체', value: 'none' },
-    { name: '상품 문의', value: 'product' },
-    { name: '로그인/정보', value: 'login-about' },
-    { name: '판매/위탁', value: 'sell-consign' },
-    { name: '결제', value: 'payment' },
-    { name: '배송 문의', value: 'shipping' },
-    { name: '기타', value: 'etc' },
-  ];
 
   useEffect(() => {
     // 검색 조건이 없을 때
@@ -186,11 +131,21 @@ const UserFAQLists = () => {
     },
   };
 
+  const tableHead = {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    px: 1,
+    py: 0.5,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
   return (
     <>
       <UserCsTitle />
 
-      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Container>
         <Box
           sx={{
             display: 'flex',
@@ -198,94 +153,103 @@ const UserFAQLists = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Box sx={{ float: 'right', my: 2 }}>
+          <Box sx={{ float: 'right', pr: 3, mb: 1 }}>
             <ToggleButtonGroup
               value={String(currentFilter)}
               exclusive
               onChange={filterChange}
             >
-              {filters.map((filter) => {
-                return (
-                  <ToggleButton
-                    key={filter.name}
-                    value={filter.value}
-                    sx={filterBox}
-                  >
-                    {filter.name}
-                  </ToggleButton>
-                );
-              })}
+              <ToggleButton value="none" sx={filterBox}>
+                전체
+              </ToggleButton>
+              <ToggleButton value="product" sx={filterBox}>
+                상품 문의
+              </ToggleButton>
+              <ToggleButton value="login-about" sx={filterBox}>
+                로그인/정보
+              </ToggleButton>
+              <ToggleButton value="sell-consign" sx={filterBox}>
+                판매/위탁
+              </ToggleButton>
+              <ToggleButton value="payment" sx={filterBox}>
+                결제
+              </ToggleButton>
+              <ToggleButton value="shipping" sx={filterBox}>
+                배송 문의
+              </ToggleButton>
+              <ToggleButton value="other" sx={filterBox}>
+                기타
+              </ToggleButton>
             </ToggleButtonGroup>
           </Box>
         </Box>
+        {/* FAQ 목록 테이블 표기 시작 */}
+        <Box
+          sx={{
+            mt: 2,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            cursor: 'default',
+            userSelect: 'none',
+          }}
+        >
+          {/* FAQ 목록 테이블 컬럼명 표기 시작 */}
+          <Grid
+            container
+            sx={{
+              px: 1,
+              py: 0.5,
+              borderTop: '2px solid #000000',
+              borderBottom: '2px solid #000000',
+            }}
+          >
+            <Grid item xs={2}>
+              <Typography sx={tableHead}>구분</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography sx={tableHead}>FAQ 제목</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography sx={tableHead}>작성일</Typography>
+            </Grid>
+          </Grid>
+          {/* FAQ 목록 테이블 컬럼명 표기 끝 */}
 
-        <StyledTableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <StyledTableHeadRow>
-                <TableCell align="center">번호</TableCell>
-                <TableCell align="center">카테고리</TableCell>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">날짜</TableCell>
-              </StyledTableHeadRow>
-            </TableHead>
-
-            {faqList.length !== 0 &&
-              faqList.map((faq, index) => (
-                <TableBody key={index}>
-                  <StyledTableRow>
-                    <TableCell align="center">{faq.faqCode}</TableCell>
-                    <TableCell align="center">{faq.faqCategory}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        maxWidth: '300px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <StyledLink
-                        title={faq.faqTitle}
-                        to={`/cs/faq/details/${faq.faqCode}`}
-                        state={{
-                          queryString: location.search,
-                        }}
-                        sx={{
-                          textDecoration: 'none',
-                          color: '#000000',
-                          '&:hover': {
-                            textDecoration: 'underline',
-                          },
-                        }}
-                      >
-                        {faq.faqTitle}
-                      </StyledLink>
-                    </TableCell>
-                    <TableCell align="center">{faq.faqDate}</TableCell>
-                  </StyledTableRow>
-                </TableBody>
-              ))}
-          </Table>
-        </StyledTableContainer>
-
-        {searchParams.get('keyword') !== null && faqList.length === 0 && (
-          <Box>
+          {/* FAQ 목록 테이블 데이터 표기 시작 */}
+          {faqList.length === 0 ? (
+            // FAQ 데이터가 없을 경우
             <Typography
-              variant="h5"
-              component="h6"
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                mt: 5,
-                mb: 5,
+                mt: 4,
+                mb: 2,
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                userSelect: 'none',
               }}
             >
-              검색 결과가 없습니다.
+              FAQ 데이터가 존재하지 않습니다.
             </Typography>
-          </Box>
-        )}
+          ) : (
+            // FAQ 데이터가 있을 경우
+            faqList.map((faq, index, row) => (
+              <UserFAQRows
+                key={faq.faqCode}
+                faqCode={faq.faqCode}
+                faqCategory={faq.faqCategory}
+                faqTitle={faq.faqTitle}
+                faqDate={faq.faqDate}
+                queryString={location.search}
+                isLast={index + 1 === row.length} // 마지막 데이터인지 확인
+              />
+            ))
+          )}
+          {/* FAQ 목록 테이블 데이터 표기 끝 */}
+        </Box>
+        {/* FAQ 목록 테이블 표기 끝 */}
 
         <Box
           sx={{
@@ -376,8 +340,7 @@ const UserFAQLists = () => {
             검색
           </Button>
         </Box>
-        <UserFooter />
-      </div>
+      </Container>
     </>
   );
 };

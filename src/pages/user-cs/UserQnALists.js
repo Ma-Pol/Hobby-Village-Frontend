@@ -2,13 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Box,
   Pagination,
   ToggleButton,
@@ -16,50 +9,13 @@ import {
   TextField,
   NativeSelect,
   Typography,
+  Container,
+  Grid,
 } from '@mui/material';
-import { styled } from '@mui/system';
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import UserQnARows from '../../components/user-cs/UserQnARows';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFooter from '../../components/UserFooter';
-
-const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  boxShadow: 'none',
-  borderTop: '1px solid black',
-  '& table': {
-    borderCollapse: 'collapse',
-    borderRadius: '0',
-    borderSpacing: '0',
-  },
-  '&.MuiPaper-root': {
-    borderRadius: '0',
-  },
-}));
-
-const StyledTableHeadRow = styled(TableRow)({
-  '& th': {
-    borderBottom: '1px solid black',
-    fontWeight: 'bold',
-  },
-});
-
-const StyledTableRow = styled(TableRow)({
-  '&:first-child td': {
-    borderTop: '1px solid black',
-  },
-  '&:last-child td': {
-    borderBottom: '1px solid black',
-  },
-});
-
-const StyledLink = styled(Link)({
-  textDecoration: 'none',
-  color: 'inherit',
-});
 
 const UserQnALists = () => {
   // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
@@ -74,16 +30,6 @@ const UserQnALists = () => {
     searchParams.get('filter')
   );
   const keywordRef = useRef(); // 현재 검색 키워드
-
-  const filters = [
-    { name: '전체', value: 'none' },
-    { name: '상품 문의', value: 'product' },
-    { name: '로그인/정보', value: 'login-about' },
-    { name: '판매/위탁', value: 'sell-consign' },
-    { name: '결제', value: 'payment' },
-    { name: '배송 문의', value: 'shipping' },
-    { name: '기타', value: 'etc' },
-  ];
 
   useEffect(() => {
     // 검색 조건이 없을 때
@@ -191,10 +137,20 @@ const UserQnALists = () => {
     },
   };
 
+  const tableHead = {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    px: 1,
+    py: 0.5,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
   return (
     <>
       <UserCsTitle />
-      <div style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Container>
         <Box
           sx={{
             display: 'flex',
@@ -202,96 +158,109 @@ const UserQnALists = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Box sx={{ float: 'right', my: 2 }}>
+          {/* 필터 선택용 Toggle Button 표기 시작 */}
+          <Box sx={{ float: 'right', pr: 3, mb: 1 }}>
             <ToggleButtonGroup
               value={String(currentFilter)}
               exclusive
               onChange={filterChange}
             >
-              {filters.map((filter) => {
-                return (
-                  <ToggleButton
-                    key={filter.name}
-                    value={filter.value}
-                    sx={filterBox}
-                  >
-                    {filter.name}
-                  </ToggleButton>
-                );
-              })}
+              <ToggleButton value="none" sx={filterBox}>
+                전체
+              </ToggleButton>
+              <ToggleButton value="product" sx={filterBox}>
+                상품 문의
+              </ToggleButton>
+              <ToggleButton value="login-about" sx={filterBox}>
+                로그인/정보
+              </ToggleButton>
+              <ToggleButton value="sell-consign" sx={filterBox}>
+                판매/위탁
+              </ToggleButton>
+              <ToggleButton value="payment" sx={filterBox}>
+                결제
+              </ToggleButton>
+              <ToggleButton value="shipping" sx={filterBox}>
+                배송 문의
+              </ToggleButton>
+              <ToggleButton value="other" sx={filterBox}>
+                기타
+              </ToggleButton>
             </ToggleButtonGroup>
           </Box>
+          {/* 필터 선택용 Toggle Button 표기 끝 */}
         </Box>
-        <StyledTableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <StyledTableHeadRow>
-                <TableCell align="center">번호</TableCell>
-                <TableCell align="center">카테고리</TableCell>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">작성일</TableCell>
-                <TableCell align="center">처리 상태</TableCell>
-              </StyledTableHeadRow>
-            </TableHead>
 
-            {questionList.length !== 0 &&
-              questionList.map((question, index) => (
-                <TableBody key={index}>
-                  <StyledTableRow>
-                    <TableCell align="center">{question.qstCode}</TableCell>
-                    <TableCell align="center">{question.qstCategory}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        maxWidth: '300px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <StyledLink
-                        title={question.qstTitle}
-                        to={`/cs/qna/${email}/details/${question.qstCode}`}
-                        state={{
-                          queryString: location.search,
-                        }}
-                        sx={{
-                          textDecoration: 'none',
-                          color: '#000000',
-                          '&:hover': {
-                            textDecoration: 'underline',
-                          },
-                        }}
-                      >
-                        {question.qstTitle}
-                      </StyledLink>
-                    </TableCell>
-                    <TableCell align="center">{question.qstDate}</TableCell>
-                    <TableCell align="center">
-                      {question.qstState === 1 ? '답변 완료' : '답변 대기'}
-                    </TableCell>
-                  </StyledTableRow>
-                </TableBody>
-              ))}
-          </Table>
-        </StyledTableContainer>
-        {searchParams.get('keyword') !== null && questionList.length === 0 && (
-          <Box>
+        {/* 질문 목록 테이블 표기 시작 */}
+        <Box
+          sx={{
+            mt: 2,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            cursor: 'default',
+            userSelect: 'none',
+          }}
+        >
+          <Grid
+            container
+            sx={{
+              px: 1,
+              py: 0.5,
+              borderTop: '2px solid #000000',
+              borderBottom: '2px solid #000000',
+            }}
+          >
+            <Grid item xs={2}>
+              <Typography sx={tableHead}>카테고리</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography sx={tableHead}>문의 제목</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography sx={tableHead}>작성일</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography sx={tableHead}>처리 상태</Typography>
+            </Grid>
+          </Grid>
+
+          {questionList.length === 0 ? (
+            // 질문 데이터가 없을 경우
             <Typography
-              variant="h5"
-              component="h6"
               sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                mt: 5,
-                mb: 5,
+                mt: 4,
+                mb: 2,
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                userSelect: 'none',
               }}
             >
-              검색 결과가 없습니다.
+              질문 데이터가 존재하지 않습니다.
             </Typography>
-          </Box>
-        )}
+          ) : (
+            // 질문 데이터가 있을 경우
+            questionList.map((question, index, row) => (
+              <UserQnARows
+                key={question.qstCode}
+                qstCode={question.qstCode}
+                qstCategory={question.qstCategory}
+                qstTitle={question.qstTitle}
+                qstWriter={question.qstWriter}
+                qstDate={question.qstDate}
+                qstState={question.qstState}
+                userCode={question.userCode}
+                queryString={location.search}
+                isLast={index + 1 === row.length} // 마지막 데이터인지 확인
+              />
+            ))
+          )}
+          {/* 질문 목록 테이블 데이터 표기 끝 */}
+        </Box>
+        {/* 질문 목록 테이블 표기 끝 */}
 
         <Box
           sx={{
@@ -425,7 +394,7 @@ const UserQnALists = () => {
           </Button>
         </Box>
         <UserFooter />
-      </div>
+      </Container>
     </>
   );
 };

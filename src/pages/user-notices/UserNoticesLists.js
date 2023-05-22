@@ -5,27 +5,26 @@ import {
   NativeSelect,
   Typography,
   Button,
-  InputLabel,
   Pagination,
   TextField,
   ToggleButtonGroup,
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import UserNoticesRows from '../../components/user-notices/UserNoticesLists/UserNoticesRows';
 
 const UserNoticesLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const [noticeList, setNoticeList] = useState([]); // 공지사항 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
   const [currentFilter, setCurrentFilter] = useState(
     searchParams.get('filter')
   ); // 현재 필터
-  const sortRef = useRef(); // 현재 정렬 기준
   const conditionRef = useRef(); // 현재 검색 조건
   const keywordRef = useRef(); // 현재 검색 키워드
 
@@ -38,11 +37,9 @@ const UserNoticesLists = () => {
         .all([
           axios.get(`/notices/count?filter=${searchParams.get('filter')}`),
           axios.get(
-            `/notices?sort=${searchParams.get(
-              'sort'
-            )}&filter=${searchParams.get('filter')}&pages=${searchParams.get(
-              'pages'
-            )}`
+            `/notices?filter=${searchParams.get(
+              'filter'
+            )}&pages=${searchParams.get('pages')}`
           ),
         ])
         .then(
@@ -51,7 +48,6 @@ const UserNoticesLists = () => {
             setNoticeList(list.data); // 공지사항 목록 설정
             setCurrentPage(searchParams.get('pages')); // 현재 페이지 설정
             setCurrentFilter(searchParams.get('filter')); // 현재 필터 설정
-            sortRef.current.value = searchParams.get('sort'); // 현재 정렬 기준 설정
             conditionRef.current.value = 'notTitle+notContent'; // 현재 검색 조건 기본값 설정
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
@@ -74,11 +70,9 @@ const UserNoticesLists = () => {
           axios.get(
             `/notices?condition=${searchParams.get(
               'condition'
-            )}&keyword=${searchParams.get('keyword')}&sort=${searchParams.get(
-              'sort'
-            )}&filter=${searchParams.get('filter')}&pages=${searchParams.get(
-              'pages'
-            )}`
+            )}&keyword=${searchParams.get('keyword')}&filter=${searchParams.get(
+              'filter'
+            )}&pages=${searchParams.get('pages')}`
           ),
         ])
         .then(
@@ -87,7 +81,6 @@ const UserNoticesLists = () => {
             setNoticeList(list.data);
             setCurrentPage(searchParams.get('pages'));
             setCurrentFilter(searchParams.get('filter'));
-            sortRef.current.value = searchParams.get('sort');
             conditionRef.current.value = 'notTitle+notContent';
             keywordRef.current.value = searchParams.get('keyword');
           })
@@ -106,23 +99,15 @@ const UserNoticesLists = () => {
 
   // 검색 버튼 클릭 시
   const search = () => {
-    const sort = sortRef.current.value;
     const condition = conditionRef.current.value;
     const keyword = keywordRef.current.value;
     if (keyword === '') {
-      navigate(`/notices/lists?sort=${sort}&filter=${currentFilter}&pages=1`);
+      navigate(`/notices/lists?&filter=${currentFilter}&pages=1`);
     } else {
       navigate(
-        `/notices/lists?condition=${condition}&keyword=${keyword}&sort=${sort}&filter=${currentFilter}&pages=1`
+        `/notices/lists?condition=${condition}&keyword=${keyword}&filter=${currentFilter}&pages=1`
       );
     }
-  };
-
-  // 정렬 기준 변경 시
-  const sortChange = () => {
-    const sort = sortRef.current.value;
-    searchParams.set('sort', sort);
-    setSearchParams(searchParams);
   };
 
   // 필터 변경 시
@@ -212,41 +197,6 @@ const UserNoticesLists = () => {
           </ToggleButtonGroup>
         </Box>
         {/* 필터 선택용 Toggle Button 표기 끝 */}
-
-        {/* 정렬 기준 선택용 Select Box 표기 시작 */}
-        <Box sx={{ float: 'right', pr: 1, mb: 1 }}>
-          <InputLabel
-            sx={{
-              fontSize: '0.8rem',
-            }}
-            variant="standard"
-            htmlFor="userNoticeListSort"
-          >
-            정렬 기준
-          </InputLabel>
-          <NativeSelect
-            inputRef={sortRef}
-            onChange={sortChange}
-            sx={{
-              px: 1,
-              hover: {
-                backgroundColor: '#ffffff',
-              },
-              focus: {
-                backgroundColor: '#fffffff',
-              },
-            }}
-            defaultValue="-notDate"
-            inputProps={{
-              name: 'sort',
-              id: 'userNoticeListSort',
-            }}
-          >
-            <option value="-notDate">최근 작성 순</option>
-            <option value="notDate">오래된 작성 순</option>
-          </NativeSelect>
-        </Box>
-        {/* 정렬 기준 선택용 Select Box 표기 끝 */}
       </Box>
       {/* 공지사항 목록 테이블 표기 시작 */}
       <Box
@@ -272,13 +222,10 @@ const UserNoticesLists = () => {
           }}
         >
           <Grid item xs={1}>
-            <Typography sx={tableHead}>번호</Typography>
+            <Typography sx={tableHead}>카테고리</Typography>
           </Grid>
-          <Grid item xs={1}>
-            <Typography sx={tableHead}>구분</Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Typography sx={tableHead}>공지사항 제목</Typography>
+          <Grid item xs={8}>
+            <Typography sx={tableHead}>제목</Typography>
           </Grid>
           <Grid item xs={2}>
             <Typography sx={tableHead}>작성일</Typography>
@@ -314,6 +261,7 @@ const UserNoticesLists = () => {
               notTitle={notice.notTitle}
               notDate={notice.notDate}
               notView={notice.notView}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))

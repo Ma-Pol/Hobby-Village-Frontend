@@ -7,6 +7,7 @@ import UserQnADetails from './UserQnADetails';
 import UserQnACreate from './UserQnACreate';
 import { Container } from '@mui/material';
 import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserCs = () => {
   return (
@@ -44,6 +45,7 @@ const UserCs = () => {
             }
           />
         </Routes>
+        <UserFooter />
       </Container>
     </>
   );

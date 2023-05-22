@@ -2,17 +2,15 @@ import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-const UserNoticesRows = ({
-  notCode,
-  notCategory,
-  notTitle,
-  notDate,
-  notFiles,
-  notView,
+const UserFAQRows = ({
+  faqCode,
+  faqCategory,
+  faqTitle,
+  faqDate,
   queryString,
   isLast,
 }) => {
-  const notLink = `/notices/details/${notCode}`;
+  const faqLink = `/cs/faq/details/${faqCode}`;
 
   const tableLine = {
     px: 1,
@@ -45,8 +43,8 @@ const UserNoticesRows = ({
 
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid item xs={1}>
-        <Typography sx={tableData}>{notCategory}</Typography>
+      <Grid item xs={2}>
+        <Typography sx={tableData}>{faqCategory}</Typography>
       </Grid>
 
       <Grid item xs={8}>
@@ -62,26 +60,22 @@ const UserNoticesRows = ({
         >
           <Link
             component={RouterLink}
-            to={notLink}
+            to={faqLink}
             state={{ queryString: queryString }}
-            title={notTitle}
+            title={faqTitle}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
-            {notTitle}
+            {faqTitle}
           </Link>
         </Typography>
       </Grid>
 
       <Grid item xs={2}>
-        <Typography sx={tableData}>{notDate}</Typography>
-      </Grid>
-
-      <Grid item xs={1}>
-        <Typography sx={tableData}>{notView}</Typography>
+        <Typography sx={tableData}>{faqDate}</Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default UserNoticesRows;
+export default UserFAQRows;

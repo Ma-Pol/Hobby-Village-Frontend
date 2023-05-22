@@ -2,17 +2,20 @@ import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-const UserNoticesRows = ({
-  notCode,
-  notCategory,
-  notTitle,
-  notDate,
-  notFiles,
-  notView,
+const AdminQnARows = ({
+  qstCode,
+  qstCategory,
+  qstTitle,
+  qstWriter,
+  qstDate,
+  qstState,
+  userCode,
   queryString,
   isLast,
 }) => {
-  const notLink = `/notices/details/${notCode}`;
+  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
+  const email = 'bae@naver.com'; // 임시 이메일
+  const qnaLink = `/cs/qna/${email}/details/${qstCode}`;
 
   const tableLine = {
     px: 1,
@@ -38,18 +41,18 @@ const UserNoticesRows = ({
     px: 1,
     py: 0.5,
     textAlign: 'center',
+    color: qstState === 0 ? '#000000' : '#9a9a9a',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   };
-
   return (
     <Grid container sx={isLast ? tableLineBottom : tableLine}>
-      <Grid item xs={1}>
-        <Typography sx={tableData}>{notCategory}</Typography>
+      <Grid item xs={2}>
+        <Typography sx={tableData}>{qstCategory}</Typography>
       </Grid>
 
-      <Grid item xs={8}>
+      <Grid item xs={6}>
         <Typography
           sx={{
             px: 1,
@@ -62,26 +65,32 @@ const UserNoticesRows = ({
         >
           <Link
             component={RouterLink}
-            to={notLink}
+            to={qnaLink}
             state={{ queryString: queryString }}
-            title={notTitle}
+            title={qstTitle}
             underline="hover"
-            sx={{ color: '#000000', cursor: 'pointer' }}
+            sx={
+              qstState === 0
+                ? { color: '#000000', cursor: 'pointer' }
+                : { color: '#9a9a9a', cursor: 'pointer' }
+            }
           >
-            {notTitle}
+            {qstTitle}
           </Link>
         </Typography>
       </Grid>
 
       <Grid item xs={2}>
-        <Typography sx={tableData}>{notDate}</Typography>
+        <Typography sx={tableData}>{qstDate}</Typography>
       </Grid>
 
-      <Grid item xs={1}>
-        <Typography sx={tableData}>{notView}</Typography>
+      <Grid item xs={2}>
+        <Typography sx={tableData}>
+          {qstState === 0 ? '답변 대기' : '답변 완료'}
+        </Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default UserNoticesRows;
+export default AdminQnARows;

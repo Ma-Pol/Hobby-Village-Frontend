@@ -1,44 +1,116 @@
-import { Box, Container, Typography, Button } from '@mui/material';
-
+import { Box, Container, Typography, Button, Paper, Grid } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import FileSaver from 'file-saver';
+import { styled } from '@mui/system';
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  margin: 'auto',
+  maxWidth: 950,
+  boxShadow: 'none',
+  backgroundColor: '#dfdfdf',
+}));
+
+const LabelItem = styled(Grid)(({ theme }) => ({
+  minHeight: '50px',
+  display: 'flex',
+  paddingLeft: '10px',
+}));
+
+// const buttonStyle = {
+//   mx: 2,
+//   width: '65px',
+//   height: '30px',
+//   borderRadius: '15px',
+//   border: '1px solid #626262',
+//   color: '#000000',
+//   fontWeight: 'bold',
+// };
 
 const UserNoticesDetails = () => {
   const { notCode } = useParams();
-  const [noticeDetail, setNoticeDetail] = useState([]);
+  const [noticeDetail, setNoticeDetail] = useState({});
+  const [fileList, setFileList] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const prevQuery = location.state?.queryString;
 
   // 공지사항 상세 조회
   useEffect(() => {
+    checkNotice();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 실재하는 공지사항인지 확인
+  const checkNotice = () => {
     axios
-      .get(`/notices/noticeDetails/${notCode}`)
-      .then((detail) => {
-        setNoticeDetail(detail.data);
+      .get(`/notices/check/${notCode}`)
+      .then((check) => {
+        if (check.data === 0) {
+          alert('존재하지 않는 공지사항입니다.');
+          navigate(-1, { replace: true });
+        } else {
+          getNotice();
+        }
       })
       .catch((err) => {
         console.error(err);
       });
-
-    axios.post(`/notices/noticeUpdateView/${notCode}`).catch((err) => {
-      console.error(err);
-    });
-  }, [notCode]);
-
-  const noticeDetailRow = {
-    minHeight: '50px',
-    display: 'flex',
   };
 
-  const noticeDetailFirstCell = {
-    width: '100px',
+  // 공지사항 상세 조회
+  const getNotice = () => {
+    axios
+      .get(`/notices/noticeDetails/${notCode}`)
+      .then((detail) => {
+        setNoticeDetail(detail.data);
+        getFileList();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
-  const noticeDetailSecondCell = {
-    width: 'calc(100% - 100px)',
+  // 공지사항 파일 데이터 조회
+  const getFileList = () => {
+    axios
+      .get(`/notices//noticeFiles/${notCode}`)
+      .then((files) => {
+        console.log(files.data);
+        if (files.data.length === 1) {
+          setFileList(files.data);
+        } else if (files.data.length > 1) {
+          setFileList(files.data);
+        } else {
+          setFileList([]);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
-  if (!noticeDetail) {
-    return <></>;
+  // 파일 다운로드
+  const fileDownload = (file) => {
+    const formData = new FormData();
+
+    formData.append('originalFileName', file.notFileOriName);
+    formData.append('storedFileName', file.notFileSavName);
+
+    axios
+      .post(`/notices/download/file`, formData, { responseType: 'blob' })
+      .then((res) => {
+        FileSaver.saveAs(res.data, file.notFileOriName);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  if (fileList === null) {
+    return <div></div>;
   } else {
     return (
       <Container>
@@ -55,118 +127,208 @@ const UserNoticesDetails = () => {
             userSelect: 'none',
           }}
         >
-          공지사항 &#62; 상세
+          공지사항
         </Typography>
 
-        <Box
-          sx={{
-            mt: 2,
-            mx: 'auto',
-            px: 2,
-            width: '1100px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: '#DDDDDD',
-              width: '1100px',
-            }}
-          >
-            <Box sx={noticeDetailRow}>
-              <Box sx={noticeDetailFirstCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  제목
-                </Typography>
-              </Box>
-              <Box sx={noticeDetailSecondCell}>
-                <Typography variant="h6" component="h2">
-                  {noticeDetail.notTitle}
-                </Typography>
-              </Box>
-            </Box>
+        <StyledPaper style={{ marginTop: '40px' }}>
+          <Grid container>
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                제목
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                title={noticeDetail.notTitle}
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {noticeDetail.notTitle}
+              </Typography>
+            </Grid>
 
-            <Box sx={noticeDetailRow}>
-              <Box sx={noticeDetailFirstCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  카테고리
-                </Typography>
-              </Box>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
 
-              <Box sx={noticeDetailSecondCell}>
-                <Typography variant="h6" component="h2">
-                  {noticeDetail.notCategory}
-                </Typography>
-              </Box>
-            </Box>
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                카테고리
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" component="h2">
+                {noticeDetail.notCategory}
+              </Typography>
+            </Grid>
 
-            <Box sx={noticeDetailRow}>
-              <Box sx={noticeDetailFirstCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  작성일
-                </Typography>
-              </Box>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
 
-              <Box sx={noticeDetailSecondCell}>
-                <Typography variant="h6" component="h2">
-                  {noticeDetail.notDate}
-                </Typography>
-              </Box>
-            </Box>
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'flex-start',
+                pt: 1,
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                내용
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                pt: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '1.1rem',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: noticeDetail.notContent,
+                }}
+              ></div>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
 
-            <Box sx={noticeDetailRow}>
-              <Box sx={noticeDetailFirstCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  내용
-                </Typography>
-              </Box>
-
-              <Box sx={noticeDetailSecondCell}>
-                <Typography
-                  dangerouslySetInnerHTML={{ __html: noticeDetail.notContent }}
-                  variant="h6"
-                  component="h2"
-                ></Typography>
-              </Box>
-            </Box>
-
-            <Box sx={noticeDetailRow}>
-              <Box sx={noticeDetailFirstCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  첨부파일
-                </Typography>
-              </Box>
-
-              <Box sx={noticeDetailSecondCell}>
-                <Typography variant="h6" component="h2">
-                  {noticeDetail.notFiles}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                첨부파일
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              {fileList !== null &&
+                fileList.length !== 0 &&
+                fileList.map((file) => {
+                  return (
+                    <Typography
+                      key={file.notFileCode}
+                      variant="h6"
+                      component="h2"
+                      title={file.notFileOriName}
+                      sx={{
+                        my: '3px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        fontSize: '1rem',
+                        '&:hover': {
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                        },
+                      }}
+                      onClick={() => {
+                        fileDownload(file);
+                      }}
+                    >
+                      {file.notFileOriName}
+                    </Typography>
+                  );
+                })}
+            </Grid>
+          </Grid>
+        </StyledPaper>
 
         <Box
           sx={{
@@ -177,7 +339,13 @@ const UserNoticesDetails = () => {
           <Button
             variant="contained"
             size="small"
-            href="/notices/lists?sort=-notDate&filter=none&pages=1"
+            onClick={() => {
+              if (prevQuery === undefined) {
+                navigate(`/notices/lists?filter=none&pages=1`);
+              } else {
+                navigate(`/notices/lists${prevQuery}`);
+              }
+            }}
             sx={{
               mt: 1,
               mr: 1,
