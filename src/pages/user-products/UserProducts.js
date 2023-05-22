@@ -12,12 +12,11 @@ const UserProducts = () => {
         <Route exact path="lists" element={<UserProductsList />} />
         <Route exact path="lists/search" element={<UserProductsSearch />} />
         <Route exact path="brand/lists" element={<UserProductsBrandList />} />
-        {/* <Route
+        <Route
           exact
           path="details/:prodCode"
           element={<UserProductsDetails />}
-        /> */}
-        <Route path="details" element={<UserProductsDetails />} />
+        />
         <Route
           path="*"
           element={
