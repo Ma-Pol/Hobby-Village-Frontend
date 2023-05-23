@@ -121,7 +121,7 @@ const UserModify = () => {
         email : email
       })
       .then((res)=> {
-        if( res === 1 ){
+        if( res.data === 1 ){
           navigate(`/`)
         }else{
 
