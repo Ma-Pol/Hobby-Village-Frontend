@@ -1,22 +1,25 @@
 import { Container } from '@mui/material';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
+import Banner from '../../components/user-main/Banner';
+import MostPopularProducts from '../../components/user-main/MostPopularProducts';
+import MainAds from '../../components/user-main/MainAds';
+import MostPopularBrand from '../../components/user-main/MostPopularBrand';
 
-const UserMain = () => {
+function UserMain(props) {
   return (
     <>
       <UserHeader />
-      <Container>
-        임시 사용자 메인 페이지
-        <br />
-        <Link to="/m">관리자 메인 페이지로</Link>
-        <br />
-      </Container>
+      {/* <Container> */}
+      <Banner />
+      <MostPopularProducts />
+      <MainAds />
+      <MostPopularBrand />
+      {/* </Container> */}
       <UserFooter />
     </>
   );
-};
+}
 
 export default UserMain;

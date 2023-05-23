@@ -74,7 +74,7 @@ const UserGuide = () => {
               <br />
               물건마다 측정된 구독료,
               <br />
-              일주일 혹은 월 단위로 지금 대여해보세요.
+              일주일 단위로 지금 대여해보세요.
             </Typography>
             <img
               className="serviceImg"
