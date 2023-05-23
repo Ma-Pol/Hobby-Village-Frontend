@@ -12,13 +12,14 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminCouponsRows from '../../components/admin-coupons/AdminCouponsLists/AdminCouponsRows';
 
 const AdminCouponsLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const [couponList, setCouponList] = useState([]); // 쿠폰 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
@@ -341,6 +342,7 @@ const AdminCouponsLists = () => {
               couponName={coupon.couponName}
               startDate={coupon.startDate}
               deadline={coupon.deadline}
+              queryString={location.search}
               couponDelete={couponDelete}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />

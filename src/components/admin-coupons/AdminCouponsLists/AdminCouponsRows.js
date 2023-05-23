@@ -1,11 +1,13 @@
 import { Grid, Typography, Button, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminCouponsRows = ({
   couponCode,
   couponName,
   startDate,
   deadline,
+  queryString,
   isLast,
   couponDelete,
 }) => {
@@ -58,7 +60,9 @@ const AdminCouponsRows = ({
           }}
         >
           <Link
-            href={couponLink}
+            component={RouterLink}
+            to={couponLink}
+            state={{ queryString: queryString }}
             title={couponName + '\n쿠폰 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}

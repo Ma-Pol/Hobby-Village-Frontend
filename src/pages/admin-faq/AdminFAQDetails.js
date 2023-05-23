@@ -1,161 +1,312 @@
-import {React, useEffect, useState, useRef} from "react";
-import styled from 'styled-components';
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import Typography  from "@mui/material/Typography";
-import Button  from '@mui/material/Button';
-import axios from "axios";
+import { React, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { styled } from '@mui/system';
+import axios from 'axios';
+import { Box, Grid, Paper, Button, Typography } from '@mui/material';
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  margin: 'auto',
+  maxWidth: 950,
+  boxShadow: 'none',
+  backgroundColor: '#f1f1f1',
+}));
+
+const LabelItem = styled(Grid)(({ theme }) => ({
+  minHeight: '50px',
+  display: 'flex',
+  paddingLeft: '10px',
+}));
+
+const buttonStyle = {
+  mx: 2,
+  width: '65px',
+  height: '30px',
+  borderRadius: '15px',
+  border: '1px solid #626262',
+  color: '#000000',
+  fontWeight: 'bold',
+};
 
 const AdminFAQDetails = () => {
-   const navigate = useNavigate();
-   const [details, setDetails] = useState();
-   const { faqCode } = useParams();
-   
-   useEffect (()=> {
-    axios
-    .get(`/m/faqs/faqdetails/${faqCode}`
-    
-    )
-    .then((res)=> {
-      console.log(res.data)
-      setDetails(res.data)
-    }).catch((err)=>{
-      console.error(err)
-    })
-   },[faqCode])
-    
-   const handleList = () => {
-        navigate(`/m/faqs/lists`);
-    }
-     
-   const handleModify = () => {
-        navigate(`/m/faqs/modify/${faqCode}`);
-    }
+  const navigate = useNavigate();
+  const location = useLocation();
+  const prevQuery = location.state?.queryString;
+  const [detail, setDetail] = useState();
+  const { faqCode } = useParams();
 
-    const handleDelete = (e) => {
-    
+  useEffect(() => {
     axios
-      .post("/m/faqs/details/delete", {
-        faqCode : faqCode
-      })
-      .then((res)=> {
-        if( res.data === 1 ){
-          navigate(`/m/faqs/lists`)
-        }else{
-
+      .get(`/m/faqs/check/${faqCode}`)
+      .then((check) => {
+        if (check.data === 0) {
+          alert('존재하지 않는 FAQ입니다.');
+          navigate(`/m/faqs/lists?sort=-faqDate&filter=none&pages=1`, {
+            replace: true,
+          });
+        } else {
+          getDetails();
         }
       })
-      .catch((e) => {
-        console.error(e);
+      .catch((err) => {
+        console.error(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [faqCode]);
+
+  const getDetails = () => {
+    axios
+      .get(`/m/faqs/faqDetails/${faqCode}`)
+      .then((detail) => {
+        setDetail(detail.data);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
-  if(!details){
-    return <></>
-  }else
- { return (
-    <Wrapper>
-        <Header style={{ marginBottom:"50px", fontSize:"36px"}}>FAQ 자주 묻는 질문 | 상세</Header>
-          <TextArea>
-          <Text>
-            제목&nbsp;&nbsp;|
-             <Typography
-              style={{width:"70%", marginLeft:"20px", marginTop:"30px"}}
-            > {details.faqTitle} </Typography> 
-            </Text>
-  
-         <Text1>
-          구분&nbsp;&nbsp;| 
-            <Typography
-                style={{ width:"150px", marginLeft:"20px", marginTop:"30px", fontSize:"20px"}}
-            >{details.faqCategory}</Typography>
-          </Text1>
+  const deleteFaq = () => {
+    if (window.confirm('이 FAQ 항목을 삭제하시겠습니까?')) {
+      axios
+        .delete(`/m/faqs/delete/${detail.faqCode}`)
+        .then((res) => {
+          if (res.data === 1) {
+            alert('삭제에 성공했습니다.');
+            handleList();
+          } else {
+            alert('삭제에 실패했습니다.');
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      return false;
+    }
+  };
 
-          <Text2>
-            내용&nbsp;&nbsp;| 
-            <Typography
-              multiline="true"
-              rows={10}
-              style={{width:"70%", marginTop:"30px",  marginLeft:"20px"}}
-            >{details.faqContent}</Typography>        
-        
-          </Text2>
-        </TextArea>
-        
-        <Group>  
-        <Button type="submit" variant="outlined" 
-          style={{marginTop:"20px" ,marginRight:"50px" ,width:"10%", height: "60px",borderRadius:"30px",backgroundColor:"#F5B8B8", borderColor:"black",fontFamily: "", fontSize:"20px", color:"black"}} 
-          onClick={handleDelete}>삭제</Button>
-  
-        <Button variant="outlined" 
-          style={{marginTop:"20px" ,width:"10%", height: "60px",borderRadius:"30px",borderColor:"black",backgroundColor:"white",fontFamily: "", fontSize:"20px", color:"black"}} 
-          onClick={handleList} >목록</Button> 
+  const handleList = () => {
+    if (prevQuery === undefined) {
+      navigate(`/m/faqs/lists?sort=-faqDate&filter=none&pages=1`);
+    } else {
+      navigate(`/m/faqs/lists${prevQuery}`);
+    }
+  };
 
-        
-        <Button variant="outlined" 
-          style={{marginTop:"20px" , marginLeft:"50px" ,width:"10%", height: "60px",borderRadius:"30px",borderColor:"black",backgroundColor:"#C3C36A",fontFamily: "", fontSize:"20px", color:"black"}} 
-          onClick={handleModify} >수정</Button>   
-        </Group>
-    </Wrapper>
-  );}
+  if (!detail) {
+    return <div></div>;
+  } else {
+    return (
+      <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+        <Box
+          sx={{
+            my: 5,
+          }}
+        >
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{
+              mt: 5,
+              mb: 1,
+              pl: 1,
+              pr: 1,
+              fontWeight: 'bold',
+              userSelect: 'none',
+            }}
+          >
+            FAQ 자주 묻는 질문 &gt; 상세
+          </Typography>
+        </Box>
+
+        <StyledPaper style={{ marginTop: '40px' }}>
+          <Grid container>
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                제목
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                title={detail.faqTitle}
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {detail.faqTitle}
+              </Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
+
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                카테고리
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" component="h2">
+                {detail.faqCategory}
+              </Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                my: 1,
+                height: '1px',
+                borderBottom: '1px solid #7d7d7d',
+              }}
+            ></Grid>
+
+            <LabelItem
+              item
+              xs={2}
+              sx={{
+                alignItems: 'flex-start',
+                pt: 1,
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                }}
+              >
+                내용
+              </Typography>
+            </LabelItem>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                px: 1,
+                pt: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '1.1rem',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: detail.faqContent,
+                }}
+              ></div>
+            </Grid>
+          </Grid>
+        </StyledPaper>
+
+        <Box
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
+          }}
+        >
+          <Button
+            onClick={deleteFaq}
+            variant="contained"
+            sx={{
+              ...buttonStyle,
+              backgroundColor: '#f5b8b8',
+              '&:hover': {
+                backgroundColor: 'tomato',
+                color: '#ffffff',
+              },
+            }}
+          >
+            삭제
+          </Button>
+          <Button
+            onClick={handleList}
+            variant="contained"
+            sx={{
+              ...buttonStyle,
+              backgroundColor: '#ffffff',
+              '&:hover': {
+                backgroundColor: '#ffffff',
+                color: '#000000',
+              },
+            }}
+          >
+            목록
+          </Button>
+          <Button
+            onClick={() => {
+              navigate(`/m/faqs/modify/${detail.faqCode}`);
+            }}
+            variant="contained"
+            sx={{
+              ...buttonStyle,
+              backgroundColor: '#c3c36a',
+              '&:hover': {
+                backgroundColor: '#c3c36a',
+                color: '#ffffff',
+              },
+            }}
+          >
+            수정
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
 };
 
 export default AdminFAQDetails;
-
-const Wrapper = styled.div`
-    width: 100%;
-    max-width: 1230px;
-    margin: 2rem auto;
-    font-weight: 700;
-    font-size: 40px;
-`
-const Header = styled.div`
-    font-family: "The Jamsil 2 Light";
-    font-size: 30pt;
-    align-items: center;
-    margin-right:615px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`
-const TextArea = styled.div`
-    align-items: center;
-    width: 1029px;
-    height: 572px;
-    background-color: #EDEDED; 
-    border-radius:10px; 
-    margin-left: 100px;
-    
-`
-const Text = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: end;
-    justify-content: center;
-    font-size:20pt;
-    margin-top:30px;
-`
-const Text1 = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: end;
-    justify-content: center;
-    font-size:20pt;
-    margin-right:570px;
-    margin-top:30px;
-`
-const Text2 = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    font-size:20pt;
-     margin-top:30px;
-    
-`
-const Group = styled.div`
-    margin-top: 80px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`

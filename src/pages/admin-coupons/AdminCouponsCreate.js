@@ -72,6 +72,7 @@ const AdminCouponsCreate = () => {
 
   const handleCouponTypeChange = (e) => {
     setCurrentCouponType(e.target.value);
+    discountRef.current.value = '';
   };
 
   const discountNumCheck = () => {
@@ -200,7 +201,7 @@ const AdminCouponsCreate = () => {
           fontWeight: 'bold',
         }}
       >
-        쿠폰 목록 &#62; 쿠폰 발행
+        쿠폰 목록 &gt; 발행
       </Typography>
       {/* form 시작 */}
       <Box
@@ -245,7 +246,6 @@ const AdminCouponsCreate = () => {
                   value={currentCouponType}
                   onChange={handleCouponTypeChange}
                   select
-                  label="쿠폰 타입"
                   size="small"
                   sx={inputStyle}
                 >
@@ -271,7 +271,7 @@ const AdminCouponsCreate = () => {
                   onChange={discountNumCheck}
                   inputRef={discountRef}
                   sx={inputStyle}
-                  label="숫자만 입력"
+                  placeholder="숫자만 입력해주세요."
                 ></TextField>
               </TableCell>
             </TableRow>

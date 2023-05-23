@@ -9,8 +9,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#f5f5f5',
-  minHeight: '300px',
+  backgroundColor: '#f1f1f1',
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -39,6 +38,29 @@ const UserQnADetails = () => {
   const prevQuery = location.state?.queryString;
 
   useEffect(() => {
+    checkQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const checkQuestion = () => {
+    axios
+      .get(`/cs/qna/check/${qstCode}`)
+      .then((check) => {
+        if (check.data === 0) {
+          alert('존재하지 않는 문의입니다.');
+          navigate(`/cs/qna/${email}/lists?filter=none&pages=1`, {
+            replace: true,
+          });
+        } else {
+          getQnADetail();
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const getQnADetail = () => {
     axios
       .all([
         axios.get(`/cs/qna/${email}/${qstCode}/writerCheck`),
@@ -49,7 +71,9 @@ const UserQnADetails = () => {
         axios.spread((writerCheck, detail, answer) => {
           if (writerCheck.data === 0) {
             alert('접근 권한이 없습니다.');
-            navigate(-1, { replace: true });
+            navigate(`/cs/qna/${email}/lists?filter=none&pages=1`, {
+              replace: true,
+            });
           } else {
             setQuestionDetail(detail.data);
             setAnswerContent(answer.data);
@@ -59,10 +83,10 @@ const UserQnADetails = () => {
       .catch((error) => {
         console.error('There was an error!', error);
       });
-  }, [qstCode, navigate]);
+  };
 
   if (!questionDetail) {
-    return <div>Loading...</div>;
+    return <div></div>;
   } else {
     return (
       <Box style={{ maxWidth: '1150px', margin: 'auto' }}>

@@ -8,30 +8,36 @@ import UserFooter from '../../components/UserFooter';
 
 const UserNotices = () => {
   return (
-    <Container>
+    <>
       <UserHeader />
-      <Routes>
-        <Route exact path="lists" element={<UserNoticesLists />} />
-        <Route exact path="details/:notCode" element={<UserNoticesDetails />} />
-        <Route
-          path="*"
-          element={
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                fontSize: '3rem',
-              }}
-            >
-              에러페이지
-            </div>
-          }
-        />
-      </Routes>
+      <Container>
+        <Routes>
+          <Route exact path="lists" element={<UserNoticesLists />} />
+          <Route
+            exact
+            path="details/:notCode"
+            element={<UserNoticesDetails />}
+          />
+          <Route
+            path="*"
+            element={
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100vh',
+                  fontSize: '3rem',
+                }}
+              >
+                에러페이지
+              </div>
+            }
+          />
+        </Routes>
+      </Container>
       <UserFooter />
-    </Container>
+    </>
   );
 };
 

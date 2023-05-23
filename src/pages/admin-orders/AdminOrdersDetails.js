@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import AdminOrdersTable from '../../components/admin-orders/AdminOrdersDetails/AdminOrdersDetailTable';
@@ -13,9 +14,27 @@ const AdminOrdersDetails = () => {
   const [orderProductList, setOrderProductList] = useState([]);
 
   useEffect(() => {
-    getOrderDetails(odrNumber);
-    getOrderProductLists(odrNumber);
-  }, [odrNumber]);
+    checkOrder();
+  }, []);
+
+  const checkOrder = () => {
+    axios
+      .get(`/m/orders/check/${odrNumber}`)
+      .then((check) => {
+        if (check.data === 0) {
+          alert('존재하지 않는 주문입니다.');
+          navigate('/m/orders/lists?sort=-odrDate&filter=none&pages=1', {
+            replace: true,
+          });
+        } else {
+          getOrderDetails(odrNumber);
+          getOrderProductLists(odrNumber);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const getOrderDetails = (odrNumber) => {
     axios
@@ -79,7 +98,7 @@ const AdminOrdersDetails = () => {
         <Button
           onClick={() => {
             if (prevPage === undefined) {
-              navigate('/m/orders/lists?sort=-odrDate&pages=1');
+              navigate('/m/orders/lists?sort=-odrDate&filter=none&pages=1');
             } else {
               navigate(`/m/orders/lists${prevPage}`);
             }

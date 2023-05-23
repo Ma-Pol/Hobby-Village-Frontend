@@ -8,6 +8,7 @@ const StyledAppBar = styled(AppBar)({
   boxShadow: 'none',
   borderBottom: '1px solid #BCB5B5',
   marginBottom: '1rem',
+  userSelect: 'none',
 });
 
 const StyledToolbar = styled(Toolbar)({

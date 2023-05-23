@@ -1,10 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserCarts = () => {
   const navigate = useNavigate();
   return (
-    <div>
+    <>
+      <UserHeader />
       <div>
         <button
           onClick={() => {
@@ -56,7 +59,8 @@ const UserCarts = () => {
           임시로 만든 결제 페이지 이동 버튼(장바구니)
         </button>
       </div>
-    </div>
+      <UserFooter />
+    </>
   );
 };
 

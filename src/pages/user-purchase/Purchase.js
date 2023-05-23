@@ -1099,1057 +1099,641 @@ const Purchase = () => {
 
   if (userInfo === undefined || productList.length === 0) {
     return (
-      <Container>
+      <>
         <UserHeader />
-      </Container>
+        <UserFooter />
+      </>
     );
   } else {
     return (
-      <Container
-        sx={{
-          mt: 2,
-          mb: 10,
-        }}
-      >
+      <>
         <UserHeader />
-        <Modal
-          open={modalHandler}
-          onClose={() => {
-            setModalHandler(false);
-          }}
-        >
-          <>
-            <DaumPostcodeEmbed
-              onComplete={(data) => {
-                selectAddress(data);
-                setModalHandler(false);
-              }}
-              autoClose={true}
-              style={daumPostcodeStyle}
-            />
-          </>
-        </Modal>
         <Container
           sx={{
-            width: '1148px',
-            display: 'flex',
-            flexDirection: 'column',
+            mt: 2,
+            mb: 10,
           }}
         >
-          {/* 주문 상품 헤더 시작 */}
-          <HeaderBox>
-            <HeaderTypography variant="h5" component="h2">
-              주문 상품&nbsp;
-              {productList.length !== 0 && productList.length + '개'}
-            </HeaderTypography>
-          </HeaderBox>
-          {/* 주문 상품 헤더 끝 */}
-
-          {/* 주문 상품 데이터 리스트 표기 시작 */}
-          <DataBox>
-            {productList.length === 0 ? (
-              <></>
-            ) : (
-              <>
-                {productList !== null &&
-                  productList.map((product) => {
-                    return (
-                      <UserPurchaseProductCard
-                        key={product.prodCode}
-                        product={product}
-                        prevPage={location.state.prevPage}
-                      />
-                    );
-                  })}
-              </>
-            )}
-          </DataBox>
-          {/* 주문 상품 데이터 리스트 표기 끝 */}
-
-          {/* 주문자 정보 헤더 시작 */}
-          <HeaderBox>
-            <HeaderTypography variant="h5" component="h2">
-              주문자 정보
-            </HeaderTypography>
-          </HeaderBox>
-          {/* 주문자 정보 헤더 끝 */}
-
-          {/* 주문자 정보 데이터(이름, 이메일, 휴대폰 번호) 표기 시작 */}
-          <DataBox>
-            <OrderDataBox>
-              <OrderDataBoxTitle>이름</OrderDataBoxTitle>
-              <Typography
-                sx={{
-                  fontSize: '1.2rem',
-                }}
-              >
-                {userInfo !== undefined && userInfo.name}
-              </Typography>
-            </OrderDataBox>
-            <OrderDataBox>
-              <OrderDataBoxTitle>이메일</OrderDataBoxTitle>
-              <Typography
-                sx={{
-                  fontSize: '1.2rem',
-                }}
-              >
-                {userInfo !== undefined && userInfo.email}
-              </Typography>
-            </OrderDataBox>
-            <OrderDataBox>
-              <OrderDataBoxTitle>전화번호</OrderDataBoxTitle>
-              <Typography
-                sx={{
-                  fontSize: '1.2rem',
-                }}
-              >
-                {userInfo !== undefined &&
-                  userInfo.phone.replace(
-                    /(\d{3})(\d{4})(\d{4})/,
-                    '$1 - $2 - $3'
-                  )}
-              </Typography>
-            </OrderDataBox>
-          </DataBox>
-          {/* 주문자 정보 데이터(이름, 이메일, 휴대폰 번호) 표기 끝 */}
-
-          {/* 배송지 정보 헤더 시작 (추가 주문 시에는 표기하지 않음) */}
-          {location.state !== null && location.state.prevPage !== 'mypages' && (
+          <Modal
+            open={modalHandler}
+            onClose={() => {
+              setModalHandler(false);
+            }}
+          >
             <>
-              <HeaderBox>
-                <HeaderTypography variant="h5" component="h2">
-                  배송지 정보
-                </HeaderTypography>
-              </HeaderBox>
-              {/* 배송지 정보 헤더 끝 */}
+              <DaumPostcodeEmbed
+                onComplete={(data) => {
+                  selectAddress(data);
+                  setModalHandler(false);
+                }}
+                autoClose={true}
+                style={daumPostcodeStyle}
+              />
+            </>
+          </Modal>
+          <Container
+            sx={{
+              width: '1148px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {/* 주문 상품 헤더 시작 */}
+            <HeaderBox>
+              <HeaderTypography variant="h5" component="h2">
+                주문 상품&nbsp;
+                {productList.length !== 0 && productList.length + '개'}
+              </HeaderTypography>
+            </HeaderBox>
+            {/* 주문 상품 헤더 끝 */}
 
-              {/* 배송지 정보 데이터(우편번호, 주소1, 주소2, 받는 사람, 전화번호, 배송 요청사항) 표기 시작 */}
-              <DataBox>
-                <OrderDataBox
+            {/* 주문 상품 데이터 리스트 표기 시작 */}
+            <DataBox>
+              {productList.length === 0 ? (
+                <></>
+              ) : (
+                <>
+                  {productList !== null &&
+                    productList.map((product) => {
+                      return (
+                        <UserPurchaseProductCard
+                          key={product.prodCode}
+                          product={product}
+                          prevPage={location.state.prevPage}
+                        />
+                      );
+                    })}
+                </>
+              )}
+            </DataBox>
+            {/* 주문 상품 데이터 리스트 표기 끝 */}
+
+            {/* 주문자 정보 헤더 시작 */}
+            <HeaderBox>
+              <HeaderTypography variant="h5" component="h2">
+                주문자 정보
+              </HeaderTypography>
+            </HeaderBox>
+            {/* 주문자 정보 헤더 끝 */}
+
+            {/* 주문자 정보 데이터(이름, 이메일, 휴대폰 번호) 표기 시작 */}
+            <DataBox>
+              <OrderDataBox>
+                <OrderDataBoxTitle>이름</OrderDataBoxTitle>
+                <Typography
                   sx={{
-                    height: '60px',
+                    fontSize: '1.2rem',
                   }}
                 >
-                  {/* 배송지 선택 Select 박스 표기 시작 */}
-                  <OrderDataBoxTitle>배송지 선택</OrderDataBoxTitle>
-                  <HVSelect
-                    defaultValue="none"
-                    onChange={addressChange}
-                    displayEmpty
-                    size="small"
-                    sx={{
-                      width: '850px',
-                    }}
-                  >
-                    <MenuItem value="none">
-                      <Typography
-                        sx={{
-                          textAlign: 'center',
-                        }}
-                      >
-                        배송지를 선택하세요
-                      </Typography>
-                    </MenuItem>
+                  {userInfo !== undefined && userInfo.name}
+                </Typography>
+              </OrderDataBox>
+              <OrderDataBox>
+                <OrderDataBoxTitle>이메일</OrderDataBoxTitle>
+                <Typography
+                  sx={{
+                    fontSize: '1.2rem',
+                  }}
+                >
+                  {userInfo !== undefined && userInfo.email}
+                </Typography>
+              </OrderDataBox>
+              <OrderDataBox>
+                <OrderDataBoxTitle>전화번호</OrderDataBoxTitle>
+                <Typography
+                  sx={{
+                    fontSize: '1.2rem',
+                  }}
+                >
+                  {userInfo !== undefined &&
+                    userInfo.phone.replace(
+                      /(\d{3})(\d{4})(\d{4})/,
+                      '$1 - $2 - $3'
+                    )}
+                </Typography>
+              </OrderDataBox>
+            </DataBox>
+            {/* 주문자 정보 데이터(이름, 이메일, 휴대폰 번호) 표기 끝 */}
 
-                    {addressList.length !== 0 &&
-                      addressList.map((address, index) => {
-                        const addr =
-                          '[' +
-                          address.zipCode +
-                          '] ' +
-                          address.address1 +
-                          ' ' +
-                          address.address2;
-                        return (
-                          <MenuItem
-                            key={address.addressCode}
-                            value={index}
-                            title={addr}
-                          >
-                            {addr}
-                          </MenuItem>
-                        );
-                      })}
+            {/* 배송지 정보 헤더 시작 (추가 주문 시에는 표기하지 않음) */}
+            {location.state !== null &&
+              location.state.prevPage !== 'mypages' && (
+                <>
+                  <HeaderBox>
+                    <HeaderTypography variant="h5" component="h2">
+                      배송지 정보
+                    </HeaderTypography>
+                  </HeaderBox>
+                  {/* 배송지 정보 헤더 끝 */}
 
-                    <MenuItem value="직접 입력">배송지 직접 입력</MenuItem>
-                  </HVSelect>
-                  {/* 배송지 선택 Select 박스 표기 끝 */}
-                </OrderDataBox>
-
-                {/* 주소, 받는 사람, 전화번호, 배송 요청사항 표기 시작 */}
-                {selectedAddress !== 'none' && (
-                  <>
+                  {/* 배송지 정보 데이터(우편번호, 주소1, 주소2, 받는 사람, 전화번호, 배송 요청사항) 표기 시작 */}
+                  <DataBox>
                     <OrderDataBox
                       sx={{
-                        minHeight: '100px',
+                        height: '60px',
                       }}
                     >
-                      <OrderDataBoxTitle>주소</OrderDataBoxTitle>
-
-                      {/* 주소 표기 시작 (직접 입력인 경우 TextField) */}
-                      {selectedAddress === '직접 입력' ? (
-                        <Box
-                          sx={{
-                            width: '850px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Box
+                      {/* 배송지 선택 Select 박스 표기 시작 */}
+                      <OrderDataBoxTitle>배송지 선택</OrderDataBoxTitle>
+                      <HVSelect
+                        defaultValue="none"
+                        onChange={addressChange}
+                        displayEmpty
+                        size="small"
+                        sx={{
+                          width: '850px',
+                        }}
+                      >
+                        <MenuItem value="none">
+                          <Typography
                             sx={{
-                              mb: 1,
-                              display: 'flex',
-                              justifyContent: 'flex-start',
-                              alignItems: 'center',
+                              textAlign: 'center',
                             }}
                           >
-                            <TextField
-                              inputRef={zipCodeRef}
-                              placeholder="우편번호"
-                              variant="standard"
-                              size="small"
-                              sx={{ ...inputBoxStyle, width: '130px' }}
-                              inputProps={{
-                                readOnly: true, // 우편번호는 직접 입력할 수 없도록 설정
-                              }}
-                            />
+                            배송지를 선택하세요
+                          </Typography>
+                        </MenuItem>
 
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                                setModalHandler(true);
-                              }}
+                        {addressList.length !== 0 &&
+                          addressList.map((address, index) => {
+                            const addr =
+                              '[' +
+                              address.zipCode +
+                              '] ' +
+                              address.address1 +
+                              ' ' +
+                              address.address2;
+                            return (
+                              <MenuItem
+                                key={address.addressCode}
+                                value={index}
+                                title={addr}
+                              >
+                                {addr}
+                              </MenuItem>
+                            );
+                          })}
+
+                        <MenuItem value="직접 입력">배송지 직접 입력</MenuItem>
+                      </HVSelect>
+                      {/* 배송지 선택 Select 박스 표기 끝 */}
+                    </OrderDataBox>
+
+                    {/* 주소, 받는 사람, 전화번호, 배송 요청사항 표기 시작 */}
+                    {selectedAddress !== 'none' && (
+                      <>
+                        <OrderDataBox
+                          sx={{
+                            minHeight: '100px',
+                          }}
+                        >
+                          <OrderDataBoxTitle>주소</OrderDataBoxTitle>
+
+                          {/* 주소 표기 시작 (직접 입력인 경우 TextField) */}
+                          {selectedAddress === '직접 입력' ? (
+                            <Box
                               sx={{
-                                ml: 2,
-                                height: '30px',
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #626262',
-                                color: '#000000',
-                                '&:hover': {
-                                  backgroundColor: '#ffffff',
-                                  color: '#000000',
-                                },
+                                width: '850px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
                               }}
                             >
-                              주소 검색
-                            </Button>
-                          </Box>
+                              <Box
+                                sx={{
+                                  mb: 1,
+                                  display: 'flex',
+                                  justifyContent: 'flex-start',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <TextField
+                                  inputRef={zipCodeRef}
+                                  placeholder="우편번호"
+                                  variant="standard"
+                                  size="small"
+                                  sx={{ ...inputBoxStyle, width: '130px' }}
+                                  inputProps={{
+                                    readOnly: true, // 우편번호는 직접 입력할 수 없도록 설정
+                                  }}
+                                />
 
-                          <Box
-                            sx={{
-                              mt: 1,
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <TextField
-                              inputRef={address1Ref}
-                              placeholder="주소"
-                              variant="standard"
-                              size="small"
-                              sx={{ ...inputBoxStyle, width: '545px' }}
-                              inputProps={{
-                                readOnly: true, // 기본 주소는 직접 입력할 수 없도록 설정
-                              }}
-                            />
+                                <Button
+                                  variant="contained"
+                                  onClick={() => {
+                                    setModalHandler(true);
+                                  }}
+                                  sx={{
+                                    ml: 2,
+                                    height: '30px',
+                                    backgroundColor: '#ffffff',
+                                    border: '1px solid #626262',
+                                    color: '#000000',
+                                    '&:hover': {
+                                      backgroundColor: '#ffffff',
+                                      color: '#000000',
+                                    },
+                                  }}
+                                >
+                                  주소 검색
+                                </Button>
+                              </Box>
 
-                            <TextField
-                              inputRef={address2Ref}
-                              placeholder="상세 주소"
-                              variant="standard"
-                              size="small"
-                              sx={{ ...inputBoxStyle, width: '300px' }}
-                            />
-                          </Box>
-                        </Box>
-                      ) : (
-                        <Typography
-                          sx={{
-                            width: '850px',
-                            fontSize: '1.2rem',
-                          }}
-                        >
-                          {'[' + selectedAddress.zipCode + '] '}
-                          {selectedAddress.address1}&nbsp;
-                          {selectedAddress.address2}
-                        </Typography>
-                      )}
-                      {/* 주소 표기 끝 (직접 입력인 경우 TextField) */}
-                    </OrderDataBox>
+                              <Box
+                                sx={{
+                                  mt: 1,
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                }}
+                              >
+                                <TextField
+                                  inputRef={address1Ref}
+                                  placeholder="주소"
+                                  variant="standard"
+                                  size="small"
+                                  sx={{ ...inputBoxStyle, width: '545px' }}
+                                  inputProps={{
+                                    readOnly: true, // 기본 주소는 직접 입력할 수 없도록 설정
+                                  }}
+                                />
 
-                    <OrderDataBox>
-                      <OrderDataBoxTitle>받는 사람</OrderDataBoxTitle>
-                      {/* 받는 사람 표기 시작 (직접 입력인 경우 TextField) */}
-                      <Box
-                        sx={{
-                          width: '850px',
-                        }}
-                      >
-                        {selectedAddress === '직접 입력' ? (
-                          <TextField
-                            inputRef={receiverRef}
-                            placeholder="받는 사람"
-                            variant="standard"
-                            size="small"
-                            sx={{ ...inputBoxStyle, width: '300px' }}
-                          />
-                        ) : (
-                          <Typography
-                            sx={{
-                              width: '850px',
-                              fontSize: '1.2rem',
-                            }}
-                          >
-                            {selectedAddress.receiver}
-                          </Typography>
-                        )}
-                      </Box>
-                      {/* 받는 사람 표기 끝 (직접 입력인 경우 TextField) */}
-                    </OrderDataBox>
-
-                    <OrderDataBox>
-                      <OrderDataBoxTitle>전화번호</OrderDataBoxTitle>
-
-                      {/* 전화번호 표기 시작 (직접 입력인 경우 TextField) */}
-                      <Box
-                        sx={{
-                          width: '850px',
-                        }}
-                      >
-                        {selectedAddress === '직접 입력' ? (
-                          <TextField
-                            inputRef={phoneRef}
-                            onChange={phoneRefCheck}
-                            placeholder="전화번호 ( - 제외)"
-                            variant="standard"
-                            size="small"
-                            sx={{ ...inputBoxStyle, width: '300px' }}
-                          />
-                        ) : (
-                          <Typography
-                            sx={{
-                              width: '850px',
-                              fontSize: '1.2rem',
-                            }}
-                          >
-                            {selectedAddress.phone.replace(
-                              /(\d{3})(\d{4})(\d{4})/,
-                              '$1 - $2 - $3'
-                            )}
-                          </Typography>
-                        )}
-                      </Box>
-                      {/* 전화번호 표기 끝 (직접 입력인 경우 TextField) */}
-                    </OrderDataBox>
-
-                    <OrderDataBox
-                      sx={{
-                        pb: '4px',
-                      }}
-                    >
-                      <OrderDataBoxTitle>배송 요청사항</OrderDataBoxTitle>
-
-                      {/* 배송 요청사항 표기 시작 */}
-                      <Box
-                        sx={{
-                          width: '850px',
-                        }}
-                      >
-                        <HVSelect
-                          value={selectedDeliRequest}
-                          onChange={deliRequestChange}
-                          displayEmpty
-                          size="small"
-                          sx={{
-                            width: '400px',
-                          }}
-                        >
-                          <MenuItem value="none" disabled>
+                                <TextField
+                                  inputRef={address2Ref}
+                                  placeholder="상세 주소"
+                                  variant="standard"
+                                  size="small"
+                                  sx={{ ...inputBoxStyle, width: '300px' }}
+                                />
+                              </Box>
+                            </Box>
+                          ) : (
                             <Typography
                               sx={{
-                                textAlign: 'center',
+                                width: '850px',
+                                fontSize: '1.2rem',
                               }}
                             >
-                              배송 시 요청사항을 선택하세요
+                              {'[' + selectedAddress.zipCode + '] '}
+                              {selectedAddress.address1}&nbsp;
+                              {selectedAddress.address2}
                             </Typography>
-                          </MenuItem>
+                          )}
+                          {/* 주소 표기 끝 (직접 입력인 경우 TextField) */}
+                        </OrderDataBox>
 
-                          {/* 
+                        <OrderDataBox>
+                          <OrderDataBoxTitle>받는 사람</OrderDataBoxTitle>
+                          {/* 받는 사람 표기 시작 (직접 입력인 경우 TextField) */}
+                          <Box
+                            sx={{
+                              width: '850px',
+                            }}
+                          >
+                            {selectedAddress === '직접 입력' ? (
+                              <TextField
+                                inputRef={receiverRef}
+                                placeholder="받는 사람"
+                                variant="standard"
+                                size="small"
+                                sx={{ ...inputBoxStyle, width: '300px' }}
+                              />
+                            ) : (
+                              <Typography
+                                sx={{
+                                  width: '850px',
+                                  fontSize: '1.2rem',
+                                }}
+                              >
+                                {selectedAddress.receiver}
+                              </Typography>
+                            )}
+                          </Box>
+                          {/* 받는 사람 표기 끝 (직접 입력인 경우 TextField) */}
+                        </OrderDataBox>
+
+                        <OrderDataBox>
+                          <OrderDataBoxTitle>전화번호</OrderDataBoxTitle>
+
+                          {/* 전화번호 표기 시작 (직접 입력인 경우 TextField) */}
+                          <Box
+                            sx={{
+                              width: '850px',
+                            }}
+                          >
+                            {selectedAddress === '직접 입력' ? (
+                              <TextField
+                                inputRef={phoneRef}
+                                onChange={phoneRefCheck}
+                                placeholder="전화번호 ( - 제외)"
+                                variant="standard"
+                                size="small"
+                                sx={{ ...inputBoxStyle, width: '300px' }}
+                              />
+                            ) : (
+                              <Typography
+                                sx={{
+                                  width: '850px',
+                                  fontSize: '1.2rem',
+                                }}
+                              >
+                                {selectedAddress.phone.replace(
+                                  /(\d{3})(\d{4})(\d{4})/,
+                                  '$1 - $2 - $3'
+                                )}
+                              </Typography>
+                            )}
+                          </Box>
+                          {/* 전화번호 표기 끝 (직접 입력인 경우 TextField) */}
+                        </OrderDataBox>
+
+                        <OrderDataBox
+                          sx={{
+                            pb: '4px',
+                          }}
+                        >
+                          <OrderDataBoxTitle>배송 요청사항</OrderDataBoxTitle>
+
+                          {/* 배송 요청사항 표기 시작 */}
+                          <Box
+                            sx={{
+                              width: '850px',
+                            }}
+                          >
+                            <HVSelect
+                              value={selectedDeliRequest}
+                              onChange={deliRequestChange}
+                              displayEmpty
+                              size="small"
+                              sx={{
+                                width: '400px',
+                              }}
+                            >
+                              <MenuItem value="none" disabled>
+                                <Typography
+                                  sx={{
+                                    textAlign: 'center',
+                                  }}
+                                >
+                                  배송 시 요청사항을 선택하세요
+                                </Typography>
+                              </MenuItem>
+
+                              {/* 
                             선택한 배송지 목록에 요청사항이 없거나
                             배송지 직접 입력을 선택한 경우에는 미표기,
                             배송지 목록에 요청사항이 있으면 표기
                           */}
-                          {selectedAddress !== null &&
-                            selectedAddress.deliRequest !== null &&
-                            selectedAddress.deliRequest !== '' &&
-                            selectedAddress !== '직접 입력' && (
-                              <MenuItem value={selectedAddress.deliRequest}>
-                                {selectedAddress.deliRequest}
+                              {selectedAddress !== null &&
+                                selectedAddress.deliRequest !== null &&
+                                selectedAddress.deliRequest !== '' &&
+                                selectedAddress !== '직접 입력' && (
+                                  <MenuItem value={selectedAddress.deliRequest}>
+                                    {selectedAddress.deliRequest}
+                                  </MenuItem>
+                                )}
+
+                              <MenuItem value="직접 수령하겠습니다.">
+                                직접 수령하겠습니다.
                               </MenuItem>
-                            )}
+                              <MenuItem value="배송 전 연락바랍니다.">
+                                배송 전 연락바랍니다.
+                              </MenuItem>
+                              <MenuItem value="부재 시 경비실에 맡겨주세요.">
+                                부재 시 경비실에 맡겨주세요.
+                              </MenuItem>
+                              <MenuItem value="부재 시 문 앞에 놓아주세요.">
+                                부재 시 문 앞에 놓아주세요.
+                              </MenuItem>
+                              <MenuItem value="부재 시 택배함에 넣어주세요.">
+                                부재 시 택배함에 넣어주세요.
+                              </MenuItem>
+                              <MenuItem value="직접 입력">직접 입력</MenuItem>
+                            </HVSelect>
+                          </Box>
+                          {/* 배송 요청사항 표기 끝 */}
+                        </OrderDataBox>
 
-                          <MenuItem value="직접 수령하겠습니다.">
-                            직접 수령하겠습니다.
-                          </MenuItem>
-                          <MenuItem value="배송 전 연락바랍니다.">
-                            배송 전 연락바랍니다.
-                          </MenuItem>
-                          <MenuItem value="부재 시 경비실에 맡겨주세요.">
-                            부재 시 경비실에 맡겨주세요.
-                          </MenuItem>
-                          <MenuItem value="부재 시 문 앞에 놓아주세요.">
-                            부재 시 문 앞에 놓아주세요.
-                          </MenuItem>
-                          <MenuItem value="부재 시 택배함에 넣어주세요.">
-                            부재 시 택배함에 넣어주세요.
-                          </MenuItem>
-                          <MenuItem value="직접 입력">직접 입력</MenuItem>
-                        </HVSelect>
-                      </Box>
-                      {/* 배송 요청사항 표기 끝 */}
-                    </OrderDataBox>
-
-                    {/* 배송 요청사항 직접 입력 TextField 표기 시작 */}
-                    {selectedDeliRequest === '직접 입력' && (
-                      <OrderDataBox>
-                        <OrderDataBoxTitle></OrderDataBoxTitle>
-                        <Box
-                          sx={{
-                            width: '850px',
-                          }}
-                        >
-                          <TextField
-                            defaultValue={
-                              selectedAddress !== null &&
-                              selectedAddress.deliRequest
-                            }
-                            inputRef={deliRequestRef}
-                            onChange={deliRequestRefCheck}
-                            placeholder="배송 요청사항(최대 50자)"
-                            variant="standard"
-                            size="small"
-                            sx={{ ...inputBoxStyle, width: '400px' }}
-                          />
-                        </Box>
-                      </OrderDataBox>
+                        {/* 배송 요청사항 직접 입력 TextField 표기 시작 */}
+                        {selectedDeliRequest === '직접 입력' && (
+                          <OrderDataBox>
+                            <OrderDataBoxTitle></OrderDataBoxTitle>
+                            <Box
+                              sx={{
+                                width: '850px',
+                              }}
+                            >
+                              <TextField
+                                defaultValue={
+                                  selectedAddress !== null &&
+                                  selectedAddress.deliRequest
+                                }
+                                inputRef={deliRequestRef}
+                                onChange={deliRequestRefCheck}
+                                placeholder="배송 요청사항(최대 50자)"
+                                variant="standard"
+                                size="small"
+                                sx={{ ...inputBoxStyle, width: '400px' }}
+                              />
+                            </Box>
+                          </OrderDataBox>
+                        )}
+                        {/* 배송 요청사항 직접 입력 TextField 표기 끝 */}
+                      </>
                     )}
-                    {/* 배송 요청사항 직접 입력 TextField 표기 끝 */}
-                  </>
-                )}
-              </DataBox>
-            </>
-          )}
-          {/* 배송지 정보 데이터(우편번호, 주소1, 주소2, 받는 사람, 전화번호, 배송 요청사항) 표기 끝 */}
+                  </DataBox>
+                </>
+              )}
+            {/* 배송지 정보 데이터(우편번호, 주소1, 주소2, 받는 사람, 전화번호, 배송 요청사항) 표기 끝 */}
 
-          {/* 쿠폰 및 적립금 헤더 시작 */}
-          <HeaderBox>
-            <HeaderTypography variant="h5" component="h2">
-              쿠폰 및 적립금 사용&nbsp;&nbsp;
-              <HtmlTooltip
-                arrow
-                title={
-                  <>
-                    <Typography
-                      sx={{
-                        fontSize: '18px',
-                        textAlign: 'center',
-                        mb: 1,
-                      }}
-                    >
-                      안내사항
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                      }}
-                    >
-                      1. 최종 결제 금액은 100원 미만이 될 수 없습니다.
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '12px',
-                      }}
-                    >
-                      2. 주문 취소 시 사용한 쿠폰은 복구되지 않습니다.
-                    </Typography>
-                  </>
-                }
-              >
-                <img
-                  width="28px"
-                  height="28px"
-                  src="https://img.icons8.com/ios/50/000000/info--v1.png"
-                  alt="쿠폰 및 적립금 안내"
-                />
-              </HtmlTooltip>
-            </HeaderTypography>
-          </HeaderBox>
-          {/* 쿠폰 및 적립금 헤더 끝 */}
-
-          {/* 쿠폰 및 적립금 데이터(쿠폰, 적립금) 표기 시작 */}
-          <DataBox>
-            <OrderDataBox
-              sx={{
-                height: '60px',
-              }}
-            >
-              <OrderDataBoxTitle>쿠폰 적용</OrderDataBoxTitle>
-              <HVSelect
-                onChange={couponChange}
-                defaultValue="none"
-                displayEmpty
-                size="small"
-              >
-                <MenuItem value="none">
-                  <Typography
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                  >
-                    현재 보유 중인 쿠폰 : {couponList.length}장
-                  </Typography>
-                </MenuItem>
-
-                {/* 쿠폰 목록 표기 시작 */}
-                {couponList.length !== 0 &&
-                  couponList.map((coupon, index) => {
-                    // 쿠폰의 할인 금액 변수 저장
-                    const discount =
-                      coupon.discountFix === 0
-                        ? '[' + coupon.discountPer + '% 할인] '
-                        : '[' +
-                          coupon.discountFix
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
-                          '원 할인] ';
-
-                    // 실제 출력 데이터
-                    return (
-                      <MenuItem
-                        key={coupon.couponCode}
-                        value={index}
-                        disabled={
-                          totalPrice - coupon.discountFix < 100 ||
-                          totalPrice - (totalPrice * coupon.discountPer) / 100 <
-                            100
-                        }
-                        title={discount + coupon.couponName}
+            {/* 쿠폰 및 적립금 헤더 시작 */}
+            <HeaderBox>
+              <HeaderTypography variant="h5" component="h2">
+                쿠폰 및 적립금 사용&nbsp;&nbsp;
+                <HtmlTooltip
+                  arrow
+                  title={
+                    <>
+                      <Typography
                         sx={{
-                          width: '400px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
+                          fontSize: '18px',
+                          textAlign: 'center',
+                          mb: 1,
                         }}
                       >
-                        {discount + coupon.couponName}
-                      </MenuItem>
-                    );
-                  })}
-                {/* 쿠폰 목록 표기 끝 */}
-              </HVSelect>
-            </OrderDataBox>
+                        안내사항
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                        }}
+                      >
+                        1. 최종 결제 금액은 100원 미만이 될 수 없습니다.
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                        }}
+                      >
+                        2. 주문 취소 시 사용한 쿠폰은 복구되지 않습니다.
+                      </Typography>
+                    </>
+                  }
+                >
+                  <img
+                    width="28px"
+                    height="28px"
+                    src="https://img.icons8.com/ios/50/000000/info--v1.png"
+                    alt="쿠폰 및 적립금 안내"
+                  />
+                </HtmlTooltip>
+              </HeaderTypography>
+            </HeaderBox>
+            {/* 쿠폰 및 적립금 헤더 끝 */}
 
-            <OrderDataBox
-              sx={{
-                height: '60px',
-              }}
-            >
-              <OrderDataBoxTitle>적립금 사용</OrderDataBoxTitle>
-              <SavedMoneyInput
-                inputRef={savedMoneyRef}
-                variant="outlined"
-                size="small"
-                onChange={savedMoneyRefCheck}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+            {/* 쿠폰 및 적립금 데이터(쿠폰, 적립금) 표기 시작 */}
+            <DataBox>
+              <OrderDataBox
+                sx={{
+                  height: '60px',
+                }}
+              >
+                <OrderDataBoxTitle>쿠폰 적용</OrderDataBoxTitle>
+                <HVSelect
+                  onChange={couponChange}
+                  defaultValue="none"
+                  displayEmpty
+                  size="small"
+                >
+                  <MenuItem value="none">
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      현재 보유 중인 쿠폰 : {couponList.length}장
+                    </Typography>
+                  </MenuItem>
+
+                  {/* 쿠폰 목록 표기 시작 */}
+                  {couponList.length !== 0 &&
+                    couponList.map((coupon, index) => {
+                      // 쿠폰의 할인 금액 변수 저장
+                      const discount =
+                        coupon.discountFix === 0
+                          ? '[' + coupon.discountPer + '% 할인] '
+                          : '[' +
+                            coupon.discountFix
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+                            '원 할인] ';
+
+                      // 실제 출력 데이터
+                      return (
+                        <MenuItem
+                          key={coupon.couponCode}
+                          value={index}
+                          disabled={
+                            totalPrice - coupon.discountFix < 100 ||
+                            totalPrice -
+                              (totalPrice * coupon.discountPer) / 100 <
+                              100
+                          }
+                          title={discount + coupon.couponName}
+                          sx={{
+                            width: '400px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {discount + coupon.couponName}
+                        </MenuItem>
+                      );
+                    })}
+                  {/* 쿠폰 목록 표기 끝 */}
+                </HVSelect>
+              </OrderDataBox>
+
+              <OrderDataBox
+                sx={{
+                  height: '60px',
+                }}
+              >
+                <OrderDataBoxTitle>적립금 사용</OrderDataBoxTitle>
+                <SavedMoneyInput
+                  inputRef={savedMoneyRef}
+                  variant="outlined"
+                  size="small"
+                  onChange={savedMoneyRefCheck}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (savedMoneyRef.current.value === '') {
+                        setExactSavedMoney(0);
+                      } else {
+                        setExactSavedMoney(savedMoneyRef.current.value);
+                      }
+                    }
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        &nbsp; 원 /&nbsp;
+                        {userInfo.savedMoney
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        &nbsp; 원
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => {
                     if (savedMoneyRef.current.value === '') {
                       setExactSavedMoney(0);
+                    } else if (
+                      savedMoneyRef.current.value >
+                      exactTotalPrice - 100
+                    ) {
+                      savedMoneyRef.current.value = exactTotalPrice - 100;
+                      setExactSavedMoney(exactTotalPrice);
                     } else {
                       setExactSavedMoney(savedMoneyRef.current.value);
                     }
-                  }
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      &nbsp; 원 /&nbsp;
-                      {userInfo.savedMoney
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      &nbsp; 원
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => {
-                  if (savedMoneyRef.current.value === '') {
-                    setExactSavedMoney(0);
-                  } else if (
-                    savedMoneyRef.current.value >
-                    exactTotalPrice - 100
-                  ) {
-                    savedMoneyRef.current.value = exactTotalPrice - 100;
-                    setExactSavedMoney(exactTotalPrice);
-                  } else {
-                    setExactSavedMoney(savedMoneyRef.current.value);
-                  }
-                }}
-                sx={{
-                  marginLeft: '10px',
-                  width: '80px',
-                  backgroundColor: '#ffffff',
-                  borderRadius: '5px',
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  color: '#000000',
-                  '&:hover': {
+                  }}
+                  sx={{
+                    marginLeft: '10px',
+                    width: '80px',
                     backgroundColor: '#ffffff',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
                     color: '#000000',
-                  },
-                }}
-              >
-                적용
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => {
-                  if (exactTotalPrice < userInfo.savedMoney) {
-                    savedMoneyRef.current.value = exactTotalPrice - 100;
-                  } else {
-                    savedMoneyRef.current.value = userInfo.savedMoney;
-                  }
-                }}
-                sx={{
-                  marginLeft: '10px',
-                  width: '120px',
-                  backgroundColor: '#c3c36a',
-                  borderRadius: '5px',
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  color: '#000000',
-                  '&:hover': {
-                    backgroundColor: '#c3c36a',
-                    color: '#ffffff',
-                  },
-                }}
-              >
-                전액 사용
-              </Button>
-            </OrderDataBox>
-          </DataBox>
-          {/* 쿠폰 및 적립금 데이터(쿠폰, 적립금) 표기 끝 */}
-
-          {/* 결제 수단 헤더 시작 */}
-          <HeaderBox>
-            <HeaderTypography variant="h5" component="h2">
-              결제 수단
-            </HeaderTypography>
-          </HeaderBox>
-          {/* 결제 수단 헤더 끝 */}
-
-          {/* 결제 수단 버튼 표기 시작 */}
-          <DataBox>
-            <PaymentBtnGroup
-              value={String(payment)}
-              exclusive
-              onChange={paymentChange}
-            >
-              <ToggleButton value="card" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/credit-card.png`}
-                  alt="신용 카드"
-                  sx={
-                    payment === 'card' ? { width: '70px' } : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'card'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  신용 카드
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton value="trans" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/account-transfer.png`}
-                  alt="계좌 이체"
-                  sx={
-                    payment === 'trans' ? { width: '70px' } : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'trans'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  계좌 이체
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton value="phone" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/mobile.png`}
-                  alt="휴대폰 결제"
-                  sx={
-                    payment === 'phone' ? { width: '70px' } : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'phone'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  휴대폰 결제
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton value="kakaopay" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/kakao-pay.png`}
-                  alt="카카오 페이"
-                  sx={
-                    payment === 'kakaopay'
-                      ? { width: '70px' }
-                      : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'kakaopay'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  카카오 페이
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton value="tosspay" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/toss.png`}
-                  alt="토스 페이"
-                  sx={
-                    payment === 'tosspay'
-                      ? { width: '70px' }
-                      : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'tosspay'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  토스 페이
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton value="payco" sx={paymentBtnStyle}>
-                <Box
-                  component="img"
-                  src={`${process.env.PUBLIC_URL}/Payment/payco.png`}
-                  alt="삼성 페이"
-                  sx={
-                    payment === 'payco' ? { width: '70px' } : { width: '50px' }
-                  }
-                />
-                <Typography
-                  sx={
-                    payment === 'payco'
-                      ? selectedPaymentText
-                      : unselectedPaymentText
-                  }
-                >
-                  페이코
-                </Typography>
-              </ToggleButton>
-            </PaymentBtnGroup>
-          </DataBox>
-          {/* 결제 수단 버튼 표기 끝 */}
-
-          {/* 총 결제 금액 헤더 시작 */}
-          <HeaderBox>
-            <HeaderTypography variant="h5" component="h2">
-              총 결제 금액
-            </HeaderTypography>
-          </HeaderBox>
-          {/* 총 결제 금액 헤더 끝 */}
-
-          {/* 총 결제 금액 및 결제 버튼 표기 시작 */}
-          <PriceContainer>
-            <PriceLeftBox>
-              <PriceLeftBoxRow>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: '#ffffff',
+                      color: '#000000',
+                    },
                   }}
                 >
-                  총 상품 금액
-                </Typography>
-                <Typography variant="h6" component="h2">
-                  {location.state !== null &&
-                    totalPriceRef.current
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  &nbsp;원
-                </Typography>
-              </PriceLeftBoxRow>
-
-              <PriceLeftBoxRow>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  총 배송비
-                </Typography>
-                <Typography variant="h6" component="h2">
-                  {location.state !== null &&
-                    totalShippingRef.current
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  &nbsp;원
-                </Typography>
-              </PriceLeftBoxRow>
-
-              <PriceLeftBoxRow>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  쿠폰 할인
-                </Typography>
-                <Typography variant="h6" component="h2">
-                  {selectedCoupon !== 'none' ? selectedCoupon : '0'}&nbsp;원
-                </Typography>
-              </PriceLeftBoxRow>
-
-              <PriceLeftBoxRow>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  사용 적립금
-                </Typography>
-                <Typography variant="h6" component="h2">
-                  {location.state !== null &&
-                    exactSavedMoney
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  &nbsp;원
-                </Typography>
-              </PriceLeftBoxRow>
-
-              <Box
-                sx={{
-                  margin: '10px 0',
-                  border: '1px solid #d0d0d0',
-                }}
-              ></Box>
-
-              <PriceLeftBoxRow>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  최종 결제 금액
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {location.state !== null && exactTotalPrice - exactSavedMoney}
-                  &nbsp;원
-                </Typography>
-              </PriceLeftBoxRow>
-            </PriceLeftBox>
-
-            <Box
-              sx={{
-                width: '605px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              {/* 약관 동의 박스 시작 */}
-              <Box
-                sx={{
-                  backgroundColor: '#f5f5f5',
-                  padding: '10px 0',
-                  width: '605px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  border: '1px solid #d0d0d0',
-                  borderRadius: '10px',
-                }}
-              >
-                {/* 개인 정보 수집 동의 박스 시작 */}
-                <Box
-                  sx={{
-                    marginBottom: '5px',
-                    width: '605px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  {/* 체크박스 시작 */}
-                  <Box
-                    sx={{
-                      width: '38px',
-                    }}
-                  >
-                    <Checkbox
-                      id="ckb1"
-                      inputRef={ckb1Ref}
-                      sx={{
-                        ml: '5px',
-                      }}
-                      size="small"
-                      color="default"
-                    />
-                  </Box>
-                  {/* 체크박스 끝 */}
-
-                  {/* 개인 정보 수집 동의 텍스트 박스 시작 */}
-                  <Box
-                    sx={{
-                      padding: '0 10px',
-                      width: '567px',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      <label htmlFor="ckb1">
-                        (필수) 개인정보 수집 이용 및 제 3자 제공 동의
-                      </label>
-                    </Typography>
-                    <Typography
-                      sx={{
-                        margin: '5px 0',
-                      }}
-                    >
-                      본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.
-                    </Typography>
-                    <Typography
-                      sx={{
-                        margin: '5px 0',
-                      }}
-                    >
-                      (주)취미빌리지는 통신 판매 중개자로 거래 당사자가
-                      아니므로, 판매자가 등록한 상품 정보 및 거래 등에 대해
-                      책임을 지지 않습니다.
-                    </Typography>
-                  </Box>
-                  {/* 개인 정보 수집 동의 텍스트 박스 끝 */}
-                </Box>
-                {/* 개인 정보 수집 동의 박스 끝 */}
-
-                {/* 결제 동의 박스 시작 */}
-                <Box
-                  sx={{
-                    width: '605px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  {/* 체크박스 시작 */}
-                  <Box
-                    sx={{
-                      width: '38px',
-                    }}
-                  >
-                    <Checkbox
-                      id="ckb2"
-                      inputRef={ckb2Ref}
-                      sx={{
-                        ml: '5px',
-                      }}
-                      size="small"
-                      color="default"
-                    />
-                  </Box>
-                  {/* 체크박스 끝 */}
-
-                  {/* 결제 동의 텍스트 박스 시작 */}
-                  <Box
-                    sx={{
-                      padding: '0 10px',
-                      width: '567px',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      <label htmlFor="ckb2">
-                        (필수) 위 주문 내용을 확인하였으며 결제에 동의합니다.
-                      </label>
-                    </Typography>
-                  </Box>
-                  {/* 결제 동의 텍스트 박스 끝 */}
-                </Box>
-                {/* 결제 동의 박스 끝 */}
-              </Box>
-              {/* 약관 동의 박스 끝 */}
-
-              {/* 결제 버튼 박스 시작 */}
-              <Box>
+                  적용
+                </Button>
                 <Button
                   variant="contained"
-                  onClick={purchaseHandler}
+                  size="small"
+                  onClick={() => {
+                    if (exactTotalPrice < userInfo.savedMoney) {
+                      savedMoneyRef.current.value = exactTotalPrice - 100;
+                    } else {
+                      savedMoneyRef.current.value = userInfo.savedMoney;
+                    }
+                  }}
                   sx={{
-                    width: '100%',
-                    height: '60px',
+                    marginLeft: '10px',
+                    width: '120px',
                     backgroundColor: '#c3c36a',
-                    borderRadius: '10px',
-                    fontSize: '1.6rem',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
                     fontWeight: 'bold',
                     color: '#000000',
                     '&:hover': {
@@ -2158,16 +1742,444 @@ const Purchase = () => {
                     },
                   }}
                 >
-                  결제하기
+                  전액 사용
                 </Button>
+              </OrderDataBox>
+            </DataBox>
+            {/* 쿠폰 및 적립금 데이터(쿠폰, 적립금) 표기 끝 */}
+
+            {/* 결제 수단 헤더 시작 */}
+            <HeaderBox>
+              <HeaderTypography variant="h5" component="h2">
+                결제 수단
+              </HeaderTypography>
+            </HeaderBox>
+            {/* 결제 수단 헤더 끝 */}
+
+            {/* 결제 수단 버튼 표기 시작 */}
+            <DataBox>
+              <PaymentBtnGroup
+                value={String(payment)}
+                exclusive
+                onChange={paymentChange}
+              >
+                <ToggleButton value="card" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/credit-card.png`}
+                    alt="신용 카드"
+                    sx={
+                      payment === 'card' ? { width: '70px' } : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'card'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    신용 카드
+                  </Typography>
+                </ToggleButton>
+
+                <ToggleButton value="trans" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/account-transfer.png`}
+                    alt="계좌 이체"
+                    sx={
+                      payment === 'trans'
+                        ? { width: '70px' }
+                        : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'trans'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    계좌 이체
+                  </Typography>
+                </ToggleButton>
+
+                <ToggleButton value="phone" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/mobile.png`}
+                    alt="휴대폰 결제"
+                    sx={
+                      payment === 'phone'
+                        ? { width: '70px' }
+                        : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'phone'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    휴대폰 결제
+                  </Typography>
+                </ToggleButton>
+
+                <ToggleButton value="kakaopay" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/kakao-pay.png`}
+                    alt="카카오 페이"
+                    sx={
+                      payment === 'kakaopay'
+                        ? { width: '70px' }
+                        : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'kakaopay'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    카카오 페이
+                  </Typography>
+                </ToggleButton>
+
+                <ToggleButton value="tosspay" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/toss.png`}
+                    alt="토스 페이"
+                    sx={
+                      payment === 'tosspay'
+                        ? { width: '70px' }
+                        : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'tosspay'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    토스 페이
+                  </Typography>
+                </ToggleButton>
+
+                <ToggleButton value="payco" sx={paymentBtnStyle}>
+                  <Box
+                    component="img"
+                    src={`${process.env.PUBLIC_URL}/Payment/payco.png`}
+                    alt="삼성 페이"
+                    sx={
+                      payment === 'payco'
+                        ? { width: '70px' }
+                        : { width: '50px' }
+                    }
+                  />
+                  <Typography
+                    sx={
+                      payment === 'payco'
+                        ? selectedPaymentText
+                        : unselectedPaymentText
+                    }
+                  >
+                    페이코
+                  </Typography>
+                </ToggleButton>
+              </PaymentBtnGroup>
+            </DataBox>
+            {/* 결제 수단 버튼 표기 끝 */}
+
+            {/* 총 결제 금액 헤더 시작 */}
+            <HeaderBox>
+              <HeaderTypography variant="h5" component="h2">
+                총 결제 금액
+              </HeaderTypography>
+            </HeaderBox>
+            {/* 총 결제 금액 헤더 끝 */}
+
+            {/* 총 결제 금액 및 결제 버튼 표기 시작 */}
+            <PriceContainer>
+              <PriceLeftBox>
+                <PriceLeftBoxRow>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    총 상품 금액
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {location.state !== null &&
+                      totalPriceRef.current
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    &nbsp;원
+                  </Typography>
+                </PriceLeftBoxRow>
+
+                <PriceLeftBoxRow>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    총 배송비
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {location.state !== null &&
+                      totalShippingRef.current
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    &nbsp;원
+                  </Typography>
+                </PriceLeftBoxRow>
+
+                <PriceLeftBoxRow>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    쿠폰 할인
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {selectedCoupon !== 'none' ? selectedCoupon : '0'}&nbsp;원
+                  </Typography>
+                </PriceLeftBoxRow>
+
+                <PriceLeftBoxRow>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    사용 적립금
+                  </Typography>
+                  <Typography variant="h6" component="h2">
+                    {location.state !== null &&
+                      exactSavedMoney
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    &nbsp;원
+                  </Typography>
+                </PriceLeftBoxRow>
+
+                <Box
+                  sx={{
+                    margin: '10px 0',
+                    border: '1px solid #d0d0d0',
+                  }}
+                ></Box>
+
+                <PriceLeftBoxRow>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    최종 결제 금액
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {location.state !== null &&
+                      exactTotalPrice - exactSavedMoney}
+                    &nbsp;원
+                  </Typography>
+                </PriceLeftBoxRow>
+              </PriceLeftBox>
+
+              <Box
+                sx={{
+                  width: '605px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {/* 약관 동의 박스 시작 */}
+                <Box
+                  sx={{
+                    backgroundColor: '#f5f5f5',
+                    padding: '10px 0',
+                    width: '605px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    border: '1px solid #d0d0d0',
+                    borderRadius: '10px',
+                  }}
+                >
+                  {/* 개인 정보 수집 동의 박스 시작 */}
+                  <Box
+                    sx={{
+                      marginBottom: '5px',
+                      width: '605px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    {/* 체크박스 시작 */}
+                    <Box
+                      sx={{
+                        width: '38px',
+                      }}
+                    >
+                      <Checkbox
+                        id="ckb1"
+                        inputRef={ckb1Ref}
+                        sx={{
+                          ml: '5px',
+                        }}
+                        size="small"
+                        color="default"
+                      />
+                    </Box>
+                    {/* 체크박스 끝 */}
+
+                    {/* 개인 정보 수집 동의 텍스트 박스 시작 */}
+                    <Box
+                      sx={{
+                        padding: '0 10px',
+                        width: '567px',
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        <label htmlFor="ckb1">
+                          (필수) 개인정보 수집 이용 및 제 3자 제공 동의
+                        </label>
+                      </Typography>
+                      <Typography
+                        sx={{
+                          margin: '5px 0',
+                        }}
+                      >
+                        본인은 만 14세 이상이며, 주문 내용을 확인하였습니다.
+                      </Typography>
+                      <Typography
+                        sx={{
+                          margin: '5px 0',
+                        }}
+                      >
+                        (주)취미빌리지는 통신 판매 중개자로 거래 당사자가
+                        아니므로, 판매자가 등록한 상품 정보 및 거래 등에 대해
+                        책임을 지지 않습니다.
+                      </Typography>
+                    </Box>
+                    {/* 개인 정보 수집 동의 텍스트 박스 끝 */}
+                  </Box>
+                  {/* 개인 정보 수집 동의 박스 끝 */}
+
+                  {/* 결제 동의 박스 시작 */}
+                  <Box
+                    sx={{
+                      width: '605px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    {/* 체크박스 시작 */}
+                    <Box
+                      sx={{
+                        width: '38px',
+                      }}
+                    >
+                      <Checkbox
+                        id="ckb2"
+                        inputRef={ckb2Ref}
+                        sx={{
+                          ml: '5px',
+                        }}
+                        size="small"
+                        color="default"
+                      />
+                    </Box>
+                    {/* 체크박스 끝 */}
+
+                    {/* 결제 동의 텍스트 박스 시작 */}
+                    <Box
+                      sx={{
+                        padding: '0 10px',
+                        width: '567px',
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        <label htmlFor="ckb2">
+                          (필수) 위 주문 내용을 확인하였으며 결제에 동의합니다.
+                        </label>
+                      </Typography>
+                    </Box>
+                    {/* 결제 동의 텍스트 박스 끝 */}
+                  </Box>
+                  {/* 결제 동의 박스 끝 */}
+                </Box>
+                {/* 약관 동의 박스 끝 */}
+
+                {/* 결제 버튼 박스 시작 */}
+                <Box>
+                  <Button
+                    variant="contained"
+                    onClick={purchaseHandler}
+                    sx={{
+                      width: '100%',
+                      height: '60px',
+                      backgroundColor: '#c3c36a',
+                      borderRadius: '10px',
+                      fontSize: '1.6rem',
+                      fontWeight: 'bold',
+                      color: '#000000',
+                      '&:hover': {
+                        backgroundColor: '#c3c36a',
+                        color: '#ffffff',
+                      },
+                    }}
+                  >
+                    결제하기
+                  </Button>
+                </Box>
+                {/* 결제 버튼 박스 끝 */}
               </Box>
-              {/* 결제 버튼 박스 끝 */}
-            </Box>
-          </PriceContainer>
-          {/* 총 결제 금액 및 결제 버튼 표기 끝 */}
+            </PriceContainer>
+            {/* 총 결제 금액 및 결제 버튼 표기 끝 */}
+          </Container>
         </Container>
         <UserFooter />
-      </Container>
+      </>
     );
   }
 };

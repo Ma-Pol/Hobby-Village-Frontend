@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PhoneIcon from '@mui/icons-material/Phone';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   footerContainer: {
+    height: '100px',
     display: 'flex',
     justifyContent: 'center',
   },
@@ -17,7 +18,7 @@ const useStyles = makeStyles(() => ({
   },
   line: {
     borderTop: '1px solid #BCB5B5',
-    marginTop: '3rem',
+    marginTop: '10px',
   },
   left: {
     textAlign: 'left',
@@ -36,6 +37,13 @@ const useStyles = makeStyles(() => ({
     color: '#555555',
     textDecoration: 'none',
   },
+  linkText: {
+    color: '#555555',
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
 }));
 
 const UserFooter = () => {
@@ -44,88 +52,119 @@ const UserFooter = () => {
   return (
     <Box>
       <Box className={classes.line} />
-      <Box className={classes.footerContainer}>
-        <Box className={classes.footer}>
-          <Grid container spacing={6}>
-            <Grid item xs={4}>
-              <Grid container>
-                <Grid item xs={3} className={classes.left}>
-                  <Typography variant="body2" className={classes.textColor}>
-                    취미빌려조
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        김지훈
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        노현진
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        배효능
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        이승현
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        이준영
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" className={classes.textColor}>
-                        이진영
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={4} className={classes.middle}>
-              <Link
-                to="/notices/lists?filter=none&pages=1"
-                className={classes.textColor}
-              >
-                <Typography variant="body2">공지사항</Typography>
-              </Link>
-              <Link to="/guide" className={classes.textColor}>
-                <Typography variant="body2">구독 서비스 안내</Typography>
-              </Link>
-              <a
-                href="mailto:hobbyvillage@example.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.textColor}
+      <Container
+        sx={{
+          mt: 2,
+          mb: 5,
+          userSelect: 'none',
+        }}
+      >
+        <Box
+          sx={{
+            mx: 'auto',
+            width: '950px',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box
+            sx={{
+              width: '200px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              sx={{
+                mr: 1,
+              }}
+            >
+              <Typography variant="body2" className={classes.textColor}>
+                취미빌려조
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+              }}
+            >
+              <Box
+                sx={{
+                  mr: 1,
+                }}
               >
                 <Typography variant="body2" className={classes.textColor}>
-                  입점ㆍ제휴ㆍ광고문의
+                  김지훈
                 </Typography>
-              </a>
-            </Grid>
-            <Grid item xs={4} className={classes.right}>
-              <Link
-                to="/cs/faq/lists?filter=none&pages=1"
-                className={classes.textColor}
-              >
-                <Typography variant="body2">고객센터</Typography>
-              </Link>
-              <Typography variant="body2" className={classes.textColor}>
-                <PhoneIcon className={classes.phoneIcon} />
-                1544-1234
+                <Typography variant="body2" className={classes.textColor}>
+                  배효능
+                </Typography>
+                <Typography variant="body2" className={classes.textColor}>
+                  이준영
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="body2" className={classes.textColor}>
+                  노현진
+                </Typography>
+                <Typography variant="body2" className={classes.textColor}>
+                  이승현
+                </Typography>
+                <Typography variant="body2" className={classes.textColor}>
+                  이진영
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              width: '200px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Link
+              to="/notices/lists?filter=none&pages=1"
+              className={classes.linkText}
+            >
+              <Typography variant="body2">공지사항</Typography>
+            </Link>
+            <Link to="/guide" className={classes.linkText}>
+              <Typography variant="body2">구독 서비스 안내</Typography>
+            </Link>
+            <a
+              href="mailto:hobbyvillage@example.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.textColor}
+            >
+              <Typography variant="body2" className={classes.linkText}>
+                입점ㆍ제휴ㆍ광고문의
               </Typography>
-            </Grid>
-          </Grid>
+            </a>
+          </Box>
+
+          <Box
+            sx={{
+              width: '200px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Link
+              to="/cs/faq/lists?filter=none&pages=1"
+              className={classes.linkText}
+            >
+              <Typography variant="body2">고객센터</Typography>
+            </Link>
+            <Typography variant="body2" className={classes.textColor}>
+              <PhoneIcon className={classes.phoneIcon} />
+              1544-1234
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+      </Container>
     </Box>
   );
 };

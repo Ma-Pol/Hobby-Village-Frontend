@@ -12,8 +12,8 @@ import UserFooter from '../../components/UserFooter';
 const UserCs = () => {
   return (
     <>
+      <UserHeader />
       <Container>
-        <UserHeader />
         <Routes>
           <Route exact path="faq/lists" element={<UserFAQLists />} />
           <Route exact path="qna/:email/lists" element={<UserQnALists />} />
@@ -45,8 +45,8 @@ const UserCs = () => {
             }
           />
         </Routes>
-        <UserFooter />
       </Container>
+      <UserFooter />
     </>
   );
 };

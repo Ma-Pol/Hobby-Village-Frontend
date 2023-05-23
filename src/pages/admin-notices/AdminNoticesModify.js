@@ -159,14 +159,11 @@ const AdminNoticesModify = () => {
   };
 
   const modifyNotice = () => {
-    const notTitleSetQuotation = setQuotation(notTitleRef.current.value);
-    const notContentSetQuotation = setQuotation(notContent);
-
     axios
       .patch(`/m/notices/modify/${notCode}`, {
-        notTitle: notTitleSetQuotation,
+        notTitle: notTitleRef.current.value,
         notCategory: notCategory,
-        notContent: notContentSetQuotation,
+        notContent: notContent,
       })
       .then((res) => {
         if (res.data === 1) {
@@ -178,21 +175,6 @@ const AdminNoticesModify = () => {
       .catch((err) => {
         console.error(err);
       });
-  };
-
-  const setQuotation = (value) => {
-    const smallQuotation = /\'/gi;
-    const bigQuotation = /\"/gi;
-
-    if (smallQuotation.test(value)) {
-      value = value.replace(smallQuotation, `\'`);
-    }
-
-    if (bigQuotation.test(value)) {
-      value = value.replace(bigQuotation, `\"`);
-    }
-
-    return value;
   };
 
   const fileDelete = () => {

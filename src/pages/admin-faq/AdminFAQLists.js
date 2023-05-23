@@ -12,13 +12,14 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminFAQRows from '../../components/admin-faq/AdminFAQLists/AdminFAQRows';
 
 const AdminFAQLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const [faqList, setFaqList] = useState([]); // FAQ 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
@@ -314,6 +315,7 @@ const AdminFAQLists = () => {
               faqCategory={faq.faqCategory}
               faqTitle={faq.faqTitle}
               faqDate={faq.faqDate}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))

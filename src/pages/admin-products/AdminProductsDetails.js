@@ -30,6 +30,24 @@ const AdminProductsDetails = () => {
   const [prodTag, setProdTag] = useState('');
 
   useEffect(() => {
+    checkProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const checkProduct = () => {
+    axios.get(`/m/products/check/${prodCode}`).then((check) => {
+      if (check.data === 0) {
+        alert('존재하지 않는 상품입니다.');
+        navigate(`/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`, {
+          replace: true,
+        });
+      } else {
+        getProductData();
+      }
+    });
+  };
+
+  const getProductData = () => {
     axios
       .all([
         axios.get(`/m/products/productDetails/${prodCode}`),
@@ -38,21 +56,15 @@ const AdminProductsDetails = () => {
       ])
       .then(
         axios.spread((detail, pictures, tags) => {
-          if (detail.data === null) {
-            alert('존재하지 않는 상품입니다.');
-            navigate(-1, { replace: true });
-          } else {
-            setProduct(detail.data);
-            setProdPics(pictures.data);
-            setProdTag(tags.data);
-          }
+          setProduct(detail.data);
+          setProdPics(pictures.data);
+          setProdTag(tags.data);
         })
       )
       .catch((err) => {
         console.error(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prodCode]);
+  };
 
   const handleDelete = () => {
     if (window.confirm('정말 해당 상품을 삭제하시겠습니까?')) {

@@ -11,7 +11,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#dddddd',
+  backgroundColor: '#f1f1f1',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -276,7 +276,12 @@ const AdminQnACreate = () => {
               답변 작성
             </Typography>
           </Box>
-          <StyledPaper style={{ marginTop: '30px' }}>
+          <StyledPaper
+            style={{ marginTop: '30px' }}
+            sx={{
+              backgroundColor: '#ffffff',
+            }}
+          >
             <Grid container>
               <LabelItem
                 item
@@ -314,6 +319,7 @@ const AdminQnACreate = () => {
                     backgroundColor: 'white',
                     border: '1px solid #000000',
                   }}
+                  placeholder="내용을 입력해주세요."
                   theme="snow"
                   value={answerContent}
                   onChange={setAnswerContent}

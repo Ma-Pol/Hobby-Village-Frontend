@@ -4,10 +4,13 @@ import UserProductsList from './UserProductsList';
 import UserProductsBrandList from './UserProductsBrandList';
 import UserProductsSearch from './UserProductsSearch';
 import UserProductsDetails from './UserProductsDetails';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserProducts = () => {
   return (
     <>
+      <UserHeader />
       <Routes>
         <Route exact path="lists" element={<UserProductsList />} />
         <Route exact path="lists/search" element={<UserProductsSearch />} />
@@ -34,6 +37,7 @@ const UserProducts = () => {
           }
         />
       </Routes>
+      <UserFooter />
     </>
   );
 };

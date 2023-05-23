@@ -5,10 +5,13 @@ import MyPagesRequests from './MyPagesRequests';
 import MyPagesAddressesLists from './MyPagesAddressesLists';
 import MyPagesAddressesCreate from './MyPagesAddressesCreate';
 import MyPagesAddressesModify from './MyPagesAddressesModify';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserMyPages = () => {
   return (
     <>
+      <UserHeader />
       <Routes>
         <Route exact path="orders" element={<MyPagesOrders />} />
         <Route exact path="requests/lists" element={<MyPagesRequests />} />
@@ -44,6 +47,7 @@ const UserMyPages = () => {
           }
         />
       </Routes>
+      <UserFooter />
     </>
   );
 };

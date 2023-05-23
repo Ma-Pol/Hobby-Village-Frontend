@@ -119,14 +119,11 @@ const AdminNoticesCreate = () => {
   };
 
   const createNotice = () => {
-    const notTitleSetQuotation = setQuotation(notTitleRef.current.value);
-    const notContentSetQuotation = setQuotation(notContent);
-
     axios
       .post(`/m/notices/create`, {
-        notTitle: notTitleSetQuotation,
+        notTitle: notTitleRef.current.value,
         notCategory: notCategory,
-        notContent: notContentSetQuotation,
+        notContent: notContent,
       })
       .then((res) => {
         if (res.data !== 0) {
@@ -144,21 +141,6 @@ const AdminNoticesCreate = () => {
       .catch((err) => {
         console.error(err);
       });
-  };
-
-  const setQuotation = (value) => {
-    const smallQuotation = /\'/gi;
-    const bigQuotation = /\"/gi;
-
-    if (smallQuotation.test(value)) {
-      value = value.replace(smallQuotation, `\'`);
-    }
-
-    if (bigQuotation.test(value)) {
-      value = value.replace(bigQuotation, `\"`);
-    }
-
-    return value;
   };
 
   const fileUpload = (notCode) => {

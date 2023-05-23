@@ -26,6 +26,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Terms from '../../components/user-request/Terms';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const CategorySelect = styled(Select)({
   width: '200px',
@@ -351,487 +353,491 @@ const UserRequests = () => {
   };
 
   return (
-    <Container
-      sx={{
-        userSelect: 'none',
-      }}
-    >
-      {/* 물품 판매/위탁 신청 헤더 시작 */}
-      <Box
+    <>
+      <UserHeader />
+      <Container
         sx={{
-          my: 5,
-          py: 2,
-          borderBottom: '1px solid #3f3f3f',
+          userSelect: 'none',
         }}
       >
-        <Typography
-          variant="h4"
+        {/* 물품 판매/위탁 신청 헤더 시작 */}
+        <Box
           sx={{
-            fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '1.9rem',
-          }}
-        >
-          물품 판매/위탁 신청
-        </Typography>
-      </Box>
-      {/* 물품 판매/위탁 신청 헤더 끝 */}
-
-      {/* 물품 판매/위탁 신청 내용 시작 */}
-      <Grid
-        container
-        sx={{
-          mx: 'auto',
-          my: 5,
-          width: '90%',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        {/* 판매/위탁 여부 선택 라인 시작 */}
-        <Grid item xs={2} sx={tableLines}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '1.3rem',
-            }}
-          >
-            판매/위탁 여부
-          </Typography>
-        </Grid>
-        <Grid item xs={10} sx={tableLines}>
-          <ToggleButtonGroup
-            value={String(sellConsign)}
-            exclusive
-            onChange={sellConsignChange}
-          >
-            <ToggleButton value="sell" sx={filterBox}>
-              판매
-            </ToggleButton>
-            <ToggleButton value="consign" sx={filterBox}>
-              위탁
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
-        {/* 판매/위탁 여부 선택 라인 끝 */}
-
-        {/* 물품 카테고리 선택 라인 시작 */}
-        <Grid item xs={2} sx={tableLines}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '1.3rem',
-            }}
-          >
-            물품 카테고리
-          </Typography>
-        </Grid>
-        <Grid item xs={10} sx={tableLines}>
-          <CategorySelect
-            value={category}
-            onChange={categoryChange}
-            size="small"
-          >
-            <MenuItem value="none" disabled>
-              카테고리 선택
-            </MenuItem>
-            {categoryList.length !== 0 &&
-              categoryList.map((category) => {
-                return (
-                  <MenuItem
-                    key={category}
-                    value={category}
-                    sx={{ textAlign: 'center' }}
-                  >
-                    {category}
-                  </MenuItem>
-                );
-              })}
-          </CategorySelect>
-        </Grid>
-        {/* 물품 카테고리 선택 라인 끝 */}
-
-        {/* 상품 명 라인 시작 */}
-        <Grid item xs={2} sx={tableLines}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '1.3rem',
-            }}
-          >
-            상품 명
-          </Typography>
-        </Grid>
-        <Grid item xs={10} sx={tableLines}>
-          <TextField
-            inputRef={titleRef}
-            size="small"
-            placeholder="상품 명을 입력해주세요."
-            sx={{ ...textField, width: '100%' }}
-          />
-        </Grid>
-        {/* 상품 명 라인 끝 */}
-
-        {/* 상품 설명 라인 시작 */}
-        <Grid item xs={2} sx={tableLines}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '1.3rem',
-            }}
-          >
-            상품 설명
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={10}
-          sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            height: '560px',
-          }}
-        >
-          <ReactQuill
-            style={{
-              marginTop: '10px',
-              padding: '0 0 40px 0',
-              height: '500px',
-              width: '100%',
-              backgroundColor: 'white',
-              border: '1px solid #000000',
-              fontSize: '1.2rem',
-            }}
-            placeholder="상품에 대한 설명을 입력해주세요."
-            theme="snow"
-            value={content}
-            onChange={setContent}
-          />
-        </Grid>
-        {/* 상품 설명 라인 끝 */}
-
-        {/* 사진 첨부 라인 시작 */}
-        <Grid
-          item
-          xs={2}
-          sx={{
-            mt: 1,
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            height: '110px',
+            my: 5,
+            py: 2,
+            borderBottom: '1px solid #3f3f3f',
           }}
         >
           <Typography
-            variant="h6"
+            variant="h4"
             sx={{
               fontWeight: 'bold',
-              fontSize: '1.3rem',
-            }}
-          >
-            사진 첨부
-            <HtmlTooltip
-              arrow
-              title={
-                <>
-                  <Typography variant="h6" sx={{ fontSize: '1rem' }}>
-                    상품의 상태를 정확히 파악할 수 있는
-                    <br />
-                    사진(jpg, jpeg, png)을 첨부해주시기
-                    <br />
-                    바랍니다.
-                    <br />
-                    (각 사진 당 100MB 이하, 최대 10장)
-                  </Typography>
-                </>
-              }
-            >
-              <img
-                style={{
-                  position: 'absolute',
-                  top: '41px',
-                  right: '49px',
-                }}
-                width="25px"
-                height="25px"
-                src="https://img.icons8.com/ios/50/000000/info--v1.png"
-                alt="쿠폰 및 적립금 안내"
-              />
-            </HtmlTooltip>
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={10}
-          sx={{
-            mt: 1,
-            display: 'flex',
-            alignItems: 'center',
-            height: '110px',
-          }}
-        >
-          <Button
-            htmlFor="fileBox"
-            component="label"
-            disableRipple
-            sx={{
-              mr: 2,
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
-              width: '100px',
-              height: '100px',
-              border: '1px solid #000000',
-              backgroundColor: '#ffffff',
-              '&:hover': {
-                backgroundColor: '#ffffff',
-              },
-              '&:click': {
-                backgroundColor: '#ffffff',
-              },
+              fontSize: '1.9rem',
             }}
           >
-            {imgFiles.length === 0 ? (
-              <img
-                width="40"
-                height="40"
-                src="https://img.icons8.com/ios-filled/50/CECECE/plus-math.png"
-                alt="fileUpload"
-              />
-            ) : (
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '2rem',
-                  color: '#000000',
-                }}
-              >
-                {imgFiles.length}
-              </Typography>
-            )}
-          </Button>
-          <input
-            hidden
-            id="fileBox"
-            type="file"
-            ref={filesRef}
-            multiple
-            onChange={imageChange}
-          />
-        </Grid>
-        {/* 사진 첨부 라인 끝 */}
+            물품 판매/위탁 신청
+          </Typography>
+        </Box>
+        {/* 물품 판매/위탁 신청 헤더 끝 */}
 
-        {/* 첨부 사진 미리보기 라인 시작 */}
-        {imgFiles.length !== 0 && (
-          <>
-            <Grid
-              item
-              xs={2}
+        {/* 물품 판매/위탁 신청 내용 시작 */}
+        <Grid
+          container
+          sx={{
+            mx: 'auto',
+            my: 5,
+            width: '90%',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          {/* 판매/위탁 여부 선택 라인 시작 */}
+          <Grid item xs={2} sx={tableLines}>
+            <Typography
+              variant="h6"
               sx={{
-                mt: 1,
-                display: 'flex',
-                alignItems: 'center',
-                height: '410px',
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
               }}
             >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '1.3rem',
-                }}
-              >
-                사진 미리보기
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={10}
+              판매/위탁 여부
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sx={tableLines}>
+            <ToggleButtonGroup
+              value={String(sellConsign)}
+              exclusive
+              onChange={sellConsignChange}
+            >
+              <ToggleButton value="sell" sx={filterBox}>
+                판매
+              </ToggleButton>
+              <ToggleButton value="consign" sx={filterBox}>
+                위탁
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+          {/* 판매/위탁 여부 선택 라인 끝 */}
+
+          {/* 물품 카테고리 선택 라인 시작 */}
+          <Grid item xs={2} sx={tableLines}>
+            <Typography
+              variant="h6"
               sx={{
-                mt: 1,
-                display: 'flex',
-                alignItems: 'center',
-                height: '410px',
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
               }}
             >
-              <Swiper
-                pagination={{
-                  type: 'fraction',
-                }}
-                navigation={true}
-                loop={true}
-                modules={[Navigation, Pagination]}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-              >
-                {imgBase64.map((img, index) => {
-                  return (
-                    <SwiperSlide
-                      key={index}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        alt="미리보기 이미지"
-                        src={img}
-                        style={{
-                          maxHeight: '350px',
-                          maxWidth: '70%',
-                        }}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
-            </Grid>
-          </>
-        )}
-        {/* 첨부 사진 미리보기 라인 끝 */}
-
-        {/* 계좌번호 입력 라인 시작 */}
-        {sellConsign === 'consign' && (
-          <>
-            <Grid item xs={2} sx={{ ...tableLines, mt: 1 }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '1.3rem',
-                }}
-              >
-                계좌 번호
-              </Typography>
-            </Grid>
-            <Grid item xs={2} sx={{ ...tableLines, mt: 1, pr: 1 }}>
-              <BankSelect value={bank} onChange={bankChange} size="small">
-                <MenuItem value="none" disabled>
-                  은행 선택
-                </MenuItem>
-                {bankList.map((bank) => {
+              물품 카테고리
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sx={tableLines}>
+            <CategorySelect
+              value={category}
+              onChange={categoryChange}
+              size="small"
+            >
+              <MenuItem value="none" disabled>
+                카테고리 선택
+              </MenuItem>
+              {categoryList.length !== 0 &&
+                categoryList.map((category) => {
                   return (
                     <MenuItem
-                      key={bank}
-                      value={bank}
-                      sx={{
-                        textAlign: 'center',
-                      }}
+                      key={category}
+                      value={category}
+                      sx={{ textAlign: 'center' }}
                     >
-                      {bank}
+                      {category}
                     </MenuItem>
                   );
                 })}
-              </BankSelect>
-            </Grid>
+            </CategorySelect>
+          </Grid>
+          {/* 물품 카테고리 선택 라인 끝 */}
 
-            <Grid item xs={8} sx={{ ...tableLines, mt: 1 }}>
-              <TextField
-                inputRef={accountRef}
-                onChange={accountChange}
-                size="small"
-                placeholder="위탁 수수료 정산을 위해 계좌 번호를 입력해주세요."
-                sx={{ ...textField, width: '100%' }}
-              />
-            </Grid>
-          </>
-        )}
-        {/* 계좌번호 입력 라인 끝 */}
+          {/* 상품 명 라인 시작 */}
+          <Grid item xs={2} sx={tableLines}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
+              }}
+            >
+              상품 명
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sx={tableLines}>
+            <TextField
+              inputRef={titleRef}
+              size="small"
+              placeholder="상품 명을 입력해주세요."
+              sx={{ ...textField, width: '100%' }}
+            />
+          </Grid>
+          {/* 상품 명 라인 끝 */}
 
-        {/* 상품 판매/위탁 약관 표기 라인 시작 */}
-        <Grid
-          item
-          xs={12}
-          sx={{
-            mt: 10,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Terms />
-        </Grid>
-        {/* 상품 판매/위탁 약관 표기 라인 끝 */}
-
-        {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 시작 */}
-        <Grid
-          item
-          xs={12}
-          sx={{
-            mt: 1,
-            mb: 3,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <Checkbox
-            id="ckbAgree"
-            inputRef={ckbAgreeRef}
-            size="small"
-            color="default"
-          />
-          <Typography variant="body1">
-            <label htmlFor="ckbAgree">
-              (필수) 약관을 상세히 읽었으며 약관 내용에 동의합니다.
-            </label>
-          </Typography>
-        </Grid>
-        {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 끝 */}
-
-        {/* 등록/취소 버튼 표시 라인 시작 */}
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Button
+          {/* 상품 설명 라인 시작 */}
+          <Grid item xs={2} sx={tableLines}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
+              }}
+            >
+              상품 설명
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={10}
             sx={{
-              ...button,
-              backgroundColor: '#ffffff',
-              '&:hover': {
+              display: 'flex',
+              alignItems: 'flex-start',
+              height: '560px',
+            }}
+          >
+            <ReactQuill
+              style={{
+                marginTop: '10px',
+                padding: '0 0 40px 0',
+                height: '500px',
+                width: '100%',
+                backgroundColor: 'white',
+                border: '1px solid #000000',
+                fontSize: '1.2rem',
+              }}
+              placeholder="상품에 대한 설명을 입력해주세요."
+              theme="snow"
+              value={content}
+              onChange={setContent}
+            />
+          </Grid>
+          {/* 상품 설명 라인 끝 */}
+
+          {/* 사진 첨부 라인 시작 */}
+          <Grid
+            item
+            xs={2}
+            sx={{
+              mt: 1,
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              height: '110px',
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
+              }}
+            >
+              사진 첨부
+              <HtmlTooltip
+                arrow
+                title={
+                  <>
+                    <Typography variant="h6" sx={{ fontSize: '1rem' }}>
+                      상품의 상태를 정확히 파악할 수 있는
+                      <br />
+                      사진(jpg, jpeg, png)을 첨부해주시기
+                      <br />
+                      바랍니다.
+                      <br />
+                      (각 사진 당 100MB 이하, 최대 10장)
+                    </Typography>
+                  </>
+                }
+              >
+                <img
+                  style={{
+                    position: 'absolute',
+                    top: '41px',
+                    right: '49px',
+                  }}
+                  width="25px"
+                  height="25px"
+                  src="https://img.icons8.com/ios/50/000000/info--v1.png"
+                  alt="쿠폰 및 적립금 안내"
+                />
+              </HtmlTooltip>
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={10}
+            sx={{
+              mt: 1,
+              display: 'flex',
+              alignItems: 'center',
+              height: '110px',
+            }}
+          >
+            <Button
+              htmlFor="fileBox"
+              component="label"
+              disableRipple
+              sx={{
+                mr: 2,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100px',
+                height: '100px',
+                border: '1px solid #000000',
                 backgroundColor: '#ffffff',
-                color: '#000000',
-              },
-            }}
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            취소
-          </Button>
+                '&:hover': {
+                  backgroundColor: '#ffffff',
+                },
+                '&:click': {
+                  backgroundColor: '#ffffff',
+                },
+              }}
+            >
+              {imgFiles.length === 0 ? (
+                <img
+                  width="40"
+                  height="40"
+                  src="https://img.icons8.com/ios-filled/50/CECECE/plus-math.png"
+                  alt="fileUpload"
+                />
+              ) : (
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: '2rem',
+                    color: '#000000',
+                  }}
+                >
+                  {imgFiles.length}
+                </Typography>
+              )}
+            </Button>
+            <input
+              hidden
+              id="fileBox"
+              type="file"
+              ref={filesRef}
+              multiple
+              onChange={imageChange}
+            />
+          </Grid>
+          {/* 사진 첨부 라인 끝 */}
 
-          <Button
-            onClick={() => {
-              onSubmit();
-            }}
+          {/* 첨부 사진 미리보기 라인 시작 */}
+          {imgFiles.length !== 0 && (
+            <>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  mt: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '410px',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: '1.3rem',
+                  }}
+                >
+                  사진 미리보기
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  mt: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '410px',
+                }}
+              >
+                <Swiper
+                  pagination={{
+                    type: 'fraction',
+                  }}
+                  navigation={true}
+                  loop={true}
+                  modules={[Navigation, Pagination]}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                >
+                  {imgBase64.map((img, index) => {
+                    return (
+                      <SwiperSlide
+                        key={index}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          alt="미리보기 이미지"
+                          src={img}
+                          style={{
+                            maxHeight: '350px',
+                            maxWidth: '70%',
+                          }}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              </Grid>
+            </>
+          )}
+          {/* 첨부 사진 미리보기 라인 끝 */}
+
+          {/* 계좌번호 입력 라인 시작 */}
+          {sellConsign === 'consign' && (
+            <>
+              <Grid item xs={2} sx={{ ...tableLines, mt: 1 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: '1.3rem',
+                  }}
+                >
+                  계좌 번호
+                </Typography>
+              </Grid>
+              <Grid item xs={2} sx={{ ...tableLines, mt: 1, pr: 1 }}>
+                <BankSelect value={bank} onChange={bankChange} size="small">
+                  <MenuItem value="none" disabled>
+                    은행 선택
+                  </MenuItem>
+                  {bankList.map((bank) => {
+                    return (
+                      <MenuItem
+                        key={bank}
+                        value={bank}
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
+                        {bank}
+                      </MenuItem>
+                    );
+                  })}
+                </BankSelect>
+              </Grid>
+
+              <Grid item xs={8} sx={{ ...tableLines, mt: 1 }}>
+                <TextField
+                  inputRef={accountRef}
+                  onChange={accountChange}
+                  size="small"
+                  placeholder="위탁 수수료 정산을 위해 계좌 번호를 입력해주세요."
+                  sx={{ ...textField, width: '100%' }}
+                />
+              </Grid>
+            </>
+          )}
+          {/* 계좌번호 입력 라인 끝 */}
+
+          {/* 상품 판매/위탁 약관 표기 라인 시작 */}
+          <Grid
+            item
+            xs={12}
             sx={{
-              ...button,
-              backgroundColor: '#c3c36a',
-              '&:hover': {
-                backgroundColor: '#c3c36a',
-                color: '#ffffff',
-              },
+              mt: 10,
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            등록
-          </Button>
+            <Terms />
+          </Grid>
+          {/* 상품 판매/위탁 약관 표기 라인 끝 */}
+
+          {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 시작 */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              mt: 1,
+              mb: 3,
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <Checkbox
+              id="ckbAgree"
+              inputRef={ckbAgreeRef}
+              size="small"
+              color="default"
+            />
+            <Typography variant="body1">
+              <label htmlFor="ckbAgree">
+                (필수) 약관을 상세히 읽었으며 약관 내용에 동의합니다.
+              </label>
+            </Typography>
+          </Grid>
+          {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 끝 */}
+
+          {/* 등록/취소 버튼 표시 라인 시작 */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Button
+              sx={{
+                ...button,
+                backgroundColor: '#ffffff',
+                '&:hover': {
+                  backgroundColor: '#ffffff',
+                  color: '#000000',
+                },
+              }}
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              취소
+            </Button>
+
+            <Button
+              onClick={() => {
+                onSubmit();
+              }}
+              sx={{
+                ...button,
+                backgroundColor: '#c3c36a',
+                '&:hover': {
+                  backgroundColor: '#c3c36a',
+                  color: '#ffffff',
+                },
+              }}
+            >
+              등록
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+      <UserFooter />
+    </>
   );
 };
 

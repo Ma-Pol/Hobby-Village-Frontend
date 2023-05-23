@@ -1,7 +1,15 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-const AdminFAQRows = ({ faqCode, faqCategory, faqTitle, faqDate, isLast }) => {
+const AdminFAQRows = ({
+  faqCode,
+  faqCategory,
+  faqTitle,
+  faqDate,
+  queryString,
+  isLast,
+}) => {
   const faqLink = `/m/faqs/details/${faqCode}`;
 
   const tableLine = {
@@ -55,7 +63,9 @@ const AdminFAQRows = ({ faqCode, faqCategory, faqTitle, faqDate, isLast }) => {
           }}
         >
           <Link
-            href={faqLink}
+            component={RouterLink}
+            to={faqLink}
+            state={{ queryString: queryString }}
             title={faqTitle + '\nFAQ 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}

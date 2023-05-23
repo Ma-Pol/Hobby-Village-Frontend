@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
-import UserFooter from '../../components/UserFooter';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#f5f5f5',
-  minHeight: '300px',
+  backgroundColor: '#f1f1f1',
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -30,12 +28,30 @@ const LabelItem = styled(Grid)(({ theme }) => ({
 }));
 
 const UserFAQDetail = () => {
+  const navigate = useNavigate();
   const [faqDetail, setFaqDetail] = useState({});
   const { faqCode } = useParams();
   const location = useLocation();
   const prevQuery = location.state?.queryString;
 
   useEffect(() => {
+    axios
+      .get(`/cs/faq/check/${faqCode}`)
+      .then((check) => {
+        if (check.data === 0) {
+          alert('존재하지 않는 FAQ입니다.');
+          navigate(`/cs/faq/lists?filter=none&pages=1`, { replace: true });
+        } else {
+          getFaqDetail();
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [faqCode]);
+
+  const getFaqDetail = () => {
     axios
       .get(`/cs/faq/${faqCode}`)
       .then((detail) => {
@@ -44,10 +60,10 @@ const UserFAQDetail = () => {
       .catch((error) => {
         console.error('There was an error!', error);
       });
-  }, [faqCode]);
+  };
 
   if (!faqDetail) {
-    return <div>Loading...</div>;
+    return <div></div>;
   } else {
     return (
       <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
@@ -209,7 +225,6 @@ const UserFAQDetail = () => {
             <StyledButton>목록</StyledButton>
           </Link>
         </Box>
-        <UserFooter />
       </Box>
     );
   }

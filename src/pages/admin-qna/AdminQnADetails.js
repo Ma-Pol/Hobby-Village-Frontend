@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#dddddd',
+  backgroundColor: '#f1f1f1',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -47,7 +47,9 @@ const AdminQnADetails = () => {
       .then((check) => {
         if (check.data === 0) {
           alert('존재하지 않는 문의입니다.');
-          navigate(-1, { replace: true });
+          navigate(`/m/qnas/lists?sort=-qstDate&filter=none&pages=1`, {
+            replace: true,
+          });
         } else {
           getQuestion();
           getAnswer();

@@ -294,6 +294,7 @@ const UserNoticesLists = () => {
       <Box
         sx={{
           mt: 2,
+          mb: 12,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
@@ -301,6 +302,7 @@ const UserNoticesLists = () => {
         }}
       >
         <NativeSelect
+          disabled
           inputRef={conditionRef}
           size="normal"
           sx={{

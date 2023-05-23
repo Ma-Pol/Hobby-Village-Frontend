@@ -10,7 +10,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   maxWidth: 950,
   boxShadow: 'none',
-  backgroundColor: '#dfdfdf',
+  backgroundColor: '#f1f1f1',
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -18,16 +18,6 @@ const LabelItem = styled(Grid)(({ theme }) => ({
   display: 'flex',
   paddingLeft: '10px',
 }));
-
-// const buttonStyle = {
-//   mx: 2,
-//   width: '65px',
-//   height: '30px',
-//   borderRadius: '15px',
-//   border: '1px solid #626262',
-//   color: '#000000',
-//   fontWeight: 'bold',
-// };
 
 const UserNoticesDetails = () => {
   const { notCode } = useParams();
@@ -50,14 +40,22 @@ const UserNoticesDetails = () => {
       .then((check) => {
         if (check.data === 0) {
           alert('존재하지 않는 공지사항입니다.');
-          navigate(-1, { replace: true });
+          navigate(`/notices/lists?filter=none&pages=1`, { replace: true });
         } else {
           getNotice();
+          increaseViews();
         }
       })
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  // 공지사항 조회수 증가
+  const increaseViews = () => {
+    axios.patch(`/notices/noticeUpdateView/${notCode}`).catch((err) => {
+      console.error(err);
+    });
   };
 
   // 공지사항 상세 조회

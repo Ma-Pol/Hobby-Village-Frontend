@@ -1,10 +1,14 @@
 import React from 'react';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserDibs = () => {
   return (
-    <div>
+    <>
+      <UserHeader />
       <div></div>
-    </div>
+      <UserFooter />
+    </>
   );
 };
 
