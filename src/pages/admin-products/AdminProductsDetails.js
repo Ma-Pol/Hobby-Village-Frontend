@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
@@ -14,90 +14,45 @@ import {
   TableContainer,
   TableCell,
   TableRow,
-  InputLabel,
-  TextField,
   Button,
-  Grid,
-  InputAdornment,
+  Link,
 } from '@mui/material';
 
 const AdminProductsDetails = () => {
   const navigate = useNavigate();
   const { prodCode } = useParams();
+  const location = useLocation();
+  const prevQuery = location.state?.queryString;
 
-  const [product, setProduct] = useState({
-    prodCode: '',
-    prodBrand: '',
-    prodPrice: 0,
-    prodCategory: '',
-    prodRegiDate: '',
-    prodName: '',
-    rentalCount: 0,
-    prodIsRental: 0,
-    prodContent: '',
-    revwRate: 0.0,
-    prodDibs: 0,
-    prodHost: '',
-  });
-
-  // 임시 이미지
-  const imagesTmp = [
-    {
-      url: process.env.PUBLIC_URL + '/BrandLogo/arena.png',
-    },
-    {
-      url: process.env.PUBLIC_URL + '/BrandLogo/brandyarn.png',
-    },
-    {
-      url: process.env.PUBLIC_URL + '/BrandLogo/excider.png',
-    },
-  ];
+  const [product, setProduct] = useState({});
 
   const [prodPics, setProdPics] = useState([]);
   const [prodTag, setProdTag] = useState('');
 
-  const getProductDetail = () => {
-    axios
-      .get(`/m/products/getProductDetail?prodCode=${prodCode}`)
-      .then((res) => {
-        const { data } = res;
-        setProduct(data);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
-
-  // 이미지 파일명 조회
-  const getProdPics = () => {
-    axios
-      .get(`/m/products/getProdPictures?prodCode=${prodCode}`)
-      .then((res) => {
-        const { data } = res;
-        setProdPics(data);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
-
-  const getProdTag = () => {
-    axios
-      .get(`/m/products/getProdTag?prodCode=${prodCode}`)
-      .then((res) => {
-        const { data } = res;
-        setProdTag(data);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
-
   useEffect(() => {
-    getProductDetail();
-    getProdPics();
-    getProdTag();
-  }, []);
+    axios
+      .all([
+        axios.get(`/m/products/productDetails/${prodCode}`),
+        axios.get(`/m/products/pictures/${prodCode}`),
+        axios.get(`/m/products/tags/${prodCode}`),
+      ])
+      .then(
+        axios.spread((detail, pictures, tags) => {
+          if (detail.data === null) {
+            alert('존재하지 않는 상품입니다.');
+            navigate(-1, { replace: true });
+          } else {
+            setProduct(detail.data);
+            setProdPics(pictures.data);
+            setProdTag(tags.data);
+          }
+        })
+      )
+      .catch((err) => {
+        console.error(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prodCode]);
 
   const handleDelete = () => {
     if (window.confirm('정말 해당 상품을 삭제하시겠습니까?')) {
@@ -105,7 +60,13 @@ const AdminProductsDetails = () => {
         .delete(`/m/products/delete?prodCode=${prodCode}`)
         .then(() => {
           alert('상품이 삭제되었습니다.');
-          navigate(`/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`);
+          if (prevQuery === undefined) {
+            navigate(
+              `/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`
+            );
+          } else {
+            navigate(`/m/products/lists${prevQuery}`);
+          }
         })
         .catch((e) => {
           console.error(e);
@@ -128,15 +89,6 @@ const AdminProductsDetails = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  };
-
-  const inputReadOnlyStyle = {
-    '& fieldset': {
-      border: 'none',
-    },
-    input: { color: '#626262' },
-    textarea: { color: '#626262' },
-    overflow: 'auto',
   };
 
   const noImageBox = {
@@ -162,6 +114,7 @@ const AdminProductsDetails = () => {
   };
 
   const btnDeleteStyle = {
+    mx: 2,
     width: '65px',
     height: '35px',
     bgcolor: '#F5B8B8',
@@ -177,6 +130,7 @@ const AdminProductsDetails = () => {
   };
 
   const btnListStyle = {
+    mx: 2,
     width: '65px',
     height: '35px',
     bgcolor: '#ffffff',
@@ -192,6 +146,7 @@ const AdminProductsDetails = () => {
   };
 
   const btnUpdateStyle = {
+    mx: 2,
     width: '65px',
     height: '35px',
     bgcolor: '#c3c36a',
@@ -206,330 +161,395 @@ const AdminProductsDetails = () => {
     },
   };
 
-  return (
-    <Container>
-      {/* 타이틀 */}
-      <Typography
-        variant="h4"
-        component="h1"
+  if (product.prodName === undefined) {
+    return <div></div>;
+  } else {
+    return (
+      <Container
         sx={{
-          mt: 5,
-          mb: 5,
-          pl: 1,
-          pr: 1,
-          fontWeight: 'bold',
+          userSelect: 'none',
         }}
       >
-        상품 목록 &#62; 상품 상세
-      </Typography>
+        {/* 타이틀 */}
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            mt: 5,
+            mb: 5,
+            pl: 1,
+            pr: 1,
+            fontWeight: 'bold',
+          }}
+        >
+          상품 목록 &#62; 상세
+        </Typography>
 
-      {/* form 시작 */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <TableContainer>
-          <Table sx={{ maxWidth: 1140 }}>
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodCode">상품 코드</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodCode"
-                  value={product.prodCode}
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodBrand">브랜드</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodBrand"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodBrand}
-                ></TextField>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <InputLabel for="prodPrice">대여료</InputLabel>
-                  <Typography sx={{ fontSize: '12px', color: '#646464' }}>
-                    &nbsp;(7일 기준)
+        {/* form 시작 */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <TableContainer>
+            <Table sx={{ width: 1140 }}>
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    상품 코드
                   </Typography>
-                </Grid>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodPrice"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">&#8361;</InputAdornment>
-                    ),
-                  }}
-                  value={product.prodPrice}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodCategory">카테고리</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodCategory"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  value={product.prodCategory}
-                ></TextField>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodRegiDate">등록일</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodRegiDate"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodRegiDate}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodName">상품명</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodName"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodName}
-                ></TextField>
-              </TableCell>
-            </TableRow>
+                </TableCell>
 
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="rentalCount">총 대여 횟수</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="rentalCount"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.rentalCount}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodIsRental">대여현황</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodIsRental"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodIsRental}
-                ></TextField>
-              </TableCell>
-            </TableRow>
+                <TableCell sx={tableBodyStyle}>
+                  <Link
+                    title="해당 상품의 주문 목록으로 이동"
+                    href={`/m/orders/lists?condition=op.prodCode&keyword=${prodCode}&sort=-odrDate&filter=none&pages=1`}
+                    underline="none"
+                    sx={{ color: '#000000', textDecoration: 'underline' }}
+                  >
+                    <Typography variant="h6" component="h2">
+                      {product.prodCode}
+                    </Typography>
+                  </Link>
+                </TableCell>
 
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel>상품 사진</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyImageStyle}>
-                {prodPics.length === 0 ? (
-                  <Box sx={noImageBox}>
-                    <Typography color="#626262">
-                      등록된 사진이 없습니다.
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    브랜드
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodBrand === null ? '-' : product.prodBrand}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{ fontWeight: 'bold' }}
+                    >
+                      대여료
+                    </Typography>
+                    <Typography
+                      sx={{ ml: '8px', fontSize: '12px', color: '#646464' }}
+                    >
+                      (7일 기준)
                     </Typography>
                   </Box>
-                ) : (
-                  <Swiper
-                    pagination={{
-                      type: 'fraction',
-                    }}
-                    navigation={true}
-                    modules={[Navigation, Pagination]}
-                    style={swiperStyle}
-                  >
-                    {prodPics.map((fileName) => {
-                      const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
-                      return (
-                        <SwiperSlide
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Box
-                            component="img"
-                            alt={fileName}
-                            src={fileSrc}
-                            sx={{
-                              width: '90%',
-                              height: '90%',
-                            }}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
-                  </Swiper>
-                )}
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodContent">상품 설명</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodContent"
-                  fullWidth
-                  multiline
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodContent}
-                ></TextField>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="revwRateAvg">평균 별점</InputLabel>
-              </TableCell>
-              <TableCell>
-                <TextField
-                  id="revwRateAvg"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.revwRate}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodDibs">관심 수</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodDibs"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodDibs}
-                ></TextField>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodHost">대여자(닉네임)</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodHost"
-                  fullWidth
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={product.prodHost}
-                ></TextField>
-              </TableCell>
-              <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodTag">연관검색어</InputLabel>
-              </TableCell>
-              <TableCell sx={tableBodyStyle}>
-                <TextField
-                  id="prodTag"
-                  fullWidth
-                  multiline
-                  size="small"
-                  sx={inputReadOnlyStyle}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={prodTag}
-                ></TextField>
-              </TableCell>
-            </TableRow>
-          </Table>
-        </TableContainer>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {String(product?.prodPrice).replace(
+                      /\B(?=(\d{3})+(?!\d))/g,
+                      ','
+                    ) + ' 원'}
+                  </Typography>
+                </TableCell>
 
-        {/* 하단 버튼 */}
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-          mt={5}
-        >
-          <Button variant="outlined" sx={btnDeleteStyle} onClick={handleDelete}>
-            삭제
-          </Button>
-          &nbsp;&nbsp;&nbsp;
-          <Button
-            variant="outlined"
-            sx={btnListStyle}
-            onClick={() =>
-              navigate(
-                `/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`
-              )
-            }
-          >
-            목록
-          </Button>
-          &nbsp;&nbsp;&nbsp;
-          <Button
-            variant="outlined"
-            sx={btnUpdateStyle}
-            onClick={() => navigate(`/m/products/modify/${product.prodCode}`)}
-          >
-            수정
-          </Button>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    카테고리
+                  </Typography>
+                </TableCell>
+
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodCategory}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    등록일
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodRegiDate}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    상품명
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography
+                    title={product.prodName}
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      mr: 0,
+                      width: '320px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {product.prodName}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    총 대여 횟수
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.rentalCount + '회'}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    대여 현황
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodIsRental === 1 ? '대여중' : '미대여'}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    상품 사진
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyImageStyle}>
+                  {prodPics.length === 0 ? (
+                    <Box sx={noImageBox}>
+                      <Typography variant="h6" component="h2" color="#626262">
+                        등록된 사진이 없습니다.
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Swiper
+                      pagination={{
+                        type: 'fraction',
+                      }}
+                      loop={true}
+                      navigation={true}
+                      modules={[Navigation, Pagination]}
+                      style={swiperStyle}
+                    >
+                      {prodPics.map((fileName) => {
+                        const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+                        return (
+                          <SwiperSlide
+                            key={fileName}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              alt={fileName}
+                              src={fileSrc}
+                              sx={{
+                                height: '83%',
+                              }}
+                            />
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
+                  )}
+                </TableCell>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    상품 설명
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '350px',
+                      overflow: 'auto',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{ __html: product.prodContent }}
+                    />
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Link
+                    title="상품 리뷰 목록으로 이동"
+                    href={`/m/reviews/lists?condition=prodCode&keyword=${prodCode}&sort=-revwRegiDate&filter=none&pages=1`}
+                    underline="none"
+                    sx={{ color: '#000000', textDecoration: 'underline' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: '#000000',
+                      }}
+                    >
+                      평균 별점
+                    </Typography>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="h6" component="h2">
+                    {product.revwRate === null ? '리뷰 없음' : product.revwRate}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    관심 수
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodDibs}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    상품 제공자
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {product.prodHost}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableHeadStyle}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    연관 검색어
+                  </Typography>
+                </TableCell>
+                <TableCell sx={tableBodyStyle}>
+                  <Typography variant="h6" component="h2">
+                    {prodTag}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </Table>
+          </TableContainer>
+
+          {/* 하단 버튼 */}
+          <Box sx={{ display: 'flex', alignItems: 'center', my: 5 }}>
+            <Button
+              variant="outlined"
+              sx={btnDeleteStyle}
+              onClick={handleDelete}
+            >
+              삭제
+            </Button>
+
+            <Button
+              variant="outlined"
+              sx={btnListStyle}
+              onClick={() => {
+                if (prevQuery === undefined) {
+                  navigate(
+                    `/m/products/lists?sort=-prodRegiDate&filter=none&pages=1`
+                  );
+                } else {
+                  navigate(`/m/products/lists${prevQuery}`);
+                }
+              }}
+            >
+              목록
+            </Button>
+
+            <Button
+              disabled={product.prodIsRental === 1 ? true : false}
+              variant="outlined"
+              sx={btnUpdateStyle}
+              onClick={() => navigate(`/m/products/modify/${product.prodCode}`)}
+            >
+              수정
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      {/* form 끝 */}
-    </Container>
-  );
+        {/* form 끝 */}
+      </Container>
+    );
+  }
 };
 
 export default AdminProductsDetails;

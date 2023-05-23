@@ -12,12 +12,13 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminProductsRows from '../../components/admin-products/AdminProductsLists/AdminProductsRows';
 
 const AdminProductsLists = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const [productList, setProductList] = useState([]); // 상품 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
@@ -227,6 +228,7 @@ const AdminProductsLists = () => {
           </InputLabel>
           <NativeSelect
             inputRef={sortRef}
+            value={sortRef.current?.value}
             onChange={sortChange}
             sx={{
               px: 1,
@@ -312,6 +314,7 @@ const AdminProductsLists = () => {
               prodHost={product.prodHost}
               prodIsRental={product.prodIsRental}
               userCode={product.userCode}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
