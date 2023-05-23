@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -43,7 +43,9 @@ const SmallTextTypography = styled(Typography)({
   color: '#000000',
 });
 
-function AdminHeader() {
+function AdminHeader({ id, nickname }) {
+  const navigate = useNavigate();
+
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
@@ -213,10 +215,30 @@ function AdminHeader() {
             fontWeight: 'bold',
           }}
         >
-          관리자01
+          {!id && !nickname ? '로그인 필요' : `${nickname}`}
         </BlackTextTypography>
-        <UserInfo>
-          <SmallTextTypography>로그아웃</SmallTextTypography>
+        <UserInfo
+          onClick={() => {
+            if (!id && !nickname) {
+              navigate('/m/login');
+            } else {
+              sessionStorage.removeItem('hobbyvillage-id');
+              sessionStorage.removeItem('hobbyvillage-nickname');
+              alert('로그아웃 되었습니다.');
+              navigate('/m/login');
+            }
+          }}
+        >
+          <SmallTextTypography
+            sx={{
+              '&:hover': {
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            {!id && !nickname ? '로그인' : '로그아웃'}
+          </SmallTextTypography>
         </UserInfo>
       </StyledToolbar>
     </StyledAppBar>

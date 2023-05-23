@@ -1,102 +1,133 @@
-import React from "react";
-import styled from 'styled-components';
-import { useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import TextField  from "@mui/material/TextField";
-import Button  from '@mui/material/Button';
-import axios from "axios";
+import React from 'react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import axios from 'axios';
+import { Box, Container, Typography } from '@mui/material';
 
 const AdminLogin = () => {
-    const adminIdRef = useRef();
-    const pwRef = useRef();
+  const idRef = useRef();
+  const passwordRef = useRef();
 
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleLogin = () => {
+    if (idRef.current.value === '' || idRef.current.value === undefined) {
+      alert('아이디를 입력해주세요.');
+      idRef.current.focus();
+      return false;
+    }
+    if (
+      passwordRef.current.value === '' ||
+      passwordRef.current.value === undefined
+    ) {
+      alert('비밀번호를 입력해주세요.');
+      passwordRef.current.focus();
+      return false;
+    }
 
-    const handleLogin = () => {
-     if (adminIdRef.current.value === "" || adminIdRef.current.value === undefined){
-        alert("아이디를 입력하시오!!!");
-        adminIdRef.current.focus();                       
-        return false;                                       
-     }
-     if (pwRef.current.value === "" || pwRef.current.value === undefined){
-        alert("패스워드를 입력하시오!!!");
-        pwRef.current.focus();
-        return false;                                                                                                                                      
-     }
-    
+    axios
+      .post('/m/loginCheck', {
+        id: idRef.current.value,
+        password: passwordRef.current.value,
+      })
+      .then((nickname) => {
+        if (nickname.data !== 'disabled') {
+          window.sessionStorage.setItem('hobbyvillage-id', idRef.current.value);
+          window.sessionStorage.setItem('hobbyvillage-nickname', nickname.data);
+          navigate('/m');
+        } else {
+          alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
-     axios
-        .post("/m/login", {
-            id: adminIdRef.current.value, //MemberVO를 통해 저장
-            password: pwRef.current.value,
-        })
-        .then((res) => {
-            console.log.apply("handleLogin =>", res);
-            if(res.data === 1){
-                window.sessionStorage.setItem("id", adminIdRef.current.value);
-                navigate("/m");//admin main
-            }else{
-              
-             }
-        })
-        .catch((e)=> {
-            console.error(e);
-        });
-    };
+  const inputBoxStyle = {
+    my: 3,
+    width: '70%',
+    '& .MuiInput-root': {
+      '&:after': {
+        borderBottom: '2px solid #c3c36a',
+      },
+    },
+  };
 
-
-
-return (
-<Wrapper>
-    <Header style={{ marginTop:"50px", marginLeft:"145px"}}>관리자 로그인</Header>
-    <Text>
-    <TextField 
-    id="standard-basic" label="아이디" variant="standard" autoFocus inputRef={adminIdRef} style={{width:"70%", marginTop:"100px"}}/>
-    <TextField 
-    id="standard-basic" label="비밀번호" type="password" variant="standard" inputRef={pwRef}  style={{width:"70%", marginTop:"50px"}}/>
-    </Text>
-    <Group>
-    <Button variant="contained" 
-    style={{marginTop:"20px" ,width:"15%", minHeight: "70px",borderRadius:"10px",backgroundColor:"#C3C36A",fontFamily: "", fontSize:"24px", color:"black"}} 
-    onClick={handleLogin} >로그인</Button> 
-    </Group>
-</Wrapper>
-
-) 
-
-}
+  return (
+    <Container
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <Box
+        sx={{
+          mt: 8,
+          p: 3,
+          width: '400px',
+          height: 'auto',
+          border: '1px solid #000000',
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h4" sx={{ mb: 5, fontWeight: 'bold' }}>
+          로그인
+        </Typography>
+        <TextField
+          variant="standard"
+          autoFocus
+          placeholder="아이디"
+          inputRef={idRef}
+          sx={inputBoxStyle}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              passwordRef.current.focus();
+            }
+          }}
+        />
+        <TextField
+          type="password"
+          variant="standard"
+          placeholder="비밀번호"
+          inputRef={passwordRef}
+          sx={inputBoxStyle}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleLogin();
+            }
+          }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleLogin}
+          sx={{
+            mt: 5,
+            mb: 2,
+            width: '170px',
+            height: '45px',
+            borderRadius: '10px',
+            border: '1px solid #626262',
+            color: '#000000',
+            fontWeight: 'bold',
+            fontSize: '1.2rem',
+            backgroundColor: '#c3c36a',
+            '&:hover': {
+              backgroundColor: '#c3c36a',
+              color: '#ffffff',
+            },
+          }}
+        >
+          로그인
+        </Button>
+      </Box>
+    </Container>
+  );
+};
 
 export default AdminLogin;
-   
-const Wrapper = styled.div`
-    width: 100%;
-    max-width: 1000px;
-    margin: 2rem auto;
-    font-weight: 700;
-    font-size: 40px;
-`
-
-const Header = styled.div`
-    font-family: "The Jamsil 2 Light";
-    font-size: 30pt;
-    justify-content: left;
-    align-items: left;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: center;
-`
-const Text = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
-const Group = styled.div`
-    margin-top: 80px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`

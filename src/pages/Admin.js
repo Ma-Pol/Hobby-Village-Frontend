@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import AdminMain from './admin-main/AdminMain';
 import AdminLogin from './admin-login/AdminLogin';
 import AdminUsers from './admin-users/AdminUsers';
@@ -14,12 +14,23 @@ import AdminQnAs from './admin-qna/AdminQnAs';
 import AdminHeader from '../components/AdminHeader';
 
 const Admin = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const id = sessionStorage.getItem('hobbyvillage-id');
+  const nickname = sessionStorage.getItem('hobbyvillage-nickname');
+
+  if (!id && !nickname && location.pathname !== '/m/login') {
+    console.log(location.pathname);
+    alert('로그인이 필요합니다.');
+    navigate(`/m/login`);
+  }
+
   return (
     <>
-      <AdminHeader />
+      <AdminHeader id={id} nickname={nickname} />
       <Routes>
         <Route exact path="" element={<AdminMain />} />
-        <Route exact path="login" element={<AdminLogin/>} />
+        <Route exact path="login" element={<AdminLogin />} />
         <Route exact path="users/*" element={<AdminUsers />} />
         <Route exact path="orders/*" element={<AdminOrders />} />
         <Route exact path="products/*" element={<AdminProducts />} />
