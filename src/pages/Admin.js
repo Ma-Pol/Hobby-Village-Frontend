@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminMain from './admin-main/AdminMain';
+import AdminLogin from './admin-login/AdminLogin';
 import AdminUsers from './admin-users/AdminUsers';
 import AdminOrders from './admin-orders/AdminOrders';
 import AdminProducts from './admin-products/AdminProducts';
@@ -18,6 +19,7 @@ const Admin = () => {
       <AdminHeader />
       <Routes>
         <Route exact path="" element={<AdminMain />} />
+        <Route exact path="login" element={<AdminLogin/>} />
         <Route exact path="users/*" element={<AdminUsers />} />
         <Route exact path="orders/*" element={<AdminOrders />} />
         <Route exact path="products/*" element={<AdminProducts />} />
