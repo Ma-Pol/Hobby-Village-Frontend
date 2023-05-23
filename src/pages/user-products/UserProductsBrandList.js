@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import BrandAds from '../../components/user-products/BrandAds';
-import Product from '../../components/user-products/UserProductCard';
+import Product from '../../components/user-products/UserBrandProductCard';
 
 // 대표 페이지
 // http://localhost:3000/products/brand/lists?brand=all&sort=all&array=recent&pages=1
