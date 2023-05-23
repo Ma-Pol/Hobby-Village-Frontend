@@ -38,8 +38,9 @@ const UserLogin = () => {
             console.log.apply("handleLogin =>", res);
             if(res.data === 1){
                 navigate(`/`);
-            }else{
-              
+            } else {
+                alert('로그인에 실패하였습니다');
+                return;
              }
         })
         .catch((e)=> {
@@ -55,7 +56,7 @@ const UserLogin = () => {
         
         <Text>
             <TextField 
-                id="standard-basic" label="이메일" variant="standard" autoFocus inputRref={emailRef} style={{width:"70%", marginTop:"50px"}}/>
+                id="standard-basic" label="이메일" variant="standard" autoFocus inputRef={emailRef} style={{width:"70%", marginTop:"50px"}}/>
             <TextField 
                 id="standard-basic" label="비밀번호" type="password" variant="standard" inputRef={pwRef}  style={{width:"70%", marginTop:"30px"}}/>
         </Text>
