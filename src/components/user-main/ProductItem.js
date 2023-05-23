@@ -14,6 +14,8 @@ const ProductItem = ({ product }) => {
       .catch((err) => {
         console.error(err);
       });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.prodCode]);
 
   return (
@@ -44,11 +46,9 @@ const ProductItem = ({ product }) => {
         {product.prodBrand !== null && (
           <Typography
             title={product.prodBrand}
-            variant="body1"
+            variant="h6"
             sx={{
-              color: '#000000',
               fontWeight: 'bold',
-              fontSize: '17px',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
