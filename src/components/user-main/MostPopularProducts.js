@@ -8,7 +8,7 @@ function MostPopularProducts(props) {
 
 // const prodCode = window.sessionStorage.getItem("prodCode"); // 인기 상품 조회
   const [lists, setLists] = useState([{
-    email : '',
+        email : '',
         prodCode : '',
         rentalCount : '',
         prodName : '',
@@ -20,45 +20,34 @@ function MostPopularProducts(props) {
 
   const getLists = () => {
     axios
-      .get("/most-popular-products", {
-        // params: {
-        //   prodCode: prodCode,
-        // },
+      .get(`/most-popular-products`)
+      .then((list) => {
+        setLists(list.data);
       })
-      .then((res) => setLists(res.data))
-      .catch((e) => {
-        console.error(e);
+      .catch((err) => {
+        console.error(err);
       });
   };
+
   useEffect(() => {
     getLists();
   }, []);
-
-  const compared = (a, b) => {
-    return a.rentalCount - b.rentalCount;
+  
+  const getSortedlists = () => {
+    return lists.sort((a, b) => b.rentalCount - a.rentalCount)
   };
-
-  const list = lists.sort(compared).map((li) => (
-    <li id="popularproducts" key={li.prodCode} to={`/${li.prodCode}`}>
-      <div className="productpictures">
-        <img
-          className="pp-pictures"
-          alt={`제품이미지`}
-          src={process.env.PUBLIC_URL + li.prodPicture}
-        ></img>
-      </div>
-      <span className="pp-text">
-        <p className="pp-name">{li.prodName}</p>
-        <p className="pp-price">{li.prodPrice}</p>
-        <p className="pp-prodDibs">{li.prodDibs}</p>
-      </span>
-    </li>
-  ));
+  const getTop8Items = () => {
+    const sortedlists = getSortedlists();
+    return sortedlists.slice(0, 8);
+  }
 
   const navigate = useNavigate();
 
   const linkToProductsLists = () => {
     navigate("/products/lists");
+  };
+  const linkToProductsDetails = () => {
+    navigate(`/products/details/:prodCode=${lists.prodCode}`);
   };
 
   return (
@@ -66,8 +55,25 @@ function MostPopularProducts(props) {
       <div className = "popularprod">
         인기 취미 물품
       </div>
-      <div>
-        <ul>{list}</ul>
+      <div className = "product-list">
+        {getTop8Items().map(li => (
+          <li id="popularproducts" key={li.prodCode}>
+            <div className="productpictures">
+              <img
+                className="pp-pictures"
+                alt={`제품이미지`}
+                src={process.env.PUBLIC_URL + li.prodPicture}
+                onClick = {linkToProductsDetails}
+              ></img>
+            </div>
+            <ul className="pp-text" onClick = {linkToProductsDetails}>
+              <li className="pp-name">{li.prodName}</li>
+              <li className="pp-price">{li.prodPrice}원</li>
+              <li className="pp-prodDibs">관심 {li.prodDibs}</li>
+            </ul>
+          </li>       
+          ))
+        }
       </div>
       <div className = "productslist">
         <button className = "productslist-btn" onClick = {linkToProductsLists}>
