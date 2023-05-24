@@ -1,42 +1,9 @@
 import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import PhoneIcon from '@mui/icons-material/Phone';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
-  footerContainer: {
-    height: '100px',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  footer: {
-    padding: '1rem',
-    width: '1150px',
-    marginTop: '0.3rem',
-    marginLeft: '15rem',
-  },
-  line: {
-    borderTop: '1px solid #BCB5B5',
-    marginTop: '10px',
-  },
-  left: {
-    textAlign: 'left',
-  },
-  middle: {
-    textAlign: 'left',
-  },
-  right: {
-    textAlign: 'left',
-  },
-  phoneIcon: {
-    verticalAlign: 'bottom',
-    marginRight: '0.3rem',
-  },
-  textColor: {
-    color: '#555555',
-    textDecoration: 'none',
-  },
   linkText: {
     color: '#555555',
     textDecoration: 'none',
@@ -47,131 +14,141 @@ const useStyles = makeStyles(() => ({
 }));
 
 const UserFooter = () => {
-  const classes = useStyles();
+  const mainText = {
+    color: '#000000',
+    fontSize: '1.1rem',
+    marginBottom: '7px',
+  };
+
+  const linkText = {
+    color: '#555555',
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  };
 
   return (
-    <Box>
-      <Box className={classes.line} />
+    <>
+      <Box
+        sx={{
+          mt: '5px',
+          mb: 2,
+          borderTop: '1px solid #BCB5B5',
+        }}
+      />
       <Container
         sx={{
-          mt: 2,
-          mb: 5,
           userSelect: 'none',
+          mb: 2,
         }}
       >
         <Box
           sx={{
-            mx: 'auto',
-            width: '950px',
+            width: '1150px',
+            height: '100px',
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'flex-start',
           }}
         >
-          <Box
-            sx={{
-              width: '200px',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Box
+          {/* 서비스 명 시작 */}
+          <Box sx={{ m: 0 }}>
+            <Typography variant="body1" sx={mainText}>
+              Hobby Village
+            </Typography>
+          </Box>
+          {/* 서비스 명 끝 */}
+
+          {/* 팀 정보 시작 */}
+          <Box sx={{ m: 0, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="body1" sx={mainText}>
+              ABOUT TEAM
+            </Typography>
+            <Typography
+              variant="body2"
               sx={{
-                mr: 1,
+                color: '#444444',
               }}
             >
-              <Typography variant="body2" className={classes.textColor}>
-                취미빌려조
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-              }}
-            >
-              <Box
+              김지훈&nbsp;&nbsp;&nbsp;&nbsp;노현진
+              <br />
+              배효능&nbsp;&nbsp;&nbsp;&nbsp;이승현
+              <br />
+              이준영&nbsp;&nbsp;&nbsp;&nbsp;이진영
+            </Typography>
+          </Box>
+          {/* 팀 정보 끝 */}
+
+          {/* 사용자 서비스 시작 */}
+          <Box sx={{ m: 0, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="body1" sx={mainText}>
+              CLIENT SERVICE
+            </Typography>
+
+            <Link to="/notices/lists?filter=none&pages=1" style={linkText}>
+              <Typography
+                variant="body2"
                 sx={{
-                  mr: 1,
+                  color: '#444444',
                 }}
               >
-                <Typography variant="body2" className={classes.textColor}>
-                  김지훈
-                </Typography>
-                <Typography variant="body2" className={classes.textColor}>
-                  배효능
-                </Typography>
-                <Typography variant="body2" className={classes.textColor}>
-                  이준영
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="body2" className={classes.textColor}>
-                  노현진
-                </Typography>
-                <Typography variant="body2" className={classes.textColor}>
-                  이승현
-                </Typography>
-                <Typography variant="body2" className={classes.textColor}>
-                  이진영
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              width: '200px',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Link
-              to="/notices/lists?filter=none&pages=1"
-              className={classes.linkText}
-            >
-              <Typography variant="body2">공지사항</Typography>
+                공지사항
+              </Typography>
             </Link>
+
             <Link
               to="/guide"
-              className={classes.linkText}
+              style={linkText}
               onClick={() => {
                 window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
               }}
             >
-              <Typography variant="body2">구독 서비스 안내</Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#444444',
+                }}
+              >
+                구독 서비스 안내
+              </Typography>
             </Link>
             <a
               href="mailto:hobbyvillage@example.com"
               target="_blank"
               rel="noopener noreferrer"
-              className={classes.textColor}
+              style={linkText}
             >
-              <Typography variant="body2" className={classes.linkText}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#444444',
+                }}
+              >
                 입점ㆍ제휴ㆍ광고문의
               </Typography>
             </a>
           </Box>
+          {/* 사용자 서비스 끝 */}
 
-          <Box
-            sx={{
-              width: '200px',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Link
-              to="/cs/faq/lists?filter=none&pages=1"
-              className={classes.linkText}
+          {/* CONTACT 시작 */}
+          <Box sx={{ m: 0, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="body1" sx={mainText}>
+              CONTACT US
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#444444',
+              }}
             >
-              <Typography variant="body2">고객센터</Typography>
-            </Link>
-            <Typography variant="body2" className={classes.textColor}>
-              <PhoneIcon className={classes.phoneIcon} />
-              1544-1234
+              TEL) 1544-1234
             </Typography>
           </Box>
+          {/* CONTACT 끝 */}
         </Box>
       </Container>
-    </Box>
+    </>
   );
 };
 

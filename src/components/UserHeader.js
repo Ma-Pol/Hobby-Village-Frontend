@@ -1,33 +1,15 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Typography,
-  Button,
   InputBase,
   Avatar,
   Box,
   Container,
+  TextField,
 } from '@mui/material';
 import { styled, alpha } from '@mui/system';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-const Search = styled('div')({
-  position: 'relative',
-  borderRadius: '12px',
-  border: '1px solid #000000',
-  backgroundColor: alpha('#ffffff', 0.15),
-  marginRight: '2rem',
-  width: 'auto',
-});
-
-const SearchInput = styled(InputBase)({
-  color: '#000000',
-  '& > input': {
-    padding: '12px 20px 12px 20px',
-    height: '15px',
-    width: '230px',
-  },
-});
 
 const BlackTextTypography = styled(Typography)({
   color: '#000000',
@@ -38,38 +20,48 @@ const SmallTextTypography = styled(Typography)({
   color: '#000000',
 });
 
-// 임시 이미지
-const profileImageUrl = 'https://via.placeholder.com/150';
-
-function UserHeader() {
+const UserHeader = () => {
   const navigate = useNavigate();
 
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const nickname = sessionStorage.getItem('hobbyvillage-usernickname'); // 닉네임을 세션에서 가져오기
   const profPicture = sessionStorage.getItem('hobbyvillage-profile'); // 프로필 사진명을 세션에서 가져오기
 
+  const searchRef = useRef();
+  const [searchMode, setSearchMode] = useState(false);
+
   return (
     <>
-      <Container>
+      <Container
+        sx={{
+          userSelect: 'none',
+        }}
+      >
+        {/* 헤더 전체 시작 */}
         <Box
           sx={{
             mt: 1,
             pb: 2,
             width: '1150px',
-            height: '90px',
+            height: '80px',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'space-between',
+            alignItems: 'flex-end',
             userSelect: 'none',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          {/* 로그인/로그아웃 고객센터 링크 시작 */}
+          {/* 로그인/로그아웃, 고객센터 시작 */}
           <Box
             sx={{
               height: '20px',
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'flex-start',
+              position: 'absolute',
+              top: '0',
+              right: '0',
             }}
           >
             <SmallTextTypography
@@ -111,155 +103,222 @@ function UserHeader() {
               </SmallTextTypography>
             </Link>
           </Box>
-          {/* 로그인/로그아웃 고객센터 링크 끝 */}
+          {/* 로그인/로그아웃, 고객센터 끝 */}
 
-          {/* 로고, 내비, 검색창, 장바구니, 닉네임, 프로필 사진 시작 */}
+          {/* 헤더 좌측부 - 취미 물품, 브랜드관, 내 취미 찾기 시작 */}
           <Box
             sx={{
-              height: '70px',
+              pr: '50px',
+              width: '350px',
+              height: '60px',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'flex-end',
+              alignItems: 'center',
             }}
           >
-            {/* 로고, 내비 시작 */}
+            <Link
+              to="/products/lists"
+              style={{
+                textDecoration: 'none',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    color: '#c3c36a',
+                  },
+                }}
+              >
+                취미 물품
+              </Typography>
+            </Link>
+
+            <Link
+              to="/products/lists"
+              style={{
+                textDecoration: 'none',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    color: '#c3c36a',
+                  },
+                }}
+              >
+                브랜드관
+              </Typography>
+            </Link>
+
+            <Link
+              to="/products/lists"
+              style={{
+                textDecoration: 'none',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    color: '#c3c36a',
+                  },
+                }}
+              >
+                내 취미 찾기
+              </Typography>
+            </Link>
+          </Box>
+          {/* 헤더 좌측부 - 취미 물품, 브랜드관, 내 취미 찾기 끝 */}
+
+          {/* 헤더 중앙부 - 로고 시작 */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Box
+              onClick={() => {
+                navigate('/');
+              }}
+              component="img"
+              src={`${process.env.PUBLIC_URL}/headers/Hobby-Village.png`}
+              sx={{
+                width: '300px',
+                cursor: 'pointer',
+              }}
+            />
+          </Box>
+          {/* 헤더 중앙부 - 로고 끝 */}
+
+          {/* 헤더 우측부 - 검색, 장바구니, 닉네임, 프로필 사진 시작 */}
+          <Box
+            sx={{
+              pl: '50px',
+              width: '350px',
+              height: '60px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              position: 'relative',
+            }}
+          >
+            {/* 검색 아이콘, 검색바 시작 */}
             <Box
               sx={{
-                height: '60px',
                 display: 'flex',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
               }}
             >
-              <Link
-                to="/"
-                style={{
-                  textDecoration: 'none',
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '160px',
-                }}
-              >
-                <BlackTextTypography
-                  style={{
-                    color: '#C3C36A',
-                    fontWeight: 900,
-                    fontSize: '1.5rem',
-                    marginRight: '2rem',
-                    textShadow: '0px 1px 2px rgba(0, 0, 0, 0.2)',
-                  }}
-                  variant="h6"
-                >
-                  취미빌리지
-                </BlackTextTypography>
-              </Link>
-
               <Box
-                sx={{
-                  height: '60px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'flex-end',
-                  width: '400px',
+                onClick={() => {
+                  if (searchMode) {
+                    setSearchMode(false);
+                  } else {
+                    searchRef.current.value = '';
+                    setSearchMode(true);
+                  }
                 }}
-              >
-                <Button
-                  component={Link}
-                  to="/products/lists"
-                  style={{
-                    height: '50px',
-                    margin: '0 1rem 0 1rem',
-                    color: '#000000',
-                    textTransform: 'none',
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold',
-                  }}
-                  disableRipple
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = 'transparent')
-                  }
-                >
-                  취미 물품
-                </Button>
-                <Button
-                  component={Link}
-                  to="/products/brand/lists"
-                  style={{
-                    height: '50px',
-                    margin: '0 1rem 0 1rem',
-                    color: '#000000',
-                    textTransform: 'none',
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold',
-                  }}
-                  disableRipple
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = 'transparent')
-                  }
-                >
-                  브랜드관
-                </Button>
-                <Button
-                  component={Link}
-                  to="/recommend"
-                  style={{
-                    height: '50px',
-                    margin: '0 1rem 0 1rem',
-                    color: '#000000',
-                    textTransform: 'none',
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold',
-                  }}
-                  disableRipple
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.backgroundColor = 'transparent')
-                  }
-                >
-                  내 취미 찾기
-                </Button>
-              </Box>
-            </Box>
-            {/* 로고, 내비 끝 */}
+                sx={{
+                  backgroundImage: `url(${process.env.PUBLIC_URL}/headers/SearchIcon.png)`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                  mr: '15px',
+                  width: '25px',
+                  height: '25px',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    backgroundImage: searchMode
+                      ? `url(${process.env.PUBLIC_URL}/headers/SearchIconClose.gif)`
+                      : `url(${process.env.PUBLIC_URL}/headers/SearchIconOpen.gif)`,
+                  },
+                }}
+              />
 
-            {/* 검색창, 장바구니, 닉네임, 프로필 사진 시작 */}
+              {/* 검색창 시작 */}
+              <TextField
+                variant="standard"
+                autoFocus={searchMode}
+                inputRef={searchRef}
+                placeholder="물품 또는 취미를 검색해보세요"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    // passwordRef.current.focus();
+                  }
+                }}
+                sx={{
+                  width: searchMode ? '300px' : '0px',
+                  transition: 'all 0.4s',
+                  '& .MuiInput-root': {
+                    '&:after': {
+                      borderBottom: '2px solid #c3c36a',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    '&.Mui-focused': {
+                      color: '#c3c36a',
+                    },
+                  },
+                }}
+              />
+            </Box>
+            {/* 검색 아이콘, 검색바 끝 */}
+
+            {/* 장바구니, 닉네임, 프로필 사진 시작 */}
             <Box
               sx={{
-                height: '46px',
+                width: '320px',
+                transition: 'all 0.4s',
                 display: 'flex',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
-                width: '550px',
+                position: 'absolute',
+                right: !searchMode ? '0px' : '-320px',
               }}
             >
-              {/* 검색창 시작 */}
-              <Search>
-                <SearchInput
-                  placeholder="물품 또는 취미를 검색해보세요"
-                  style={{ color: '#3a3a3a' }}
-                />
-              </Search>
-              {/* 검색창 끝 */}
-
-              {/* 장바구니 시작 */}
               {email !== null && (
                 <Link
                   to={`/carts/${email}/lists/all`}
-                  style={{ textDecoration: 'none', marginRight: '1rem' }}
+                  style={{
+                    textDecoration: 'none',
+                    marginRight: '2rem',
+                  }}
                 >
-                  <ShoppingCartIcon style={{ color: '#000000' }} />
+                  <Typography
+                    sx={{
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      color: '#000000',
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        color: '#c3c36a',
+                      },
+                    }}
+                  >
+                    장바구니
+                  </Typography>
                 </Link>
               )}
-
-              {/* 장바구니 끝 */}
-
-              {/* 닉네임 시작 */}
               <Link
                 to={email !== null ? `/mypages/${email}/orders` : '/login'}
                 style={{
                   textDecoration: 'none',
                   marginRight: '1rem',
-                  maxWidth: '150px',
+                  maxWidth: '140px',
                 }}
               >
                 <BlackTextTypography
@@ -267,6 +326,11 @@ function UserHeader() {
                   variant="subtitle1"
                   sx={{
                     maxWidth: '150px',
+                    fontSize: '16px',
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      color: '#c3c36a',
+                    },
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -275,10 +339,6 @@ function UserHeader() {
                   {nickname !== null && nickname}
                 </BlackTextTypography>
               </Link>
-
-              {/* 닉네임 끝 */}
-
-              {/* 프로필 사진 시작 */}
               <Link
                 to={email !== null ? `/mypages/${email}/orders` : '/login'}
                 style={{ textDecoration: 'none' }}
@@ -290,21 +350,21 @@ function UserHeader() {
                   }
                 />
               </Link>
-              {/* 프로필 사진 끝 */}
             </Box>
-            {/* 검색창, 장바구니, 닉네임, 프로필 사진 끝 */}
+            {/* 장바구니, 닉네임, 프로필 사진 끝 */}
           </Box>
-          {/* 로고, 내비, 검색창, 장바구니, 닉네임, 프로필 사진 끝 */}
+          {/* 헤더 우측부 - 검색, 장바구니, 닉네임, 프로필 사진 끝 */}
         </Box>
+        {/* 헤더 전체 끝 */}
       </Container>
       <Box
         sx={{
-          mb: '10px',
+          mb: '5px',
           borderBottom: '1px solid #BCB5B5',
         }}
       />
     </>
   );
-}
+};
 
 export default UserHeader;
