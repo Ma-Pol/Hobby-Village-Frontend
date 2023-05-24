@@ -1,9 +1,11 @@
 import { Box, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProductItem = ({ product }) => {
   const [productImage, setProductImage] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -19,34 +21,57 @@ const ProductItem = ({ product }) => {
   }, [product.prodCode]);
 
   return (
-    <Grid
-      item
-      xs={3}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
+    <Grid item xs={3}>
       <Box
-        component="img"
+        onClick={() => {
+          navigate(`/products/details/${product.prodCode}`);
+        }}
         sx={{
-          width: '170px',
-          height: '170px',
-          objectFit: 'cover',
-          border: '1px solid #d0d0d0',
+          m: 0,
+          p: '24px 0px 8px 0px',
+          borderRadius: '5px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           '&:hover': {
             cursor: 'pointer',
+            boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.5)',
+            backgroundColor: '#f5f5f5',
           },
         }}
-        alt={product.prodName}
-        src={'http://localhost:8080/main/viewImage/' + productImage}
-      />
-      <Box sx={{ m: 0, width: '170px', my: 1 }}>
-        {product.prodBrand !== null && (
+      >
+        <Box
+          component="img"
+          sx={{
+            width: '170px',
+            height: '170px',
+            objectFit: 'cover',
+            border: '1px solid #d0d0d0',
+            '&:hover': {
+              cursor: 'pointer',
+            },
+          }}
+          alt={product.prodName}
+          src={'http://localhost:8080/main/viewImage/' + productImage}
+        />
+        <Box sx={{ m: 0, width: '170px', my: 1 }}>
+          {product.prodBrand !== null && (
+            <Typography
+              title={product.prodBrand}
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {product.prodBrand}
+            </Typography>
+          )}
           <Typography
-            title={product.prodBrand}
-            variant="h6"
+            title={product.prodName}
+            variant="body1"
             sx={{
               fontWeight: 'bold',
               overflow: 'hidden',
@@ -54,26 +79,14 @@ const ProductItem = ({ product }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {product.prodBrand}
+            {product.prodName}
           </Typography>
-        )}
-        <Typography
-          title={product.prodName}
-          variant="body1"
-          sx={{
-            fontWeight: 'bold',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {product.prodName}
-        </Typography>
-        <Typography variant="body1">
-          {String(product.prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
-            '원'}
-        </Typography>
-        <Typography variant="body1">{'관심 ' + product.prodDibs}</Typography>
+          <Typography variant="body1">
+            {String(product.prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+              '원'}
+          </Typography>
+          <Typography variant="body1">{'관심 ' + product.prodDibs}</Typography>
+        </Box>
       </Box>
     </Grid>
   );

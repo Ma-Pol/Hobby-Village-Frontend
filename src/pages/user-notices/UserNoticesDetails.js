@@ -76,7 +76,6 @@ const UserNoticesDetails = () => {
     axios
       .get(`/notices//noticeFiles/${notCode}`)
       .then((files) => {
-        console.log(files.data);
         if (files.data.length === 1) {
           setFileList(files.data);
         } else if (files.data.length > 1) {
@@ -111,7 +110,7 @@ const UserNoticesDetails = () => {
     return <div></div>;
   } else {
     return (
-      <Container>
+      <Container sx={{ minHeight: '80vh' }}>
         {/* 공지사항 목록 글씨 표기 시작 */}
         <Typography
           variant="h4"

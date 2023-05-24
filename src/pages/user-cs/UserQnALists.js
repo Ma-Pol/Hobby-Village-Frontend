@@ -12,13 +12,17 @@ import {
   Container,
   Grid,
 } from '@mui/material';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import UserQnARows from '../../components/user-cs/UserQnARows';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
 
 const UserQnALists = () => {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com'; // 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const location = useLocation(); // 현재 URL 정보
@@ -76,7 +80,6 @@ const UserQnALists = () => {
         ])
         .then(
           axios.spread((count, list) => {
-            console.log(count.data);
             setTotalPage(Math.ceil(count.data / 10));
             setQuestionList(list.data);
             setCurrentPage(searchParams.get('pages'));
@@ -146,10 +149,15 @@ const UserQnALists = () => {
     whiteSpace: 'nowrap',
   };
 
+  if (email === null) {
+    alert('1:1 문의는 로그인 후 이용할 수 있습니다.');
+    return <Navigate to="/login" replace={true} />;
+  }
+
   return (
     <>
       <UserCsTitle />
-      <Container>
+      <Container sx={{ minHeight: '80vh' }}>
         <Box
           sx={{
             display: 'flex',

@@ -15,7 +15,16 @@ function MainAds(props) {
   };
 
   return (
-    <Box sx={{ width: '100%', m: 0, p: 0, userSelect: 'none' }}>
+    <Box
+      sx={{
+        width: '100%',
+        m: 0,
+        p: 0,
+        userSelect: 'none',
+        borderTop: '1px solid #000000',
+        borderBottom: '1px solid #000000',
+      }}
+    >
       <Swiper
         loop={true}
         pagination={pagination}

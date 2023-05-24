@@ -80,7 +80,6 @@ const AdminNoticesDetails = () => {
     axios
       .get(`/m/notices//noticeFiles/${notCode}`)
       .then((files) => {
-        console.log(files.data);
         if (files.data.length === 1) {
           setFileList(files.data);
         } else if (files.data.length > 1) {

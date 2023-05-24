@@ -16,15 +16,10 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import Terms from '../../components/user-request/Terms';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
@@ -120,8 +115,7 @@ const button = {
 };
 
 const UserRequests = () => {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com'; // 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
 
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
@@ -257,6 +251,7 @@ const UserRequests = () => {
 
     if (imageFiles.length > 10) {
       alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
+      setImgFiles([]);
       filesRef.current.value = '';
       return false;
     }
@@ -281,6 +276,7 @@ const UserRequests = () => {
 
       if (check) {
         filesRef.current.value = '';
+        setImgFiles([]);
         setImgBase64([]);
         return false;
       }
@@ -305,6 +301,18 @@ const UserRequests = () => {
         };
       }
     }
+  };
+
+  // 이미지 삭제
+  const imageDelete = (index) => {
+    const newImgFiles = [...imgFiles];
+    const newImgBase64 = [...imgBase64];
+
+    newImgFiles.splice(index, 1);
+    newImgBase64.splice(index, 1);
+
+    setImgFiles(newImgFiles);
+    setImgBase64(newImgBase64);
   };
 
   // 이미지 업로드 함수(위탁 신청 등록 후 사용)
@@ -351,6 +359,11 @@ const UserRequests = () => {
       accountRef.current.value = accountNum.replace(/[^0-9]/gi, '');
     }
   };
+
+  if (email === null) {
+    alert('로그인 후 이용해주세요.');
+    return <Navigate to="/login" replace={true} />;
+  }
 
   return (
     <>
@@ -576,7 +589,8 @@ const UserRequests = () => {
               mt: 1,
               display: 'flex',
               alignItems: 'center',
-              height: '110px',
+              flexWrap: 'wrap',
+              height: 'auto',
             }}
           >
             <Button
@@ -584,7 +598,8 @@ const UserRequests = () => {
               component="label"
               disableRipple
               sx={{
-                mr: 2,
+                mr: '20px',
+                mb: '20px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -620,6 +635,60 @@ const UserRequests = () => {
                 </Typography>
               )}
             </Button>
+
+            {imgBase64.map((img, index) => {
+              return (
+                <>
+                  <Box
+                    sx={{
+                      mr: '20px',
+                      mb: '20px',
+                      position: 'relative',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100px',
+                      height: '100px',
+                      border: '1px solid #000000',
+                      borderRadius: '5px',
+                    }}
+                  >
+                    <Box
+                      key={index}
+                      component="img"
+                      alt="미리보기 이미지"
+                      src={img}
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '5px',
+                      }}
+                    />
+                    <Box
+                      onClick={() => {
+                        imageDelete(index);
+                      }}
+                      component="img"
+                      alt="삭제 이미지"
+                      src={`${process.env.PUBLIC_URL}/assets/ic-reset.png`}
+                      sx={{
+                        position: 'absolute',
+                        top: '5px',
+                        right: '5px',
+                        p: '2px',
+                        borderRadius: '5px',
+                        backgroundColor: '#00000050',
+                        '&:hover': {
+                          cursor: 'pointer',
+                          backgroundColor: '#00000080',
+                        },
+                      }}
+                    />
+                  </Box>
+                </>
+              );
+            })}
+
             <input
               hidden
               id="fileBox"
@@ -632,7 +701,7 @@ const UserRequests = () => {
           {/* 사진 첨부 라인 끝 */}
 
           {/* 첨부 사진 미리보기 라인 시작 */}
-          {imgFiles.length !== 0 && (
+          {/* {imgFiles.length !== 0 && (
             <>
               <Grid
                 item
@@ -701,7 +770,7 @@ const UserRequests = () => {
                 </Swiper>
               </Grid>
             </>
-          )}
+          )} */}
           {/* 첨부 사진 미리보기 라인 끝 */}
 
           {/* 계좌번호 입력 라인 시작 */}

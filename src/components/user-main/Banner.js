@@ -20,10 +20,10 @@ const Banner = () => {
     navigate('/products/brand/lists');
   };
   const linkToNoticesLists = () => {
-    navigate('/notices/lists');
+    navigate('/notices/lists?filter=none&pages=1');
   };
   const linkToServiceInfo = () => {
-    navigate('/serviceInfo');
+    navigate('/guide');
   };
 
   const pagination = {
@@ -304,7 +304,7 @@ const Banner = () => {
                 }}
               >
                 <h1>
-                  취미빌리지의 서비스의
+                  취미빌리지 서비스의
                   <br />
                   상세 정보를 알려드립니다
                 </h1>

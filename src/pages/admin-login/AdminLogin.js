@@ -61,6 +61,7 @@ const AdminLogin = () => {
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        userSelect: 'none',
       }}
     >
       <Box

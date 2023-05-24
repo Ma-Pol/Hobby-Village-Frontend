@@ -152,7 +152,7 @@ const UserNoticesLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ minHeight: '80vh' }}>
       {/* 공지사항 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"

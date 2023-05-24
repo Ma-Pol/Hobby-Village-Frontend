@@ -47,7 +47,6 @@ const AdminProductsCreate = () => {
 
   const [imgBase64, setImgBase64] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
-  const filesRef = useRef();
 
   const prodPictureRef = useRef();
   const prodTagRef = useRef();
@@ -112,7 +111,8 @@ const AdminProductsCreate = () => {
         check = true;
       }
       if (check) {
-        filesRef.current.value = '';
+        prodPictureRef.current.value = '';
+        setImgFiles([]);
         setImgBase64([]);
         return false;
       }
@@ -175,28 +175,38 @@ const AdminProductsCreate = () => {
       prodPriceRef.current.focus();
       return false;
     }
+
     if (prodCategoryRef.current.value === 'none') {
       alert('카테고리를 선택해주세요.');
       prodCategoryRef.current.focus();
       return false;
     }
+
     if (prodShippingRef.current.value === '') {
       alert('배송비를 입력해주세요.');
       prodShippingRef.current.focus();
       return false;
     }
+
     if (prodNameRef.current.value === '') {
       alert('상품명을 입력해주세요.');
       prodNameRef.current.focus();
       return false;
     }
+
     if (prodContent === '') {
       alert('상품 설명을 입력해주세요.');
       return false;
     }
+
     if (prodHostRef.current.value === '') {
       alert('상품 제공자를 입력해주세요.');
       prodHostRef.current.focus();
+      return false;
+    }
+
+    if (imgFiles.length === 0) {
+      alert('상품 이미지를 등록해주세요.');
       return false;
     }
 

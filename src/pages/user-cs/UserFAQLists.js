@@ -145,7 +145,7 @@ const UserFAQLists = () => {
     <>
       <UserCsTitle />
 
-      <Container>
+      <Container sx={{ minHeight: '80vh' }}>
         <Box
           sx={{
             display: 'flex',

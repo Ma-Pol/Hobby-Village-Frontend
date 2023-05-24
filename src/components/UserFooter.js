@@ -130,7 +130,13 @@ const UserFooter = () => {
             >
               <Typography variant="body2">공지사항</Typography>
             </Link>
-            <Link to="/guide" className={classes.linkText}>
+            <Link
+              to="/guide"
+              className={classes.linkText}
+              onClick={() => {
+                window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+              }}
+            >
               <Typography variant="body2">구독 서비스 안내</Typography>
             </Link>
             <a

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  useParams,
+  Link,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
 
@@ -28,8 +34,7 @@ const LabelItem = styled(Grid)(({ theme }) => ({
 }));
 
 const UserQnADetails = () => {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com'; // 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const [questionDetail, setQuestionDetail] = useState({});
   const [answerContent, setAnswerContent] = useState();
   const { qstCode } = useParams();
@@ -85,11 +90,16 @@ const UserQnADetails = () => {
       });
   };
 
+  if (email === null) {
+    alert('1:1 문의는 로그인 후 이용할 수 있습니다.');
+    return <Navigate to="/login" replace={true} />;
+  }
+
   if (!questionDetail) {
     return <div></div>;
   } else {
     return (
-      <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Box style={{ maxWidth: '1150px', margin: 'auto', minHeight: '80vh' }}>
         <Box
           sx={{
             my: 5,
@@ -308,7 +318,13 @@ const UserQnADetails = () => {
           </>
         )}
 
-        <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Box
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
+          }}
+        >
           <Link
             to={
               prevQuery === undefined

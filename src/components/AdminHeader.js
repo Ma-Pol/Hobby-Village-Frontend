@@ -215,7 +215,7 @@ function AdminHeader({ id, nickname }) {
             fontWeight: 'bold',
           }}
         >
-          {!id && !nickname ? '로그인 필요' : `${nickname}`}
+          {!id && !nickname ? '' : `${nickname}`}
         </BlackTextTypography>
         <UserInfo
           onClick={() => {
@@ -231,6 +231,7 @@ function AdminHeader({ id, nickname }) {
         >
           <SmallTextTypography
             sx={{
+              mt: 1,
               '&:hover': {
                 cursor: 'pointer',
                 textDecoration: 'underline',

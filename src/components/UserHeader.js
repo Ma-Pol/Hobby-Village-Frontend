@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -14,13 +14,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const Search = styled('div')({
   position: 'relative',
   borderRadius: '12px',
-  backgroundColor: alpha('#000', 0.1),
+  border: '1px solid #000000',
+  backgroundColor: alpha('#ffffff', 0.15),
   marginRight: '2rem',
   width: 'auto',
 });
 
 const SearchInput = styled(InputBase)({
-  color: 'inherit',
+  color: '#000000',
   '& > input': {
     padding: '12px 20px 12px 20px',
     height: '15px',
@@ -41,8 +42,11 @@ const SmallTextTypography = styled(Typography)({
 const profileImageUrl = 'https://via.placeholder.com/150';
 
 function UserHeader() {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com';
+  const navigate = useNavigate();
+
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
+  const nickname = sessionStorage.getItem('hobbyvillage-usernickname'); // 닉네임을 세션에서 가져오기
+  const profPicture = sessionStorage.getItem('hobbyvillage-profile'); // 프로필 사진명을 세션에서 가져오기
 
   return (
     <>
@@ -57,7 +61,6 @@ function UserHeader() {
             flexDirection: 'column',
             justifyContent: 'space-between',
             userSelect: 'none',
-            // borderBottom: '1px solid #BCB5B5',
           }}
         >
           {/* 로그인/로그아웃 고객센터 링크 시작 */}
@@ -70,11 +73,27 @@ function UserHeader() {
             }}
           >
             <SmallTextTypography
+              onClick={() => {
+                if (email !== null) {
+                  if (window.confirm('로그아웃 하시겠습니까?')) {
+                    sessionStorage.removeItem('hobbyvillage-email');
+                    sessionStorage.removeItem('hobbyvillage-usernickname');
+                    sessionStorage.removeItem('hobbyvillage-profile');
+                    navigate('/login');
+                  }
+                } else {
+                  navigate('/login');
+                }
+              }}
               sx={{
                 mr: 2,
+                '&:hover': {
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                },
               }}
             >
-              로그아웃
+              {email !== null ? '로그아웃' : '로그인'}
             </SmallTextTypography>
 
             <Link
@@ -223,17 +242,20 @@ function UserHeader() {
               {/* 검색창 끝 */}
 
               {/* 장바구니 시작 */}
-              <Link
-                to={`/carts/${email}/lists/all`}
-                style={{ textDecoration: 'none', marginRight: '1rem' }}
-              >
-                <ShoppingCartIcon style={{ color: '#000000' }} />
-              </Link>
+              {email !== null && (
+                <Link
+                  to={`/carts/${email}/lists/all`}
+                  style={{ textDecoration: 'none', marginRight: '1rem' }}
+                >
+                  <ShoppingCartIcon style={{ color: '#000000' }} />
+                </Link>
+              )}
+
               {/* 장바구니 끝 */}
 
               {/* 닉네임 시작 */}
               <Link
-                to={`/mypages/${email}/orders`}
+                to={email !== null ? `/mypages/${email}/orders` : '/login'}
                 style={{
                   textDecoration: 'none',
                   marginRight: '1rem',
@@ -241,7 +263,7 @@ function UserHeader() {
                 }}
               >
                 <BlackTextTypography
-                  title="닉네임"
+                  title={nickname !== null && nickname}
                   variant="subtitle1"
                   sx={{
                     maxWidth: '150px',
@@ -250,17 +272,23 @@ function UserHeader() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  닉네임
+                  {nickname !== null && nickname}
                 </BlackTextTypography>
               </Link>
+
               {/* 닉네임 끝 */}
 
               {/* 프로필 사진 시작 */}
               <Link
-                to={`/mypages/${email}/orders`}
+                to={email !== null ? `/mypages/${email}/orders` : '/login'}
                 style={{ textDecoration: 'none' }}
               >
-                <Avatar alt="프로필" src={profileImageUrl} />
+                <Avatar
+                  src={
+                    profPicture !== null &&
+                    'http://localhost:8080/profPicture/' + profPicture
+                  }
+                />
               </Link>
               {/* 프로필 사진 끝 */}
             </Box>

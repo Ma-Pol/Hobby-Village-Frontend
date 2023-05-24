@@ -127,7 +127,6 @@ const AdminNoticesCreate = () => {
       })
       .then((res) => {
         if (res.data !== 0) {
-          console.log(res.data);
           if (files.length > 0) {
             fileUpload(res.data);
           } else {

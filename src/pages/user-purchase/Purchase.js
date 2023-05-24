@@ -16,7 +16,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/system';
 import React, { useEffect, useRef, useState } from 'react';
 import UserPurchaseProductCard from '../../components/user-purchase/UserPurchaseProductCard';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import UserHeader from '../../components/UserHeader';
@@ -142,8 +142,7 @@ const PriceLeftBoxRow = styled(Box)({
 });
 
 const Purchase = () => {
-  // const email = window.sessionStorage.getItem('email'); // 로그인한 유저의 이메일
-  const email = 'bae@naver.com'; // 테스트용 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
 
   const navigate = useNavigate(); // 페이지 이동을 위한 훅
   const location = useLocation(); // 이전 페이지에서 넘겨받은 데이터에 접근하기 위한 훅
@@ -182,31 +181,37 @@ const Purchase = () => {
   const deliRequestRef = useRef(''); // 배송지 직접 입력 - 배송 요청사항(직접 입력하는 경우)
 
   useEffect(() => {
-    // 이전 페이지에서 넘겨받은 데이터를 체크
-    if (location.state !== null && location.state.products !== undefined) {
-      getUserInfo(email); // 유저 정보 가져오기
-      getCouponList(email); // 유저의 쿠폰 목록 가져오기
-      checkProductInfo(location.state.products); // state에 저장된 상품 정보와 실제 상품 정보 비교
+    if (email === null) {
+      alert('로그인 후 이용해주세요.');
+      navigate('/login', { replace: true });
+    } else {
+      // 이전 페이지에서 넘겨받은 데이터를 체크
+      if (location.state !== null && location.state.products !== undefined) {
+        getUserInfo(email); // 유저 정보 가져오기
+        getCouponList(email); // 유저의 쿠폰 목록 가져오기
+        checkProductInfo(location.state.products); // state에 저장된 상품 정보와 실제 상품 정보 비교
 
-      if (location.state.prevPage !== 'mypages') {
-        checkProductState(); // 상품 상태 체크(대여/미대여 체크)
-        getAddressList(email); // 유저의 배송지 목록 가져오기
-      } else {
-        setProductList([location.state.products[0]]); // 마이페이지 접근일 때 상품 목록 저장
-        totalPriceRef.current =
-          (location.state.products[0].prodPrice *
-            location.state.products[0].period) /
-          7; // 총 상품 금액 저장
-        totalShippingRef.current = 0; // 추가 결제 시 배송비는 없음
-        setTotalPrice(totalPriceRef.current);
-        setExactTotalPrice(totalPriceRef.current);
+        if (location.state.prevPage !== 'mypages') {
+          checkProductState(); // 상품 상태 체크(대여/미대여 체크)
+          getAddressList(email); // 유저의 배송지 목록 가져오기
+        } else {
+          setProductList([location.state.products[0]]); // 마이페이지 접근일 때 상품 목록 저장
+          totalPriceRef.current =
+            (location.state.products[0].prodPrice *
+              location.state.products[0].period) /
+            7; // 총 상품 금액 저장
+          totalShippingRef.current = 0; // 추가 결제 시 배송비는 없음
+          setTotalPrice(totalPriceRef.current);
+          setExactTotalPrice(totalPriceRef.current);
+        }
+      }
+      // 이전 페이지에서 넘겨받은 데이터가 없는 경우 강제로 이전 페이지 이동
+      else {
+        alert('잘못된 접근입니다.');
+        navigate(-1, { replace: true });
       }
     }
-    // 이전 페이지에서 넘겨받은 데이터가 없는 경우 강제로 이전 페이지 이동
-    else {
-      alert('잘못된 접근입니다.');
-      navigate(-1, { replace: true });
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

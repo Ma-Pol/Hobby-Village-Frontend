@@ -56,7 +56,6 @@ const AdminProductsModify = () => {
   const [prodPics, setProdPics] = useState([]);
   const [imgBase64, setImgBase64] = useState([]);
   const [imgFiles, setImgFiles] = useState([]);
-  const filesRef = useRef();
   const prodPictureRef = useRef();
 
   useEffect(() => {
@@ -119,7 +118,8 @@ const AdminProductsModify = () => {
         check = true;
       }
       if (check) {
-        filesRef.current.value = '';
+        prodPictureRef.current.value = '';
+        setImgFiles([]);
         setImgBase64([]);
         return false;
       }

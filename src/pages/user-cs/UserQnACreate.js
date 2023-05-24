@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {
@@ -43,8 +43,7 @@ const CategorySelect = styled(Select)({
 });
 
 const UserQnACreate = () => {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com'; // 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
 
   const location = useLocation();
   const prevQuery = location.state?.queryString;
@@ -95,8 +94,13 @@ const UserQnACreate = () => {
     setCategory(e.target.value);
   };
 
+  if (email === null) {
+    alert('1:1 문의는 로그인 후 이용할 수 있습니다.');
+    return <Navigate to="/login" replace={true} />;
+  }
+
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', minHeight: '80vh' }}>
       <Box
         sx={{
           my: 5,
@@ -254,6 +258,7 @@ const UserQnACreate = () => {
       <Box
         style={{
           marginTop: '20px',
+          marginBottom: '50px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',

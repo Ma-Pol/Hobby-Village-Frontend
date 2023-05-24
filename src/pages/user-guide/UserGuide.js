@@ -33,7 +33,9 @@ const UserGuide = () => {
   const textStyle = {
     fontSize: '20px',
     '& h1': {
+      fontSize: '35px',
       marginTop: '0',
+      marginBottom: '10px',
     },
   };
 
@@ -44,7 +46,7 @@ const UserGuide = () => {
         <Box sx={{ ...sectionOuterBox, backgroundColor: '#f8f8e0' }}>
           <Box sx={sectionInnerBox}>
             <Typography sx={textStyle}>
-              <h1>취미를 빌려드립니다.</h1>
+              <h1>취미를 빌려드립니다</h1>
               몸만 준비해 주세요
               <br />
               준비는 저희가 하겠습니다.
@@ -118,8 +120,10 @@ const UserGuide = () => {
               무엇을 시작해야 고민인 당신을 위한 서비스
               <br />
               <br />
-              취미 테스트를 통한 취미 찾기, <br />
-              성향을 파악한 취미 생활 추천받기, <br />
+              취미 테스트를 통한 취미 찾기,
+              <br />
+              성향을 파악한 취미 생활 추천받기,
+              <br />
               <br />
               저희가 같이 찾아드리겠습니다.
             </Typography>

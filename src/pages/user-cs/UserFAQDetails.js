@@ -66,7 +66,7 @@ const UserFAQDetail = () => {
     return <div></div>;
   } else {
     return (
-      <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Box style={{ maxWidth: '1150px', margin: 'auto', minHeight: '80vh' }}>
         <Box
           sx={{
             my: 5,
@@ -214,7 +214,13 @@ const UserFAQDetail = () => {
             </Grid>
           </Grid>
         </StyledPaper>
-        <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Box
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
+          }}
+        >
           <Link
             to={
               prevQuery === undefined

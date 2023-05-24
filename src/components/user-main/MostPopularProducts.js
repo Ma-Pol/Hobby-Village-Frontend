@@ -45,6 +45,7 @@ const MostPopularProducts = () => {
         container
         spacing={2}
         sx={{
+          width: '85%',
           mb: 5,
         }}
       >
