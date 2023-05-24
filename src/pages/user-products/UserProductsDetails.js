@@ -1,7 +1,11 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import SimpleImageSlider from 'react-simple-image-slider';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import {
   Box,
@@ -22,37 +26,105 @@ import {
   Stack,
   Avatar,
 } from '@mui/material';
+import Review from '../../components/user-products/UserProductRevw';
 
 const UserProductsDetails = () => {
-  const images = [
-    {
-      url: "process.env.PUBLIC_URL + '/arena.png'",
-    },
-    {
-      url: "process.env.PUBLIC_URL + '/brandyarn.png'",
-    },
-    {
-      url: "process.env.PUBLIC_URL + '/excider.png'",
-    },
-  ];
+  const navigate = useNavigate();
+  const { prodCode } = useParams();
 
-  const [value, setValue] = useState(2);
+  const [product, setProduct] = useState();
+  const [pictures, setPictures] = useState([]);
+  const [brandImg, setBrandImg] = useState();
+
+  // 상품 상세 조회 + 브랜드 로고 이미지, 상품 이미지 파일명 조회
+  const getProductDetail = () => {
+    axios
+      .get(`/products/lists/getProductDetail?prodCode=${prodCode}`)
+      .then((res) => {
+        setProduct(res.data);
+        console.log(product);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getProductDetail();
+  }, []);
+
+  const getImage = () => {
+    axios
+      .all([
+        axios.get(
+          `/products/lists/getBrandImgName?prodBrand=${product.prodBrand}`
+        ),
+        axios.get(
+          `/products/lists/getProdPictures?prodCode=${product.prodCode}`
+        ),
+      ])
+      .then(
+        axios.spread((brand, prodPics) => {
+          setBrandImg(brand.data);
+          setPictures(prodPics.data);
+        })
+      )
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getImage();
+  }, [prodCode]);
+
+  const swiperStyle = {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '5px',
+    width: '350px',
+    minHeight: '220px',
+    height: '350px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
 
   return (
     <>
       <Box>
+        <Swiper
+          pagination={{
+            type: 'fraction',
+          }}
+          navigation={true}
+          modules={[Navigation, Pagination]}
+          style={swiperStyle}
+        >
+          {pictures.map((fileName) => {
+            const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+            return (
+              <SwiperSlide
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Box
+                  component="img"
+                  alt={fileName}
+                  src={fileSrc}
+                  sx={{
+                    width: '90%',
+                    height: '90%',
+                  }}
+                />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <SimpleImageSlider
-              width={400}
-              height={400}
-              images={images}
-              showBullets={true}
-              showNavs={true}
-              navSize={50}
-              navMargin={10}
-            />
-          </Grid>
+          <Grid item xs={12} sm={6}></Grid>
           <Grid item xs={12} sm={6}>
             <Box>
               <Chip label="캠핑" sx={{ height: '30px' }} />
@@ -111,7 +183,8 @@ const UserProductsDetails = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box mt={20}>
+      {/* 리뷰 시작 */}
+      {/* <Box mt={20}>
         <Grid Container></Grid>
         <Grid item>
           <Typography display="inline" variant="h5" component="h5">
@@ -179,8 +252,8 @@ const UserProductsDetails = () => {
             mt: 2.5,
             mb: 2.5,
           }}
-        ></Box>
-      </Box>
+        ></Box> */}
+      {/* </Box> */}
     </>
   );
 };
