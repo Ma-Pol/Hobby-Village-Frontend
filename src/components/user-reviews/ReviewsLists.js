@@ -18,8 +18,8 @@ function ReviewsLists(props) {
     useEffect(() => {
         axios
             .all([
-                axios.get(`/reviewslists?pages=${searchParams.get('pages')}`),
-                axios.get(`/reviewslists?sort=${searchParams.get('sort')}`),
+                axios.get(`/reviews/lists?pages=${searchParams.get('pages')}`),
+                axios.get(`/reviews/lists?sort=${searchParams.get('sort')}`),
             ])
             .then(
                 axios.spread((count) => {
@@ -44,16 +44,7 @@ function ReviewsLists(props) {
         setSearchParams(searchParams);
     }
 
-    const [lists, setLists] = useState([{
-        email : '',
-        revwCode : '',
-        revwRate : '',
-        revwTitle : '',
-        revwRegiDate : '',
-        revwReport : '',
-        prodCode : '',
-        prodName : '',
-    }]);
+    const [lists, setLists] = useState([]);
 
     const getLists = () => {
         axios
@@ -61,7 +52,7 @@ function ReviewsLists(props) {
         //   .then((res) => {
         //     setLists(res.data);
         // })
-        .get(`/reviewslists`)
+        .get(`/reviews/lists`)
         .then((list) => {
           setLists(list.data);
       })

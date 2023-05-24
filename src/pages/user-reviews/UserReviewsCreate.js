@@ -1,9 +1,10 @@
 import React from 'react';
+import ReviewsCreate from "components/user-reviews/ReviewsCreate";
 
 const UserReviewsCreate = () => {
   return (
     <div>
-      <div></div>
+      <ReviewsCreate></ReviewsCreate>
     </div>
   );
 };

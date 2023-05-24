@@ -5,22 +5,14 @@ import axios from "axios";
 import { Container, Typography, Box, Table, TableRow, TableCell, Button } from '@mui/material';
 
 const ReviewsDetails = () => {
+
     const navigate = useNavigate();
     const { revwCode } = useParams();
-    const [details, setDetails] = useState([{
-        revwCode : '',
-        revwRate : '',
-        revwTitle : '',
-        revwContent : '',
-        revwReport : '',
-        prodCode : '',
-        prodName : '',
-        revwPicture :'',
-}]);
+    const [details, setDetails] = useState([]);
 
     const getDetails = () => {
         axios
-        .get(`/reviewsdetails/${revwCode}`)
+        .get(`/reviews/details/${revwCode}`)
         .then((detail) => {
             setDetails(detail.data);
         })
@@ -38,7 +30,7 @@ const ReviewsDetails = () => {
     }
 
     const modifyReviews = () => {
-        navigate(`/reviews/modify${revwCode}`);
+        navigate(`/reviews/modify/${revwCode}`);
     }
 
     const tabletitleStyle = {
@@ -52,10 +44,10 @@ const ReviewsDetails = () => {
     }
     const btnlistStyle = {
         variant : 'outlined',
-        width : '65px',
-        height : '30px',
+        width : '150px',
+        height : '50px',
         bgcolor: '#c3c36a',
-        borderRadius: '15px',
+        borderRadius: '10px',
         border: '1px solid #626262',
         color: '#000000',
         fontWeight: 'bold',
@@ -67,10 +59,10 @@ const ReviewsDetails = () => {
     }
     const btnmodifyStyle = {
         variant : 'outlined',
-        width : '65px',
-        height : '30px',
+        width : '150px',
+        height : '50px',
         bgcolor: '#ffffff',
-        borderRadius: '15px',
+        borderRadius: '10px',
         border: '1px solid #626262',
         color: '#000000',
         fontWeight: 'bold',
@@ -100,7 +92,7 @@ const ReviewsDetails = () => {
                             fontSize : '1.6rem',
                         }}
                     >
-                        리뷰관리 &gt; 리뷰상세
+                        리뷰 관리 &gt; 리뷰 상세
                     </Typography>
                 </Box>
                 <Container>
@@ -135,7 +127,12 @@ const ReviewsDetails = () => {
                             </TableRow>
                             <TableRow>                   
                                 <TableCell sx = {tabletitleStyle}>첨부 사진</TableCell>
-                                <TableCell sx = {tablecontentStyle}>{details.revwPicture}</TableCell>
+                                <TableCell sx = {tablecontentStyle}>
+                                    <img
+                                        alt = {`상품사진`}
+                                        src = {process.env.PUBLIC_URL + details.prodPicture}
+                                    ></img>
+                                </TableCell>
                             </TableRow>
                             <TableRow>                   
                                 <TableCell sx = {tabletitleStyle}>리뷰 본문</TableCell>
@@ -148,7 +145,7 @@ const ReviewsDetails = () => {
                         </>                     
                     </Table>
                     <Box
-                        sx={{ mt : '30px', display : 'flex', flexDirection : 'row', alignItems : 'center' }}
+                        sx={{ mt : '30px', display : 'flex', flexDirection : 'row', justifyContent : 'center', alignItems : 'center' }}
                     >
                         <Button onClick = {ListsReviews} sx = {btnlistStyle}>
                             목록
