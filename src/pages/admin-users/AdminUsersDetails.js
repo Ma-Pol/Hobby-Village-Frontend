@@ -18,33 +18,44 @@ const AdminUsersDetails = () => {
     })
     .then((res)=> {
       setDetails(res.data)
+      console.log(res.data)
     })
-   })
+   },[userCode])
 
-  const handleMemberForm = () => {
-        navigate(`m/users`);
+    const handleList = () => {
+        navigate(`/m/users/lists`);
     }
 
+  if(!details){
+  return <></>
+  }else{  
   return (
     <Wrapper>
         <Header style={{ marginBottom:"50px", fontSize:"40px"}}>회원 상세 정보</Header>
           <Wrapper1>
-          <Box style={{width:"200px", height:"200px", backgroundColor:"lightgrey", float:"left", marginRight:"20px", marginLeft:"100px"}}/>
-
-     
+          <Box style={{ float:"left", marginRight:"20px", marginLeft:"100px"}}>
+              <Box  
+                 style= { {width:"200px", height:"200px" , backgroundColor:"lightgrey"}}
+                    component = 'img'
+                    src={
+                      details.profPicture !== null
+                        ? `http://localhost:8080/m/users/profPicture/${details.profPicture}` 
+                        : `${process.env.PUBLIC_URL}/assets/photo.png`
+                    }
+              />
+          </Box>
+           
           <Text>
             이름&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"50px"}}
-              defaultValue= {details.name}
-            />
+            >{details.name}</Typography>
             </Text>
             <Text>
             닉네임&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"20px"}}
-              defaultValue= {details.nickname}
-            />
+            >{details.nickname}</Typography>
             </Text>
           </Wrapper1>
           
@@ -53,43 +64,37 @@ const AdminUsersDetails = () => {
             이메일&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"50px"}}
-              defaultValue= {details.email}
-            />
+            >{details.email}</Typography>
             </Text>
              <Text>
                 생년월일&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"20px"}}
-              defaultValue= {details.birthday}
-            />
+            >{details.birthday}</Typography>
             </Text>
              <Text>
             전화번호&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"20px"}}
-              defaultValue= {details.phone}
-            />
+            >{details.phone}</Typography>
             </Text>
              <Text>
             우편번호&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"20px"}}
-              defaultValue= {details.zipCode}
-            />
+            >{details.zipCode}</Typography>
             </Text>
              <Text>
             주소&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"70px"}}
-              defaultValue= {details.address1}
-            />
+            >{details.address1}</Typography>
             </Text>
              <Text>
             적립금&nbsp;&nbsp;
             <Typography
               style={{width:"70%", marginLeft:"40px", }}
-              defaultValue= {details.savedMoney}
-            />
+            >{details.savedMoney}</Typography>
             </Text>
            
         </TextArea>
@@ -97,10 +102,10 @@ const AdminUsersDetails = () => {
         <Group>  
         <Button variant="outlined" 
           style={{marginTop:"20px" ,width:"10%", height: "60px",borderRadius:"30px",borderColor:"black",backgroundColor:"white",fontFamily: "", fontSize:"20px", color:"black"}} 
-          onClick={handleMemberForm} >목록</Button> 
+          onClick={handleList} >목록</Button> 
         </Group>
     </Wrapper>
-  );
+  );}
 };
 
 export default AdminUsersDetails;
@@ -148,4 +153,6 @@ const Group = styled.div`
     align-items: center;
     justify-content: center;
 `
+const Avatar = styled.div`
 
+`
