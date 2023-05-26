@@ -32,41 +32,48 @@ const UserProductsDetails = () => {
   const navigate = useNavigate();
   const { prodCode } = useParams();
 
-  const [product, setProduct] = useState();
-  const [pictures, setPictures] = useState([]);
+  const [product, setProduct] = useState({});
   const [brandImg, setBrandImg] = useState();
+  const [pictures, setPictures] = useState([]);
+  const profPicFile = `http://localhost:8080/prodReview/upload/profPic/${product.profPicture}`;
+  const [revwCount, setRevwCount] = useState();
+  const [reviewList, setReviewList] = useState([]);
 
-  // 상품 상세 조회 + 브랜드 로고 이미지, 상품 이미지 파일명 조회
+  // 상품 상세 정보
   const getProductDetail = () => {
     axios
       .get(`/products/lists/getProductDetail?prodCode=${prodCode}`)
       .then((res) => {
         setProduct(res.data);
-        console.log(product);
       })
       .catch((e) => {
         console.error(e);
       });
   };
 
-  useEffect(() => {
-    getProductDetail();
-  }, []);
+  // 상품 이미지
+  const getProdImg = () => {
+    axios
+      .get(`/products/lists/getProdPictures?prodCode=${prodCode}`)
+      .then((res) => {
+        setPictures(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
-  const getImage = () => {
+  // 리뷰 개수 + 리뷰 목록 구하기
+  const getReviewList = () => {
     axios
       .all([
-        axios.get(
-          `/products/lists/getBrandImgName?prodBrand=${product.prodBrand}`
-        ),
-        axios.get(
-          `/products/lists/getProdPictures?prodCode=${product.prodCode}`
-        ),
+        axios.get(`/prodReview/count?prodCode=${prodCode}`),
+        axios.get(`/prodReview/list?prodCode=${prodCode}`),
       ])
       .then(
-        axios.spread((brand, prodPics) => {
-          setBrandImg(brand.data);
-          setPictures(prodPics.data);
+        axios.spread((count, list) => {
+          setRevwCount(count.data);
+          setReviewList(list.data);
         })
       )
       .catch((e) => {
@@ -75,14 +82,32 @@ const UserProductsDetails = () => {
   };
 
   useEffect(() => {
-    getImage();
-  }, [prodCode]);
+    getProductDetail();
+    getProdImg();
+    getReviewList();
+  }, []);
+
+  // 브랜드 이미지 파일명
+  const getBrandImgName = () => {
+    axios
+      .get(`/products/lists/getBrandImgName?brand=${product.prodBrand}`)
+      .then((res) => {
+        setBrandImg(res.data);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  useEffect(() => {
+    getBrandImgName();
+  }, []);
 
   const swiperStyle = {
     backgroundColor: '#f1f1f1',
     borderRadius: '5px',
-    width: '350px',
-    minHeight: '220px',
+    width: '400px',
+    minHeight: '400px',
     height: '350px',
     display: 'flex',
     alignItems: 'center',
@@ -90,82 +115,94 @@ const UserProductsDetails = () => {
   };
 
   return (
-    <>
+    <Container>
+      {/* 브랜드 로고 표시 */}
+      <Box></Box>
+      {/* 상품 정보 */}
+      <Box></Box>
       <Box>
-        <Swiper
-          pagination={{
-            type: 'fraction',
-          }}
-          navigation={true}
-          modules={[Navigation, Pagination]}
-          style={swiperStyle}
-        >
-          {pictures.map((fileName) => {
-            const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
-            return (
-              <SwiperSlide
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Box
-                  component="img"
-                  alt={fileName}
-                  src={fileSrc}
-                  sx={{
-                    width: '90%',
-                    height: '90%',
-                  }}
-                />
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}></Grid>
+          <Grid item xs={12} sm={6}>
+            <Swiper
+              pagination={{
+                type: 'fraction',
+              }}
+              navigation={true}
+              modules={[Navigation, Pagination]}
+              style={swiperStyle}
+            >
+              {pictures.map((fileName) => {
+                const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+                return (
+                  <SwiperSlide
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      alt={fileName}
+                      src={fileSrc}
+                      sx={{
+                        width: '90%',
+                        height: '90%',
+                      }}
+                    />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Chip label="캠핑" sx={{ height: '30px' }} />
+              <Chip label={product.prodCategory} sx={{ height: '30px' }} />
             </Box>
             <Grid item xs={6}>
               <Typography variant="h5" component="h2" mt={1} display="inline">
-                냄비 1개, 주전자 2개
+                {product.prodName}
               </Typography>
               <FavoriteBorderOutlinedIcon></FavoriteBorderOutlinedIcon>
+              <Typography>관심 {product.prodDibs}</Typography>
             </Grid>
             <Box mb={1}>
-              <Typography display="inline">30,000원</Typography>
+              <Typography display="inline">{product.prodPrice}원</Typography>
               <Typography display="inline"> / 7일</Typography>
             </Box>
             <TextField
               disabled
               multiline
               rows={9}
-              value="캠핑 필수품! 튼튼한 냄비와 주전자입니다.  하자는 확대 컷 참고 해주세요 ^^"
+              value={product.prodContent}
               sx={{ width: '450px' }}
             ></TextField>
+            <Typography>{product.prodHost}</Typography>
+            <Avatar
+              display="inline"
+              sx={{ bgcolor: '#ABCDEF', width: 30, height: 30 }}
+              src={profPicFile}
+            ></Avatar>
             <Box id="buttons" mt={2}>
               <TextField
                 select
-                dafaultValue={0}
+                defaultValue={0}
                 size="small"
                 sx={{ width: 150 }}
               >
-                <MenuItem key={0} value={0}>
+                <MenuItem key={0} value="0">
                   대여기간 선택
                 </MenuItem>
-                <MenuItem key={7} value={7}>
+                <MenuItem key={7} value="7">
                   7일
                 </MenuItem>
-                <MenuItem key={14} value={14}>
+                <MenuItem key={14} value="14">
                   14일
                 </MenuItem>
-                <MenuItem key={21} value={21}>
+                <MenuItem key={21} value="21">
                   21일
                 </MenuItem>
-                <MenuItem key={28} value={28}>
+                <MenuItem key={28} value="28">
                   28일
                 </MenuItem>
               </TextField>
@@ -178,83 +215,34 @@ const UserProductsDetails = () => {
               </Button>
               <Button variant="contained" color="info" sx={{ width: 130 }}>
                 지금 빌리기
+                {/* 이미 대여중일 경우 '현재 대여 중인 상품입니다' 멘트를 버튼 대신 보여주기 */}
               </Button>
             </Box>
           </Grid>
         </Grid>
+        <Box mt={20}>
+          <Grid item>
+            <Typography display="inline" variant="h5" component="h5">
+              대여 리뷰
+            </Typography>
+            <Typography display="inline"> {revwCount} </Typography>
+            <Box
+              sx={{
+                maxWidth: 1080,
+                height: 1.1,
+                backgroundColor: '#DFDFDF',
+                mt: 2.5,
+                mb: 2.5,
+              }}
+            ></Box>
+          </Grid>
+          {/* 리뷰목록 */}
+          {reviewList.map((review) => {
+            return <Review key={review.revwCode} review={review}></Review>;
+          })}
+        </Box>
       </Box>
-      {/* 리뷰 시작 */}
-      {/* <Box mt={20}>
-        <Grid Container></Grid>
-        <Grid item>
-          <Typography display="inline" variant="h5" component="h5">
-            대여 리뷰
-          </Typography>
-          <Typography display="inline"> (13) </Typography>
-          <Box
-            sx={{
-              maxWidth: 1080,
-              height: 1.1,
-              backgroundColor: '#DFDFDF',
-              mt: 2.5,
-              mb: 2.5,
-            }}
-          ></Box>
-        </Grid>
-        <Grid container xs={12} spacing={1}>
-          <Grid item xs={2.5}>
-            <Rating name="read-only" value={value} size="small" readOnly />
-          </Grid>
-          <Grid item xs={5.5}>
-            <Typography variant="body1" component="body1">
-              덕분에 즐거운 캠핑할 수 있었습니다!
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography variant="body1" component="body1">
-              2023.02.23
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Stack direction="row" spacing={0.5}>
-              <Typography display="inline" variant="body1" component="body1">
-                프로캠핑러
-              </Typography>
-              <Avatar
-                display="inline"
-                sx={{ bgcolor: '#ABCDEF', width: 30, height: 30 }}
-              >
-                PC
-              </Avatar>
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid container xs={12} spacing={1}>
-          <Grid item xs={2.5}></Grid>
-          <Grid item xs={5.2}>
-            <TextField
-              multiline
-              sx={{ mt: 1 }}
-              fullWidth
-              rows={7}
-              disabled
-              value="구매할지말지 고민중이었는데 마침 취미빌리지에 있길래 빌려봤어요. 엄청 가볍고 햇빛 아래에서 더 예쁘더라고요^^"
-            ></TextField>
-          </Grid>
-          <Grid item xs={2.3}></Grid>
-          <Grid item xs={2}></Grid>
-        </Grid>
-        <Box
-          sx={{
-            maxWidth: 1080,
-            height: 1.1,
-            backgroundColor: '#DFDFDF',
-            mt: 2.5,
-            mb: 2.5,
-          }}
-        ></Box> */}
-      {/* </Box> */}
-    </>
+    </Container>
   );
 };
 
