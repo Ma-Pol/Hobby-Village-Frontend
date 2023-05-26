@@ -345,8 +345,9 @@ const UserHeader = () => {
               >
                 <Avatar
                   src={
-                    profPicture !== null &&
-                    'http://localhost:8080/profPicture/' + profPicture
+                    profPicture !== null
+                      ? 'http://localhost:8080/profPicture/' + profPicture
+                      : `${process.env.PUBLIC_URL}/assets/photo.png`
                   }
                 />
               </Link>
@@ -359,8 +360,8 @@ const UserHeader = () => {
       </Container>
       <Box
         sx={{
-          mb: '5px',
-          borderBottom: '1px solid #BCB5B5',
+          // mb: '5px',
+          borderBottom: '1px solid #d5d5d5',
         }}
       />
     </>

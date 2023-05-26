@@ -32,9 +32,9 @@ const UserFooter = () => {
     <>
       <Box
         sx={{
-          mt: '5px',
+          // mt: '5px',
           mb: 2,
-          borderTop: '1px solid #BCB5B5',
+          borderTop: '1px solid #d5d5d5',
         }}
       />
       <Container
@@ -83,7 +83,7 @@ const UserFooter = () => {
           {/* 사용자 서비스 시작 */}
           <Box sx={{ m: 0, display: 'flex', flexDirection: 'column' }}>
             <Typography variant="body1" sx={mainText}>
-              CLIENT SERVICE
+              CUSTOMER SERVICE
             </Typography>
 
             <Link to="/notices/lists?filter=none&pages=1" style={linkText}>

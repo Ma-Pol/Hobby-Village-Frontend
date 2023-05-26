@@ -21,8 +21,8 @@ function MainAds(props) {
         m: 0,
         p: 0,
         userSelect: 'none',
-        borderTop: '1px solid #000000',
-        borderBottom: '1px solid #000000',
+        borderTop: '1px solid #d5d5d5',
+        borderBottom: '1px solid #d5d5d5',
       }}
     >
       <Swiper

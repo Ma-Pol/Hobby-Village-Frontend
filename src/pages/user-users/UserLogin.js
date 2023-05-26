@@ -64,6 +64,21 @@ const UserLogin = () => {
       });
   };
 
+  const inputStyle = {
+    my: 1,
+    width: '450px',
+    '& .MuiInput-root': {
+      '&:after': {
+        borderBottom: '2px solid #c3c36a',
+      },
+    },
+    '& .MuiInputLabel-root': {
+      '&.Mui-focused': {
+        color: '#c3c36a',
+      },
+    },
+  };
+
   if (email !== null) {
     return <Navigate to="/" replace={true} />;
   }
@@ -76,8 +91,8 @@ const UserLogin = () => {
           height: '80vh',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
           justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Typography
@@ -104,20 +119,7 @@ const UserLogin = () => {
                 passwordRef.current.focus();
               }
             }}
-            sx={{
-              my: 1,
-              width: '450px',
-              '& .MuiInput-root': {
-                '&:after': {
-                  borderBottom: '2px solid #c3c36a',
-                },
-              },
-              '& .MuiInputLabel-root': {
-                '&.Mui-focused': {
-                  color: '#c3c36a',
-                },
-              },
-            }}
+            sx={inputStyle}
           />
         </Box>
 
@@ -132,20 +134,7 @@ const UserLogin = () => {
                 handleLogin();
               }
             }}
-            sx={{
-              my: 1,
-              width: '450px',
-              '& .MuiInput-root': {
-                '&:after': {
-                  borderBottom: '2px solid #c3c36a',
-                },
-              },
-              '& .MuiInputLabel-root': {
-                '&.Mui-focused': {
-                  color: '#c3c36a',
-                },
-              },
-            }}
+            sx={inputStyle}
           />
         </Box>
 

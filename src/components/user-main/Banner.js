@@ -39,6 +39,7 @@ const Banner = () => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    cursor: 'pointer',
   };
 
   const slideTextBox = {
@@ -48,7 +49,15 @@ const Banner = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', m: 0, p: 0, userSelect: 'none' }}>
+    <Box
+      sx={{
+        width: '100%',
+        m: 0,
+        p: 0,
+        userSelect: 'none',
+        borderBottom: '1px solid #d5d5d5',
+      }}
+    >
       <Swiper
         loop={true}
         pagination={pagination}
@@ -66,6 +75,7 @@ const Banner = () => {
       >
         <SwiperSlide>
           <Box
+            onClick={linkToProductsLists}
             sx={{
               ...slideBox,
               backgroundColor: '#F0F0DC',
@@ -88,24 +98,16 @@ const Banner = () => {
                 <br />
                 저희가 도와드리겠습니다.
               </Typography>
-              <Button
-                onClick={linkToProductsLists}
+              <Typography
                 sx={{
-                  mt: 2,
-                  width: '120px',
-                  height: '42px',
-                  color: '#4a4a4a',
-                  borderRadius: '10px',
-                  fontWeight: 'bold',
-                  backgroundColor: '#d9d9d999',
-                  '&:hover': {
-                    backgroundColor: '#7a7a7a',
-                    color: '#ffffff',
-                  },
+                  mt: '20px',
+                  fontSize: '20px',
                 }}
               >
-                취미 물품 보기
-              </Button>
+                취미 물품에 대해 궁금하신가요?
+                <br />
+                취향에 맞는 취미 물품을 찾아보세요!
+              </Typography>
             </Box>
             <Box
               component="img"
@@ -114,10 +116,10 @@ const Banner = () => {
               sx={{
                 m: 0,
                 objectFit: 'cover',
-                width: '400px',
-                height: '298px',
+                width: '300px',
+                height: '300px',
                 boxShadow: '0px 4px 4px #00000040, 0px 4px 4px #00000040',
-                borderRadius: '10px',
+                borderRadius: '150px',
                 overflow: 'hidden',
               }}
             />
@@ -126,6 +128,7 @@ const Banner = () => {
 
         <SwiperSlide>
           <Box
+            onClick={linkToRequests}
             sx={{
               ...slideBox,
               backgroundColor: '#ffffff',
@@ -138,10 +141,10 @@ const Banner = () => {
               sx={{
                 m: 0,
                 objectFit: 'cover',
-                width: '277px',
-                height: '340px',
+                width: '300px',
+                height: '300px',
                 boxShadow: '0px 4px 4px #00000040, 0px 4px 4px #00000040',
-                borderRadius: '10px',
+                borderRadius: '150px',
                 overflow: 'hidden',
               }}
             />
@@ -165,51 +168,23 @@ const Banner = () => {
                 <br />
                 개인의 취미 물품을 빌려주고, 빌릴 수 있습니다.
               </Typography>
-              <Box sx={{ m: 0 }}>
-                <Button
-                  onClick={linkToProductsLists}
-                  sx={{
-                    mt: 2,
-                    mr: 2,
-                    width: '120px',
-                    height: '42px',
-                    color: '#4a4a4a',
-                    borderRadius: '10px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#d9d9d999',
-                    '&:hover': {
-                      backgroundColor: '#7a7a7a',
-                      color: '#ffffff',
-                    },
-                  }}
-                >
-                  취미 물품 보기
-                </Button>
-                <Button
-                  onClick={linkToRequests}
-                  sx={{
-                    mt: 2,
-                    width: '160px',
-                    height: '42px',
-                    color: '#4a4a4a',
-                    borderRadius: '10px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#d9d9d999',
-                    '&:hover': {
-                      backgroundColor: '#7a7a7a',
-                      color: '#ffffff',
-                    },
-                  }}
-                >
-                  물품 판매/위탁하기
-                </Button>
-              </Box>
+              <Typography
+                sx={{
+                  mt: '20px',
+                  fontSize: '20px',
+                }}
+              >
+                물품 판매/위탁에 관심이 있으신가요?
+                <br />
+                여러분의 취미 물품을 공유해주세요!
+              </Typography>
             </Box>
           </Box>
         </SwiperSlide>
 
         <SwiperSlide>
           <Box
+            onClick={linkToProductsBrandLists}
             sx={{
               ...slideBox,
               backgroundColor: '#E4E58E50',
@@ -235,24 +210,15 @@ const Banner = () => {
                 <br />
                 신상품까지 빌려드립니다.
               </Typography>
-              <Button
-                onClick={linkToProductsBrandLists}
+              <Typography
                 sx={{
-                  mt: 2,
-                  width: '120px',
-                  height: '42px',
-                  color: '#4a4a4a',
-                  borderRadius: '10px',
-                  fontWeight: 'bold',
-                  backgroundColor: '#d9d9d999',
-                  '&:hover': {
-                    backgroundColor: '#7a7a7a',
-                    color: '#ffffff',
-                  },
+                  mt: '20px',
+                  fontSize: '20px',
                 }}
               >
-                브랜드관 보기
-              </Button>
+                브랜드 물품을 빌려보고 싶으신가요?
+                <br />이 곳에서 브랜드 물품을 찾아보세요!
+              </Typography>
             </Box>
             <Box
               component="img"
@@ -261,10 +227,10 @@ const Banner = () => {
               sx={{
                 m: 0,
                 objectFit: 'cover',
-                width: '400px',
-                height: '298px',
+                width: '300px',
+                height: '300px',
                 boxShadow: '0px 4px 4px #00000040, 0px 4px 4px #00000040',
-                borderRadius: '10px',
+                borderRadius: '150px',
                 overflow: 'hidden',
               }}
             />
@@ -273,6 +239,7 @@ const Banner = () => {
 
         <SwiperSlide>
           <Box
+            onClick={linkToServiceInfo}
             sx={{
               ...slideBox,
               backgroundColor: '#EFE8E850',
@@ -285,10 +252,10 @@ const Banner = () => {
               sx={{
                 m: 0,
                 objectFit: 'cover',
-                width: '277px',
-                height: '340px',
+                width: '300px',
+                height: '300px',
                 boxShadow: '0px 4px 4px #00000040, 0px 4px 4px #00000040',
-                borderRadius: '10px',
+                borderRadius: '150px',
                 overflow: 'hidden',
               }}
             />
@@ -312,45 +279,15 @@ const Banner = () => {
                 <br />
                 새롭게 게시된 공지사항을 알아보세요.
               </Typography>
-              <Box sx={{ m: 0 }}>
-                <Button
-                  onClick={linkToServiceInfo}
-                  sx={{
-                    mt: 2,
-                    mr: 2,
-                    width: '170px',
-                    height: '42px',
-                    color: '#4a4a4a',
-                    borderRadius: '10px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#d9d9d999',
-                    '&:hover': {
-                      backgroundColor: '#7a7a7a',
-                      color: '#ffffff',
-                    },
-                  }}
-                >
-                  구독 서비스 안내
-                </Button>
-                <Button
-                  onClick={linkToNoticesLists}
-                  sx={{
-                    mt: 2,
-                    width: '100px',
-                    height: '42px',
-                    color: '#4a4a4a',
-                    borderRadius: '10px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#d9d9d999',
-                    '&:hover': {
-                      backgroundColor: '#7a7a7a',
-                      color: '#ffffff',
-                    },
-                  }}
-                >
-                  공지사항
-                </Button>
-              </Box>
+              <Typography
+                sx={{
+                  mt: '20px',
+                  fontSize: '20px',
+                }}
+              >
+                구독 서비스에 대해 궁금하신가요?
+                <br />이 곳에서 구독 서비스에 대해 알아보세요!
+              </Typography>
             </Box>
           </Box>
         </SwiperSlide>

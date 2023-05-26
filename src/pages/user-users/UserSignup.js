@@ -1,112 +1,281 @@
-import React, { useState, useRef } from "react";
-import styled from 'styled-components';
-import { useNavigate } from "react-router-dom";
-import TextField from '@mui/material/TextField';
-import Button  from '@mui/material/Button';
-import { Modal } from "@material-ui/core";
-import axios from "axios";
-import FileInput from "./FileInput";
-import './Signup.css'
-import DaumPostcodeEmbed from "react-daum-postcode";
+/* eslint-disable no-control-regex */
+/* eslint-disable no-useless-escape */
+import React, { useState, useRef, useReducer } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import {
+  TextField,
+  Button,
+  Modal,
+  Typography,
+  Box,
+  Container,
+} from '@mui/material';
+import axios from 'axios';
+import './Signup.css';
+import DaumPostcodeEmbed from 'react-daum-postcode';
+import UserHeader from 'components/UserHeader';
+import UserFooter from 'components/UserFooter';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+const daumPostcodeStyle = {
+  display: 'block',
+  position: 'fixed',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  top: '30%',
+  width: '400px',
+  height: '500px',
+  zIndex: '99999',
+};
+
+const checkBtnStyle = {
+  mb: '20px',
+  backgroundColor: '#D9D9D9',
+  color: '#000000',
+  '&:hover': {
+    backgroundColor: '#D9D9D9',
+  },
+};
+
+const emailReducer = (state, action) => {
+  switch (action.type) {
+    case 'CEW':
+      return {
+        ...state,
+        CEW: action.CEW,
+      };
+    case 'CER':
+      return {
+        ...state,
+        CER: action.CER,
+      };
+    case 'CEL':
+      return {
+        ...state,
+        CEL: action.CEL,
+      };
+    case 'CE':
+      return {
+        ...state,
+        CE: action.CE,
+      };
+    default:
+      return state;
+  }
+};
+
+const nicknameReducer = (state, action) => {
+  switch (action.type) {
+    case 'CNW':
+      return {
+        ...state,
+        CNW: action.CNW,
+      };
+    case 'CNR':
+      return {
+        ...state,
+        CNR: action.CNR,
+      };
+    case 'CNL':
+      return {
+        ...state,
+        CNL: action.CNL,
+      };
+    case 'CN':
+      return {
+        ...state,
+        CN: action.CN,
+      };
+    default:
+      return state;
+  }
+};
 
 const UserSignup = () => {
-  const [Password, setPassword] = useState("")
-  const [confirmPassword, setconfirmPassword] = useState("")
-  const [checkEmail, setCheckEmail] = useState(false)
-  const [checkNickname, setCheckNickname] = useState(false)
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
+
+  const emailRegex = new RegExp(
+    "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+  );
+  const nicknameRegex = new RegExp('[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]$');
+
+  const navigate = useNavigate();
   const [modalHandler, setModalHandler] = useState(false); // 배송지 입력 모달 핸들러
-  const zipCodeRef = useRef(); // 배송지 직접 입력 - 우편번호
-  const address1Ref = useRef(); // 배송지 직접 입력 - 주소
-  const address2Ref = useRef(); // 배송지 직접 입력 - 상세주소
+
+  const [emailCheck, emailDispatch] = useReducer(emailReducer, {
+    CEW: false, // 이메일 입력 시작 여부 체크(CHECK_EMAIL_WRITE)
+    CER: false, // 이메일 정규식 체크(CHECK_EMAIL_REGEX)
+    CEL: false, // 이메일 길이 체크(CHECK_EMAIL_LENGTH)
+    CE: false, // 이메일 중복 체크(CHECK_EMAIL)
+  });
+
+  const [nicknameCheck, nicknameDispatch] = useReducer(nicknameReducer, {
+    CNW: false, // 닉네임 입력 시작 여부 체크(CHECK_NICKNAME_WRITE)
+    CNR: false, // 닉네임 정규식 체크(CHECK_NICKNAME_REGEX)
+    CNL: false, // 닉네임 길이 체크(CHECK_NICKNAME_LENGTH)
+    CN: false, // 닉네임 중복 체크(CHECK_NICKNAME)
+  });
+
+  const [imgBase64, setImgBase64] = useState([]);
+  const [imgFile, setImgFile] = useState(null);
+  const imageRef = useRef();
+
   const emailRef = useRef();
-  const pwRef = useRef();
-  const nickRef = useRef();
+  const nicknameRef = useRef();
+
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
+  const [checkPasswordConfirmWrite, setCheckPasswordConfirmWrite] =
+    useState(false); // 비밀번호 확인 입력 여부 체크
+  const [checkPassword, setPasswordCheck] = useState(false); // 비밀번호 일치 여부 체크
+
   const nameRef = useRef();
-  const birthRef = useRef();
+  const [birthDay, setBirthDay] = useState(null);
   const phoneRef = useRef();
 
+  const [zipCode, setZipCode] = useState('');
+  const [address1, setAddress1] = useState('');
+  const address2Ref = useRef();
 
-
-  const [values, setValues] = useState({
-     imgFile: null,   
-    });
- 
-  const navigate = useNavigate();
-
-  const handleClickButton = () => {
-        navigate('/login');
-    }
- 
-  const onPasswordHandler = (event) => {
-        setPassword(event.currentTarget.value)
+  // 이메일 입력 시 체크
+  const onEmailChange = (e) => {
+    if (!emailCheck.CEW) {
+      emailDispatch({ type: 'CEW', CEW: true });
     }
 
-  const onconfirmPasswordHandler = (event) => {
-        setconfirmPassword(event.currentTarget.value)
+    // 실제 입력값 체크
+    if (e.target.value.length === 0) {
+      emailDispatch({ type: 'CEL', CEL: false });
+    } else {
+      emailDispatch({ type: 'CEL', CEL: true });
     }
-  
-   const handleChange = (name,value) => { //name,value를 parmeter로 받아서
-        setValues((prevValues) => ({
-                   ...prevValues,
-                   [name]: value, //name의 값으로 property명을 지정하고 해당하는 값을 지정할 수 있음
-               }) );
-   }
 
-   //이메일 중복확인
-    const onCheckEmail = async (e) => {
-    e.preventDefault();
+    // 이메일 정규식 체크
+    if (emailRegex.test(e.target.value)) {
+      emailDispatch({ type: 'CER', CER: true });
+    } else {
+      emailDispatch({ type: 'CER', CER: false });
+    }
 
-    try { 
-      const res = await axios.post("/users/register/email", { email: emailRef.current.value });
+    // 중복확인 미확인 상태로 변경
+    emailDispatch({ type: 'CE', CE: false });
+  };
 
-      const  result  = await res.data;
+  // 닉네임 입력 시 체크
+  const onNicknameChange = (e) => {
+    if (!nicknameCheck.CNW) {
+      nicknameDispatch({ type: 'CNW', CNW: true });
+    }
 
-      if (result) {
-          alert("이미 등록된 메일입니다. 다시 입력해주세요.");
-          emailRef.current.disabled = false;
+    // 2자 이하 체크
+    if (e.target.value.length < 2) {
+      nicknameDispatch({ type: 'CNL', CNL: false });
+    } else {
+      nicknameDispatch({ type: 'CNL', CNL: true });
+    }
+
+    // 10자 이상 입력 불가
+    if (e.target.value.length > 10) {
+      nicknameRef.current.value = e.target.value.slice(0, 10);
+    }
+
+    // 닉네임 정규식 체크
+    if (nicknameRegex.test(e.target.value)) {
+      nicknameDispatch({ type: 'CNR', CNR: true });
+    } else {
+      nicknameDispatch({ type: 'CNR', CNR: false });
+    }
+
+    // 중복확인 미확인 상태로 변경
+    nicknameDispatch({ type: 'CN', CN: false });
+  };
+
+  // 이메일 중복확인
+  const onCheckEmail = () => {
+    axios
+      .get(`/signup/check?email=${emailRef.current.value}`)
+      .then((res) => {
+        if (res.data) {
+          alert('이미 등록된 이메일입니다. 다시 입력해주세요.');
+          emailRef.current.value = '';
+          emailRef.current.focus();
+          emailDispatch({ type: 'CEL', CEL: false });
+          emailDispatch({ type: 'CER', CER: false });
+          emailDispatch({ type: 'CE', CE: false });
+        } else {
+          alert('사용 가능한 이메일입니다.');
+          nicknameRef.current.focus();
+          emailDispatch({ type: 'CE', CE: true });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  // 닉네임 중복확인
+  const onCheckNickname = () => {
+    axios
+      .get(`/signup/check?nickname=${nicknameRef.current.value}`)
+      .then((res) => {
+        if (res.data) {
+          alert('이미 등록된 닉네임입니다. 다시 입력해주세요.');
+          nicknameRef.current.value = '';
+          nicknameRef.current.focus();
+          nicknameDispatch({ type: 'CNL', CNL: false });
+          nicknameDispatch({ type: 'CNR', CNR: false });
+          nicknameDispatch({ type: 'CN', CN: false });
+        } else {
+          alert('사용 가능한 닉네임입니다.');
+          passwordRef.current.focus();
+          nicknameDispatch({ type: 'CN', CN: true });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  // 비밀번호 일치확인 1
+  const passwordCheck = (e) => {
+    if (checkPasswordConfirmWrite) {
+      if (passwordConfirmRef.current.value === e.target.value) {
+        setPasswordCheck(true);
       } else {
-        alert("사용 가능한 메일입니다.");
-        e.target.disabled = true;
+        setPasswordCheck(false);
       }
-
-    } catch (err) {
-      console.log(err);
     }
-  }
+  };
 
-  //닉네임 중복확인
-  const onCheckNickname = async (e) => {
-    e.preventDefault();
-
-    try { 
-      const res = await axios.post("/users/register/nickname", { nickname: nickRef.current.value })
-      
-      const  result = await res.data;
-
-      if (result) {
-        alert("이미 등록된 닉네임입니다. 다시 입력해주세요.");
-        nickRef.current.disabled = false;
-        e.target.disabled = false;
-     } else {
-        alert("사용 가능한 닉네임입니다.");
-        nickRef.current.disabled = true;
-        e.target.disabled = true;
-      }
-
-
-    } catch (err) {
-      console.log(err);
+  // 비밀번호 일치확인 2
+  const passwordConfirmCheck = (e) => {
+    if (!checkPasswordConfirmWrite) {
+      setCheckPasswordConfirmWrite(true);
     }
-  }
-    
-   
-  //비밀번호 일치확인
-  const hasNotSameError = passwordEntered =>
-        // eslint-disable-next-line eqeqeq
-        Password != confirmPassword ? true : false;    
- 
 
-   // 주소 검색 후처리
+    if (passwordRef.current.value === e.target.value) {
+      setPasswordCheck(true);
+    } else {
+      setPasswordCheck(false);
+    }
+  };
+
+  // 생년월일 값 적용
+  const handleBirthdayChange = (date) => {
+    setBirthDay(date);
+  };
+
+  const phoneCheck = (e) => {
+    const phone = e.target.value;
+    phoneRef.current.value = phone.replace(/[^0-9]/gi, '');
+
+    if (phone.length > 11) {
+      phoneRef.current.value = phone.substring(0, 11);
+    }
+  };
+
+  // 주소 검색 후처리
   const selectAddress = (data) => {
     let address1 = '';
     let extraAddress = '';
@@ -129,270 +298,748 @@ const UserSignup = () => {
       address1 = data.jibunAddress;
     }
 
-    zipCodeRef.current.value = data.zonecode;
-    address1Ref.current.value = address1;
+    setZipCode(data.zonecode);
+    setAddress1(address1);
     address2Ref.current.value = '';
     address2Ref.current.focus();
   };
 
-  
-  const handleMember = () => { 
-    
-    if (values.imgFile.name === "") {
-      alert("사진을 입력해 주세요");
-      values.imgFile.focus();
-      return false;
-    }
-
-    if (nameRef.current.value === "" ) {
-      alert("이름을 입력해 주세요");
+  const handleMember = () => {
+    if (emailRef.current.value === '') {
+      alert('이메일을 입력해 주세요');
       emailRef.current.focus();
       return false;
     }
 
-    if (nickRef.current.value === "") {
-      alert("닉네임을 입력해 주세요");
-      nickRef.current.focus();
+    if (nicknameRef.current.value === '') {
+      alert('닉네임을 입력해 주세요');
+      nicknameRef.current.focus();
       return false;
     }
 
-    if (emailRef.current.value === "") {
-      alert("이메일을 입력해 주세요");
-      nickRef.current.focus();
+    if (passwordRef.current.value === '') {
+      alert('비밀번호를 입력해 주세요');
+      passwordRef.current.focus();
       return false;
     }
 
-    if (pwRef.current.value === "") {
-      alert("비밀번호를 입력해 주세요");
-      nickRef.current.focus();
+    if (nameRef.current.value === '') {
+      alert('이름을 입력해 주세요');
+      nameRef.current.focus();
       return false;
     }
 
-    if (birthRef.current.value === "") {
-      alert("생년월일을 입력해 주세요");
-      nickRef.current.focus();
+    if (phoneRef.current.value === '') {
+      alert('전화번호를 입력해 주세요');
+      phoneRef.current.focus();
       return false;
     }
 
-    if (phoneRef.current.value === "") {
-      alert("전화번호를 입력해 주세요");
-      nickRef.current.focus();
+    if (zipCode === '' || address1 === '') {
+      alert('주소를 입력해 주세요');
+      setModalHandler(true);
       return false;
     }
 
-     
-    if (address2Ref.current.value === "") {
-      alert("상세주소를 입력해 주세요");
-      nickRef.current.focus();
+    if (!emailCheck.CE) {
+      alert('이메일 중복 확인을 해주세요.');
+      emailRef.current.focus();
       return false;
     }
 
-    if ( checkNickname ){
-      alert("이미 존재하는 닉네임입니다.");
-      nickRef.current.focus();
+    if (!nicknameCheck.CN) {
+      alert('닉네임 중복 확인을 해주세요.');
+      nicknameRef.current.focus();
       return false;
     }
 
-    if ( checkEmail ){
-      alert("이미 존재하는 이메일입니다.");
-      nickRef.current.focus();
+    if (!checkPassword) {
+      alert('비밀번호를 확인해주세요.');
+      passwordConfirmRef.current.focus();
       return false;
     }
-   
-    axios   
-            .post("/signup", {
-                email: emailRef.current.value,
-                password: pwRef.current.value,
-                name:nameRef.current.value ,
-                nickname:nickRef.current.value,
-                birthday:birthRef.current.value,
-                phone:phoneRef.current.value,
-                profPicture:values.imgFile.name,
-                zipCode: zipCodeRef.current.value,
-                address1:address1Ref.current.value,
-                address2:address2Ref.current.value,
-                isDefault:1
 
-            })
-            .then((res) => {
-                console.log("handleMember =>", res);
-                if (res.data === 1) {
-                    navigate("/login") //login 폼으로 감
-                    }else {
-                    alert("회원가입 실패!!!");                   
-                }    
-            })
-            
-            .catch((e) => {
-                console.error(e);
-            });
+    const memberData = {
+      email: emailRef.current.value,
+      nickname: nicknameRef.current.value,
+      password: passwordRef.current.value,
+      name: nameRef.current.value,
+      birthday: birthDay,
+      phone: phoneRef.current.value,
+      zipCode: zipCode,
+      address1: address1,
+      address2:
+        address2Ref.current.value === '' ? null : address2Ref.current.value,
     };
-  
+
+    axios
+      .post('/signup', memberData)
+      .then((res) => {
+        if (res.data === 1) {
+          if (imgFile !== null) {
+            imageUpload();
+          } else {
+            alert('회원가입에 성공했습니다.');
+            navigate('/login'); //login 폼으로 감
+          }
+        } else {
+          alert('회원가입에 실패했습니다.');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const imageChange = (e) => {
+    if (e.target.files.length === 0) {
+      imageRef.current.value = '';
+      setImgFile(null);
+      setImgBase64([]);
+      return false;
+    }
+
+    const imageFile = e.target.files[0];
+
+    let check = false;
+    const regExp = /[\[\]\{\}\/\?\\\*\|\<\>\"\'\:\;\`\^]/g;
+    const imageFileType = imageFile.name.split('.').at(-1).toLowerCase();
+
+    if (regExp.test(imageFile.name)) {
+      alert('파일 이름에 특수문자가 포함되어 있습니다.');
+      check = true;
+    } else if (
+      imageFileType !== 'jpg' &&
+      imageFileType !== 'png' &&
+      imageFileType !== 'jpeg'
+    ) {
+      alert('이미지 파일만 업로드 가능합니다.');
+      check = true;
+    }
+    if (check) {
+      imageRef.current.value = '';
+      setImgFile(null);
+      setImgBase64([]);
+      return false;
+    }
+
+    setImgFile(imageFile);
+
+    setImgBase64([]);
+
+    if (imageFile) {
+      const imgViewer = new FileReader();
+
+      imgViewer.readAsDataURL(imageFile);
+      imgViewer.onloadend = () => {
+        const base64 = imgViewer.result;
+
+        if (base64) {
+          const base64Sub = base64.toString();
+
+          setImgBase64((imgBase64) => [...imgBase64, base64Sub]);
+        }
+      };
+    }
+  };
+
+  const imageUpload = () => {
+    const formData = new FormData();
+
+    formData.append('uploadImg', imgFile);
+
+    axios
+      .post(`/signup/upload/${emailRef.current.value}`, formData)
+      .then((res) => {
+        if (res.data !== 0) {
+          alert('회원가입에 성공했습니다.');
+        } else {
+          alert('회원가입에는 성공했으나 이미지 업로드에 실패했습니다.');
+        }
+        navigate('/login'); //login 폼으로 감
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  if (email !== null) {
+    return <Navigate to="/login" replace={true} />;
+  }
+
+  const defaultInputStyle = {
+    '& .MuiInput-root': {
+      '&:after': {
+        borderBottom: '2px solid #c3c36a',
+      },
+    },
+    '& .MuiInputLabel-root': {
+      '&.Mui-focused': {
+        color: '#c3c36a',
+      },
+    },
+  };
+
+  const emailStyle = {
+    '& .MuiInput-root': {
+      '&:before': {
+        borderBottom:
+          !emailCheck.CEW || (emailCheck.CEL && emailCheck.CER && emailCheck.CE)
+            ? '1px solid #878787'
+            : '1px solid #ff0000',
+      },
+      '&:after': {
+        borderBottom:
+          !emailCheck.CEW || (emailCheck.CEL && emailCheck.CER && emailCheck.CE)
+            ? '2px solid #c3c36a'
+            : '2px solid #ff0000',
+      },
+    },
+    '& .MuiInputLabel-root': {
+      '&.Mui-focused': {
+        color:
+          !emailCheck.CEW || (emailCheck.CEL && emailCheck.CER && emailCheck.CE)
+            ? '#c3c36a'
+            : '#ff0000',
+      },
+    },
+    '& .MuiFormHelperText-root': {
+      color:
+        !emailCheck.CEW || (emailCheck.CEL && emailCheck.CER && emailCheck.CE)
+          ? '#878787'
+          : '#ff0000',
+    },
+  };
+
+  const nicknameStyle = {
+    '& .MuiInput-root': {
+      '&:before': {
+        borderBottom:
+          !nicknameCheck.CNW ||
+          (nicknameCheck.CNL && nicknameCheck.CNR && nicknameCheck.CN)
+            ? '1px solid #878787'
+            : '1px solid #ff0000',
+      },
+      '&:after': {
+        borderBottom:
+          !nicknameCheck.CNW ||
+          (nicknameCheck.CNL && nicknameCheck.CNR && nicknameCheck.CN)
+            ? '2px solid #c3c36a'
+            : '2px solid #ff0000',
+      },
+    },
+    '& .MuiInputLabel-root': {
+      '&.Mui-focused': {
+        color:
+          !nicknameCheck.CNW ||
+          (nicknameCheck.CNL && nicknameCheck.CNR && nicknameCheck.CN)
+            ? '#c3c36a'
+            : '#ff0000',
+      },
+    },
+    '& .MuiFormHelperText-root': {
+      color:
+        !nicknameCheck.CNW ||
+        (nicknameCheck.CNL && nicknameCheck.CNR && nicknameCheck.CN)
+          ? '#878787'
+          : '#ff0000',
+    },
+  };
+
+  const passwordConfirmStyle = {
+    '& .MuiInput-root': {
+      '&:before': {
+        borderBottom:
+          !checkPasswordConfirmWrite || checkPassword
+            ? '1px solid #878787'
+            : '1px solid #ff0000',
+      },
+      '&:after': {
+        borderBottom:
+          !checkPasswordConfirmWrite || checkPassword
+            ? '2px solid #c3c36a'
+            : '2px solid #ff0000',
+      },
+    },
+    '& .MuiInputLabel-root': {
+      '&.Mui-focused': {
+        color:
+          !checkPasswordConfirmWrite || checkPassword ? '#c3c36a' : '#ff0000',
+      },
+    },
+    '& .MuiFormHelperText-root': {
+      color:
+        !checkPasswordConfirmWrite || checkPassword ? '#878787' : '#ff0000',
+    },
+  };
 
   return (
-     <Wrapper>
-        <Header style={{ marginTop:"50px", marginLeft:"70px"}}>회원가입</Header>
-        <Container >
-            <FileInput 
-                    name="imgFile" 
-                    value={values.imgFile} 
-                    onChange={handleChange}
-                       
-            />        
-            <Text1>
-                <TextField 
-                     label="이름" variant="standard" autoFocus style={{width:"50%", marginTop:"50px", marginLeft:"30px"}} 
-                    inputRef={nameRef}/>
-            </Text1>
-            <Text1>
-                <TextField 
-                    label="닉네임" variant="standard" style={{width:"41%", marginTop:"50px", marginLeft:"30px", marginRight:"10px"}}
-                    inputRef={nickRef}
-                    />
-                <Button onClick={onCheckNickname} 
-                    style={{backgroundColor:"#D9D9D9", height:"30px", color:"black", marginTop:"70px"}} >
-                    중복
-                </Button>    
-            </Text1>
-        </Container>
-
-        <Text>
-            <Text1>
-                <TextField 
-                    label="이메일" variant="standard" style={{width:"575px", marginRight:"10px"}} inputRef={emailRef} />
-                <Button 
-                    onClick={onCheckEmail} style={{backgroundColor:"#D9D9D9", height:"30px", color:"black", marginTop:"10px"}} >
-                    중복
-                </Button>
-            </Text1>      
-            <TextField 
-                label="비밀번호" variant="standard" required style={{width:"80%", marginTop:"30px"}}
-                onChange={onPasswordHandler}  // 해당 텍스트필드에 error 핸들러 추가
-                type="password" 
-            />
-            <TextField 
-                label="비밀번호 확인" variant="standard"  required style={{width:"80%", marginTop:"30px"}}
-                defaultValue={confirmPassword} onChange={onconfirmPasswordHandler} error={hasNotSameError('confirmPassword')} // 해당 텍스트필드에 error 핸들러 추가
-                helperText={hasNotSameError('confirmPassword') ? "입력한 비밀번호와 일치하지 않습니다." : null} // 에러일 경우에만 안내 문구 표시
-                type="password" inputRef={pwRef}
-            />
-            <TextField 
-                label="생년월일" variant="standard" style={{width:"80%", marginTop:"30px"}} inputRef={birthRef}/>
-            <TextField 
-                label="전화번호" variant="standard" style={{width:"80%", marginTop:"30px"}} inputRef={phoneRef}/>
-        </Text>
-        <Text>
-             <Modal
-            open={modalHandler}
-            onClose={() => {
-            setModalHandler(false);
-            }}
-        > 
-        <DaumPostcodeEmbed
+    <>
+      <UserHeader />
+      <Modal
+        open={modalHandler}
+        onClose={() => {
+          setModalHandler(false);
+        }}
+      >
+        <>
+          <DaumPostcodeEmbed
             onComplete={(data) => {
-            selectAddress(data);
-            setModalHandler(false);
+              selectAddress(data);
+              setModalHandler(false);
             }}
             autoClose={true}
-            // style={daumPostcodeStyle}
-        />
-        </Modal>
-        <Text2>
-            <TextField
-                inputRef={zipCodeRef}
-                placeholder="우편번호"
-                variant="standard"
-                size="small"
-                style={{ marginRight:"25px", width:"30%"}}
-                inputProps={{
-                readOnly: true,
-                }}
-            />
-            <Button onClick={setModalHandler} 
-                style={{backgroundColor:"#D9D9D9",marginRight:"345px", height:"30px", color:"black"}}>주소검색</Button>
-        </Text2>
-            <TextField
-                inputRef={address1Ref}
-                placeholder="주소"
-                variant="standard"
-                size="small"
-                style={{marginTop:"50px", width:"80%"}}
-                inputProps={{
-                readOnly: true,
-                }}
-                />
-            <TextField
-                inputRef={address2Ref}
-                placeholder="상세 주소"
-                variant="standard"
-                size="small"
-                style={{marginTop:"50px", width:"80%"}}
-            />    
-        </Text> 
-    
-    <Group>
-        <Button variant="outlined" 
-            style={{marginTop:"20px" ,marginRight:"50px" ,width:"20%", height: "60px",borderRadius:"10px",backgroundColor:"white",fontFamily: "", fontSize:"24px", color:"black",borderColor:"black"}} 
-            onClick={handleClickButton}>취소</Button>
-        <Button variant="outlined" 
-            style={{marginTop:"20px" ,width:"20%", height: "60px",borderRadius:"10px",backgroundColor:"#C3C36A",fontFamily: "", fontSize:"24px", color:"black",borderColor:"black"}} 
-            onClick={handleMember}>계정 생성</Button>
-    </Group>
-    
-</Wrapper>
+            style={daumPostcodeStyle}
+          />
+        </>
+      </Modal>
 
+      <Container
+        sx={{
+          minHeight: '80vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          userSelect: 'none',
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h4"
+          sx={{
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            mt: '50px',
+            mb: '50px',
+          }}
+        >
+          회원가입
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '700px',
+          }}
+        >
+          {/* 프로필 사진 및 이메일/닉네임 인풋 시작 */}
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+            }}
+          >
+            <input
+              hidden
+              id="imageInput"
+              type="file"
+              ref={imageRef}
+              onChange={imageChange}
+            />
+            <label
+              title="100MB 미만의 jpg, png, jpeg 파일만 업로드 가능합니다."
+              htmlFor="imageInput"
+              style={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%',
+              }}
+            >
+              <Box
+                component="img"
+                sx={{
+                  objectFit: 'cover',
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  border: '1px solid #d5d5d5',
+                  cursor: 'pointer',
+                }}
+                src={
+                  imgBase64.length === 0
+                    ? `${process.env.PUBLIC_URL}/assets/photo.png`
+                    : imgBase64[0]
+                }
+                alt="프로필 사진"
+              />
+            </label>
+            <Box
+              sx={{
+                m: 0,
+                ml: '30px',
+                width: '470px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+              }}
+            >
+              <Box
+                sx={{
+                  my: '10px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'flex-end',
+                  width: '100%',
+                  height: '70px',
+                }}
+              >
+                <TextField
+                  autoFocus
+                  label="이메일*"
+                  variant="standard"
+                  inputRef={emailRef}
+                  onChange={onEmailChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      onCheckEmail();
+                    }
+                  }}
+                  helperText={
+                    !emailCheck.CEW || !emailCheck.CEL
+                      ? '이메일을 입력해주세요.'
+                      : emailCheck.CEL && !emailCheck.CER
+                      ? '이메일 형식이 올바르지 않습니다.'
+                      : emailCheck.CEL && emailCheck.CER && !emailCheck.CE
+                      ? '이메일 중복 확인이 필요합니다.'
+                      : '사용 가능한 이메일입니다.'
+                  }
+                  sx={{
+                    ...emailStyle,
+                    width: '370px',
+                    mr: '20px',
+                  }}
+                />
+                <Button
+                  onClick={onCheckEmail}
+                  sx={checkBtnStyle}
+                  disabled={
+                    !emailCheck.CEW ||
+                    !emailCheck.CEL ||
+                    !emailCheck.CER ||
+                    emailCheck.CE
+                  }
+                >
+                  중복
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  mt: '10px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'flex-end',
+                  width: '100%',
+                  height: '70px',
+                }}
+              >
+                <TextField
+                  label="닉네임*"
+                  variant="standard"
+                  inputRef={nicknameRef}
+                  onChange={onNicknameChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      onCheckNickname();
+                    }
+                  }}
+                  helperText={
+                    !nicknameCheck.CNW || !nicknameCheck.CNL
+                      ? '닉네임은 2 ~ 10자의 한글, 영문 숫자로 입력해주세요.'
+                      : nicknameCheck.CNL && !nicknameCheck.CNR
+                      ? '닉네임은 한글, 영문, 숫자만 입력 가능합니다.'
+                      : nicknameCheck.CNL &&
+                        nicknameCheck.CNR &&
+                        !nicknameCheck.CN
+                      ? '닉네임 중복 확인이 필요합니다.'
+                      : '사용 가능한 닉네임입니다.'
+                  }
+                  sx={{
+                    ...nicknameStyle,
+                    width: '370px',
+                    mr: '20px',
+                  }}
+                />
+                <Button
+                  onClick={onCheckNickname}
+                  sx={checkBtnStyle}
+                  disabled={
+                    !nicknameCheck.CNW ||
+                    !nicknameCheck.CNL ||
+                    !nicknameCheck.CNR ||
+                    nicknameCheck.CN
+                  }
+                >
+                  중복
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+          {/* 프로필 사진 및 이메일/닉네임 인풋 끝 */}
+
+          <TextField
+            label="비밀번호*"
+            type="password"
+            variant="standard"
+            inputRef={passwordRef}
+            onChange={passwordCheck}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                passwordConfirmRef.current.focus();
+              }
+            }}
+            sx={{
+              ...defaultInputStyle,
+              width: '400px',
+              mt: '30px',
+            }}
+          />
+          <TextField
+            label="비밀번호 확인*"
+            type="password"
+            variant="standard"
+            inputRef={passwordConfirmRef}
+            onChange={passwordConfirmCheck}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                nameRef.current.focus();
+              }
+            }}
+            helperText={
+              !checkPasswordConfirmWrite
+                ? ''
+                : !checkPassword
+                ? '비밀번호가 일치하지 않습니다.'
+                : '비밀번호가 일치합니다.'
+            }
+            sx={{
+              ...passwordConfirmStyle,
+              width: '400px',
+              mt: '35px',
+            }}
+          />
+          <TextField
+            label="이름*"
+            variant="standard"
+            inputRef={nameRef}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                phoneRef.current.focus();
+              }
+            }}
+            sx={{
+              ...defaultInputStyle,
+              width: '400px',
+              mt: '35px',
+            }}
+          />
+          <Box
+            sx={{
+              width: '400px',
+              mt: '45px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="생년월일"
+                value={birthDay}
+                onChange={handleBirthdayChange}
+                disableFuture
+                sx={{
+                  '& .MuiInputBase-input': {
+                    width: '200px',
+                    height: '20px',
+                  },
+                  '& .MuiOutlinedInput-root.Mui-focused': {
+                    '& > fieldset': {
+                      borderColor: '#c3c36a',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    '&.Mui-focused': {
+                      color: '#c3c36a',
+                    },
+                  },
+                }}
+                format="YYYY-MM-DD"
+              />
+            </LocalizationProvider>
+            <Button
+              variant="outlined"
+              sx={{
+                ml: '15px',
+                mt: '5px',
+                pt: '6px',
+                width: '100px',
+                height: '40px',
+                backgroundColor: '#D9D9D9',
+                border: 'none',
+                color: '#000000',
+                '&:hover': {
+                  border: 'none',
+                  backgroundColor: '#D9D9D9',
+                },
+              }}
+              onClick={() => {
+                setBirthDay(null);
+              }}
+            >
+              초기화
+            </Button>
+          </Box>
+
+          <TextField
+            label="휴대폰 번호*"
+            variant="standard"
+            inputRef={phoneRef}
+            onChange={phoneCheck}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setModalHandler(true);
+              }
+            }}
+            helperText=""
+            sx={{
+              ...defaultInputStyle,
+              width: '400px',
+              mt: '35px',
+            }}
+          />
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '400px',
+              mt: '35px',
+            }}
+          >
+            <TextField
+              label="우편번호*"
+              variant="standard"
+              value={zipCode}
+              sx={{
+                ...defaultInputStyle,
+                width: '250px',
+              }}
+              inputProps={{
+                readOnly: true,
+              }}
+            />
+            <Button
+              onClick={() => {
+                setModalHandler(true);
+              }}
+              sx={{
+                width: '100px',
+                backgroundColor: '#D9D9D9',
+                border: 'none',
+                color: '#000000',
+                '&:hover': {
+                  border: 'none',
+                  backgroundColor: '#D9D9D9',
+                },
+              }}
+            >
+              주소찾기
+            </Button>
+          </Box>
+
+          <TextField
+            label="주소*"
+            variant="standard"
+            value={address1}
+            sx={{
+              ...defaultInputStyle,
+              width: '400px',
+              mt: '35px',
+            }}
+            inputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="상세주소"
+            variant="standard"
+            inputRef={address2Ref}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleMember();
+              }
+            }}
+            sx={{
+              ...defaultInputStyle,
+              width: '400px',
+              mt: '35px',
+            }}
+          />
+        </Box>
+
+        <Box
+          sx={{
+            m: 0,
+            mt: 10,
+            mb: 10,
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate(-1);
+            }}
+            sx={{
+              mr: 3,
+              width: '170px',
+              height: '45px',
+              borderRadius: '10px',
+              color: '#000000',
+              fontWeight: 'bold',
+              fontSize: '1.2rem',
+              backgroundColor: '#ffffff',
+              '&:hover': {
+                backgroundColor: '#ffffff',
+                color: '#000000',
+              },
+            }}
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleMember}
+            variant="contained"
+            sx={{
+              ml: 3,
+              width: '170px',
+              height: '45px',
+              borderRadius: '10px',
+              color: '#000000',
+              fontWeight: 'bold',
+              fontSize: '1.2rem',
+              backgroundColor: '#c3c36a',
+              '&:hover': {
+                backgroundColor: '#c3c36a',
+                color: '#ffffff',
+              },
+            }}
+          >
+            회원가입
+          </Button>
+        </Box>
+      </Container>
+
+      <UserFooter />
+    </>
   );
 };
 
 export default UserSignup;
-
-const Wrapper = styled.div`
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
-    font-weight: 700;
-    font-size: 40px;
-`
-const Header = styled.div`
-    font-family: "The Jamsil 2 Light";
-    font-size: 25pt;
-    justify-content: left;
-    align-items: left;
-    display: flex;
-    flex-direction: column;
-`
-const Container = styled.div`
-    align-items: center;
-    width: 1029px;
-    margin-left: 80px;
-    margin-bottom: 50px;
-    margin-top:80px;
-`
-
-const Text = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
-const Text1 = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: left;
-    font-size:20pt;
-`
-const Text2 = styled.div` 
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    font-size:20pt;
-    margin-top: 50px
-`
-const Group = styled.div`
-    margin-top: 80px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`
