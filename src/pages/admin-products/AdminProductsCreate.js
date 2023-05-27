@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper';
+import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -395,7 +395,11 @@ const AdminProductsCreate = () => {
   };
 
   return (
-    <Container>
+    <Container
+      sx={{
+        userSelect: 'none',
+      }}
+    >
       {/* 타이틀 */}
       <Typography
         variant="h4"

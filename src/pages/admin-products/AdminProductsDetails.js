@@ -98,6 +98,7 @@ const AdminProductsDetails = () => {
     width: 170,
     fontSize: 18,
     border: '1px solid #E0E0E0',
+    userSelect: 'none',
   };
 
   const tableBodyStyle = { width: 400, border: '1px solid #E0E0E0' };
@@ -107,6 +108,7 @@ const AdminProductsDetails = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    userSelect: 'none',
   };
 
   const noImageBox = {
@@ -180,11 +182,7 @@ const AdminProductsDetails = () => {
   };
 
   return (
-    <Container
-      sx={{
-        userSelect: 'none',
-      }}
-    >
+    <Container>
       {/* 타이틀 */}
       <Typography
         variant="h4"
@@ -195,6 +193,7 @@ const AdminProductsDetails = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
+          userSelect: 'none',
         }}
       >
         상품 목록 &#62; 상세

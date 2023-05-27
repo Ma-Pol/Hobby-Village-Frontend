@@ -8,12 +8,14 @@ import UserQnACreate from './UserQnACreate';
 import { Container } from '@mui/material';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
+import UserCsTitle from '../../components/user-cs/UserCsTitle';
 
 const UserCs = () => {
   return (
     <>
       <UserHeader />
       <Container>
+        <UserCsTitle />
         <Routes>
           <Route exact path="faq/lists" element={<UserFAQLists />} />
           <Route exact path="qna/:email/lists" element={<UserQnALists />} />

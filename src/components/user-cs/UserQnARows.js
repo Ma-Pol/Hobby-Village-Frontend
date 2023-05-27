@@ -13,8 +13,7 @@ const AdminQnARows = ({
   queryString,
   isLast,
 }) => {
-  // const email = sessionStorage.getItem('email'); // 이메일을 세션에서 가져오기
-  const email = 'bae@naver.com'; // 임시 이메일
+  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const qnaLink = `/cs/qna/${email}/details/${qstCode}`;
 
   const tableLine = {

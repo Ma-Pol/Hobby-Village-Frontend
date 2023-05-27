@@ -19,8 +19,8 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import UserQnARows from '../../components/user-cs/UserQnARows';
-import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import Loading from 'components/Loading';
+import UserCsTitleBottom from '../../components/user-cs/UserCsTitleBottom';
 
 const UserQnALists = () => {
   const [loading, setLoading] = useState(true);
@@ -115,6 +115,7 @@ const UserQnALists = () => {
   };
 
   const search = () => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
     const keyword = keywordRef.current.value;
     if (keyword === '') {
       navigate(`/cs/qna/${email}/lists?filter=${currentFilter}&pages=1`);
@@ -164,7 +165,7 @@ const UserQnALists = () => {
 
   return (
     <>
-      <UserCsTitle />
+      <UserCsTitleBottom />
       <Container sx={{ minHeight: '80vh' }}>
         <Box
           sx={{

@@ -251,7 +251,7 @@ const AdminRequestsLists = () => {
           userSelect: 'none',
         }}
       >
-        신청 목록
+        물품 판매/위탁 신청 목록
       </Typography>
       {/* 신청 목록 글씨 표기 끝 */}
 

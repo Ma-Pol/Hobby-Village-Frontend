@@ -72,6 +72,7 @@ const AdminUsersDetails = () => {
     fontWeight: 'bold',
     width: '140px',
     mr: '60px',
+    userSelect: 'none',
   };
 
   const contentStyle = {
@@ -143,6 +144,7 @@ const AdminUsersDetails = () => {
                     borderRadius: '50%',
                     objectFit: 'cover',
                     border: '1px solid #d5d5d5',
+                    userSelect: 'none',
                   }}
                   component="img"
                   src={
@@ -181,6 +183,7 @@ const AdminUsersDetails = () => {
                       sx={{
                         fontWeight: 'bold',
                         mr: '50px',
+                        userSelect: 'none',
                       }}
                     >
                       이메일
@@ -206,6 +209,7 @@ const AdminUsersDetails = () => {
                       sx={{
                         fontWeight: 'bold',
                         mr: '50px',
+                        userSelect: 'none',
                       }}
                     >
                       닉네임
@@ -259,12 +263,24 @@ const AdminUsersDetails = () => {
                 </Typography>
               </Box>
 
-              <Box sx={{ ...mainBoxStyle, mb: '20px' }}>
+              <Box sx={mainBoxStyle}>
                 <Typography variant="h6" component="h2" sx={headerStyle}>
                   기본 주소
                 </Typography>
                 <Typography variant="h6" component="h2" sx={contentStyle}>
                   {details.address1 + ' ' + details.address2}
+                </Typography>
+              </Box>
+
+              <Box sx={{ ...mainBoxStyle, mb: '20px' }}>
+                <Typography variant="h6" component="h2" sx={headerStyle}>
+                  적립금
+                </Typography>
+                <Typography variant="h6" component="h2" sx={contentStyle}>
+                  {String(details.savedMoney).replace(
+                    /\B(?=(\d{3})+(?!\d))/g,
+                    ','
+                  ) + ' 원'}
                 </Typography>
               </Box>
             </Box>

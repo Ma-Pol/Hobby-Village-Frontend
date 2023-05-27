@@ -10,7 +10,7 @@ const UserDeleteModal = ({ setModalHandler, userDelete }) => {
         position: 'fixed',
         left: '50%',
         transform: 'translateX(-50%)',
-        top: '30%',
+        top: '34%',
         borderRadius: '15px',
         border: '2px solid #000000',
         width: '600px',

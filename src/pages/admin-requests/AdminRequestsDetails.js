@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, Grid, Modal, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -15,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Loading from 'components/Loading';
+import RequestRejectModal from '../../components/admin-requests/AdminRequestsDetails/RequestRejectModal';
 
 const requestDataRow = {
   py: 2,
@@ -86,6 +80,7 @@ const AdminRequestsDetails = () => {
   const { reqCode } = useParams();
   const [requestDetail, setRequestDetail] = useState([]);
   const [reqFileList, setReqFileList] = useState([]);
+  const [rejectModalHandler, setRejectModalHandler] = useState(false); // 심사 탈락 모달
 
   useEffect(() => {
     checkRequest();
@@ -124,6 +119,7 @@ const AdminRequestsDetails = () => {
       )
       .finally(() => {
         setLoading(false);
+        console.log(reqFileList);
       })
       .catch((err) => {
         console.error(err);
@@ -135,6 +131,8 @@ const AdminRequestsDetails = () => {
       axios
         .patch(`/m/requests/updateProgress/${reqCode}`, {
           reqProgress: requestDetail.reqProgress,
+          reqTitle: requestDetail.reqTitle,
+          reqPhone: requestDetail.phone,
         })
         .then((res) => {
           if (res.data === 1) {
@@ -147,6 +145,16 @@ const AdminRequestsDetails = () => {
             navigate(`/m/products/create`, {
               state: {
                 requestDetail: requestDetail,
+                reqFileList: reqFileList,
+                // 보내지는 데이터
+                // reqCode: requestDetail.reqCode,
+                // reqTitle: requestDetail.reqTitle,
+                // reqPrice: requestDetail.reqPrice,
+                // reqCategory: requestDetail.reqCategory,
+                // reqContent: requestDetail.reqContent,
+                // reqProgress: requestDetail.reqProgress,
+                // reqPhone: requestDetail.phone,
+                // reqFileList: reqFileList,
               },
             });
           } else {
@@ -158,24 +166,21 @@ const AdminRequestsDetails = () => {
     }
   };
 
-  const rejectProgress = () => {
-    if (window.confirm('정말 탈락 처리하시겠습니까?')) {
-      axios
-        .patch(`/m/requests/rejectProgress/${reqCode}`)
-        .then((res) => {
-          if (res.data === 1) {
-            alert('탈락 처리되었습니다.');
-            getRequestData(reqCode);
-          } else {
-            alert('탈락 처리에 실패했습니다.');
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      return false;
-    }
+  const rejectProgress = (rejectData) => {
+    axios
+      .patch(`/m/requests/rejectProgress`, rejectData)
+      .then((res) => {
+        if (res.data === 1) {
+          alert('심사 탈락 처리되었습니다.');
+          getRequestData(reqCode);
+        } else {
+          alert('심사 탈락 처리에 실패했습니다.');
+        }
+        setRejectModalHandler(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const cancelProgress = () => {
@@ -219,466 +224,495 @@ const AdminRequestsDetails = () => {
   };
 
   return (
-    <Container>
-      {/* 신청 상세 글씨 표기 시작 */}
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{
-          mt: 5,
-          mb: 1,
-          pl: 1,
-          pr: 1,
-          fontWeight: 'bold',
-          userSelect: 'none',
+    <>
+      <Modal
+        open={rejectModalHandler}
+        onClose={() => {
+          setRejectModalHandler(false);
         }}
       >
-        물품 판매/위탁 신청 목록 &gt; 신청 상세
-      </Typography>
-      {/* 신청 상세 글씨 표기 끝 */}
-
-      {loading ? (
-        <Loading height={'70vh'} />
-      ) : (
         <>
-          <Container
-            sx={{
-              width: '1100px',
-            }}
-          >
-            <Grid container sx={{ mb: 4 }}>
-              {/* 신청자 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    신청 회원
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  <Typography variant="h6" component="h2">
-                    {requestDetail.nickname +
-                      ' (' +
-                      requestDetail.reqEmail +
-                      ')'}
-                  </Typography>
-                </Box>
-              </Grid>
-              {/* 신청자 표기 끝 */}
+          <RequestRejectModal
+            reqCode={reqCode}
+            reqTitle={requestDetail.reqTitle}
+            reqPhone={requestDetail.phone}
+            setRejectModalHandler={setRejectModalHandler}
+            rejectProgress={rejectProgress}
+          />
+        </>
+      </Modal>
+      <Container>
+        {/* 신청 상세 글씨 표기 시작 */}
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            mt: 5,
+            mb: 1,
+            pl: 1,
+            pr: 1,
+            fontWeight: 'bold',
+            userSelect: 'none',
+          }}
+        >
+          물품 판매/위탁 신청 목록 &gt; 신청 상세
+        </Typography>
+        {/* 신청 상세 글씨 표기 끝 */}
 
-              {/* 신청 타입 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    신청 타입
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  <Typography variant="h6" component="h2">
-                    {requestDetail.reqSort}
-                  </Typography>
-                </Box>
-              </Grid>
-              {/* 신청 타입 표기 끝 */}
-
-              {/* 물품 카테고리 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    물품 카테고리
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  <Typography variant="h6" component="h2">
-                    {requestDetail.reqCategory}
-                  </Typography>
-                </Box>
-              </Grid>
-              {/* 물품 카테고리 표기 끝 */}
-
-              {/* 상품 명 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    물품 명
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  <Typography variant="h6" component="h2">
-                    {requestDetail.reqTitle}
-                  </Typography>
-                </Box>
-              </Grid>
-              {/* 상품 명 표기 끝 */}
-
-              {/* 물품 설명 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    물품 설명
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  <Typography variant="h6" component="h2">
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: requestDetail.reqContent,
+        {loading ? (
+          <Loading height={'70vh'} />
+        ) : (
+          <>
+            <Container
+              sx={{
+                width: '1100px',
+              }}
+            >
+              <Grid container sx={{ mb: 4 }}>
+                {/* 신청자 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
                       }}
-                    ></div>
-                  </Typography>
-                </Box>
-              </Grid>
-              {/* 물품 설명 표기 끝 */}
-
-              {/* 첨부파일 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    첨부 파일
-                  </Typography>
-                </Box>
-
-                {/* 첨부파일 출력부 시작 */}
-                {reqFileList.length === 0 ? (
-                  <Box sx={requestDataValueCol}>
-                    <Typography variant="h6" component="h2">
-                      첨부 파일이 없습니다.
+                    >
+                      신청 회원
                     </Typography>
                   </Box>
-                ) : (
-                  <Swiper
-                    loop={true}
-                    pagination={pagination}
-                    modules={[Pagination]}
-                    style={requestFileValueCol}
-                  >
-                    {reqFileList.map((fileName) => {
-                      const fileSrc = `http://localhost:8080/m/requests/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
-                      return (
-                        <SwiperSlide
-                          key={fileName}
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Box
-                            component="img"
-                            alt={fileName}
-                            src={fileSrc}
-                            sx={{
-                              my: 5,
-                              objectFit: 'contain',
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
-                  </Swiper>
-                )}
+                  <Box sx={requestDataValueCol}>
+                    <Typography variant="h6" component="h2">
+                      {requestDetail.nickname +
+                        ' (' +
+                        requestDetail.reqEmail +
+                        ')'}
+                    </Typography>
+                  </Box>
+                </Grid>
+                {/* 신청자 표기 끝 */}
 
-                {/* 첨부파일 출력부 끝 */}
-              </Grid>
-              {/* 첨부파일 표기 끝 */}
+                {/* 신청 타입 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      신청 타입
+                    </Typography>
+                  </Box>
+                  <Box sx={requestDataValueCol}>
+                    <Typography variant="h6" component="h2">
+                      {requestDetail.reqSort}
+                    </Typography>
+                  </Box>
+                </Grid>
+                {/* 신청 타입 표기 끝 */}
 
-              {/* 현재 진행 상황 표기 시작 */}
-              <Grid item xs={12} sx={requestDataRow}>
-                <Box sx={requestDataNameCol}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    현재 진행 상황
-                  </Typography>
-                </Box>
-                <Box sx={requestDataValueCol}>
-                  {requestDetail.reqProgress === '1차 심사 중' ||
-                  requestDetail.reqProgress === '2차 심사 대기' ||
-                  requestDetail.reqProgress === '2차 심사 중' ||
-                  requestDetail.reqProgress === '완료' ? (
-                    <>
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '1차 심사 중'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        1차 심사 중
+                {/* 물품 카테고리 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      물품 카테고리
+                    </Typography>
+                  </Box>
+                  <Box sx={requestDataValueCol}>
+                    <Typography variant="h6" component="h2">
+                      {requestDetail.reqCategory}
+                    </Typography>
+                  </Box>
+                </Grid>
+                {/* 물품 카테고리 표기 끝 */}
+
+                {/* 상품 명 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      물품 명
+                    </Typography>
+                  </Box>
+                  <Box sx={requestDataValueCol}>
+                    <Typography variant="h6" component="h2">
+                      {requestDetail.reqTitle}
+                    </Typography>
+                  </Box>
+                </Grid>
+                {/* 상품 명 표기 끝 */}
+
+                {/* 물품 설명 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      물품 설명
+                    </Typography>
+                  </Box>
+                  <Box sx={requestDataValueCol}>
+                    <Typography variant="h6" component="h2">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: requestDetail.reqContent,
+                        }}
+                      ></div>
+                    </Typography>
+                  </Box>
+                </Grid>
+                {/* 물품 설명 표기 끝 */}
+
+                {/* 첨부파일 표기 시작 */}
+                <Grid item xs={12} sx={requestDataRow}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      첨부 파일
+                    </Typography>
+                  </Box>
+
+                  {/* 첨부파일 출력부 시작 */}
+                  {reqFileList.length === 0 ? (
+                    <Box sx={requestDataValueCol}>
+                      <Typography variant="h6" component="h2">
+                        첨부 파일이 없습니다.
                       </Typography>
-                      &nbsp;&gt;&nbsp;
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '2차 심사 대기'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        2차 심사 대기
-                      </Typography>
-                      &nbsp;&gt;&nbsp;
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '2차 심사 중'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        2차 심사 중
-                      </Typography>
-                      &nbsp;&gt;&nbsp;
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '완료'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        완료
-                      </Typography>
-                    </>
-                  ) : requestDetail.reqProgress === '심사 탈락' ? (
-                    <>
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={reqProgressExact}
-                      >
-                        심사 탈락
-                      </Typography>
-                    </>
+                    </Box>
                   ) : (
-                    <>
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '위탁 철회 요청'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        위탁 철회 요청
-                      </Typography>
-                      &nbsp;&gt;&nbsp;
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '철회 진행 중'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        철회 진행 중
-                      </Typography>
-                      &nbsp;&gt;&nbsp;
-                      <Typography
-                        variant="h6"
-                        component="h2"
-                        sx={
-                          requestDetail.reqProgress === '철회 완료'
-                            ? reqProgressExact
-                            : reqProgressNotExact
-                        }
-                      >
-                        철회 완료
-                      </Typography>
-                    </>
+                    <Swiper
+                      loop={true}
+                      pagination={pagination}
+                      modules={[Pagination]}
+                      style={requestFileValueCol}
+                    >
+                      {reqFileList.map((fileName) => {
+                        const fileSrc = `http://localhost:8080/m/requests/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+                        return (
+                          <SwiperSlide
+                            key={fileName}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              alt={fileName}
+                              src={fileSrc}
+                              sx={{
+                                my: 5,
+                                objectFit: 'contain',
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
                   )}
-                </Box>
-              </Grid>
-              {/* 현재 진행 상황 표기 끝 */}
-            </Grid>
-          </Container>
 
-          {/* 하단 버튼 표기 시작 */}
-          <Box
-            sx={{
-              my: 4,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {requestDetail.reqProgress === '심사 탈락' ||
-            requestDetail.reqProgress === '철회 진행 중' ||
-            requestDetail.reqProgress === '철회 완료' ||
-            requestDetail.reqProgress === '완료' ? (
-              <></>
-            ) : requestDetail.reqProgress === '위탁 철회 요청' ? (
+                  {/* 첨부파일 출력부 끝 */}
+                </Grid>
+                {/* 첨부파일 표기 끝 */}
+
+                {/* 현재 진행 상황 표기 시작 */}
+                <Grid item xs={12} sx={{ ...requestDataRow, border: 'none' }}>
+                  <Box sx={requestDataNameCol}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      현재 진행 상황
+                    </Typography>
+                  </Box>
+                  <Box sx={requestDataValueCol}>
+                    {requestDetail.reqProgress === '1차 심사 중' ||
+                    requestDetail.reqProgress === '2차 심사 대기' ||
+                    requestDetail.reqProgress === '2차 심사 중' ||
+                    requestDetail.reqProgress === '완료' ? (
+                      <>
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '1차 심사 중'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          1차 심사 중
+                        </Typography>
+                        &nbsp;&gt;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '2차 심사 대기'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          2차 심사 대기
+                        </Typography>
+                        &nbsp;&gt;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '2차 심사 중'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          2차 심사 중
+                        </Typography>
+                        &nbsp;&gt;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '완료'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          완료
+                        </Typography>
+                      </>
+                    ) : requestDetail.reqProgress === '심사 탈락' ? (
+                      <>
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={reqProgressExact}
+                        >
+                          심사 탈락
+                        </Typography>
+                        &nbsp;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={reqProgressNotExact}
+                        >
+                          {'(사유: ' + requestDetail.rejectReason + ')'}
+                        </Typography>
+                      </>
+                    ) : (
+                      <>
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '위탁 철회 요청'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          위탁 철회 요청
+                        </Typography>
+                        &nbsp;&gt;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '철회 진행 중'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          철회 진행 중
+                        </Typography>
+                        &nbsp;&gt;&nbsp;
+                        <Typography
+                          variant="h6"
+                          component="h2"
+                          sx={
+                            requestDetail.reqProgress === '철회 완료'
+                              ? reqProgressExact
+                              : reqProgressNotExact
+                          }
+                        >
+                          철회 완료
+                        </Typography>
+                      </>
+                    )}
+                  </Box>
+                </Grid>
+                {/* 현재 진행 상황 표기 끝 */}
+              </Grid>
+            </Container>
+
+            {/* 하단 버튼 표기 시작 */}
+            <Box
+              sx={{
+                mt: 4,
+                mb: 8,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {requestDetail.reqProgress === '심사 탈락' ||
+              requestDetail.reqProgress === '철회 진행 중' ||
+              requestDetail.reqProgress === '철회 완료' ||
+              requestDetail.reqProgress === '완료' ? (
+                <></>
+              ) : requestDetail.reqProgress === '위탁 철회 요청' ? (
+                <Button
+                  onClick={rejectCancelProgress}
+                  variant="contained"
+                  sx={{
+                    mx: 2,
+                    width: '130px',
+                    height: '30px',
+                    backgroundColor: '#f5b8b8',
+                    borderRadius: '15px',
+                    border: '1px solid #626262',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: 'tomato',
+                      color: '#ffffff',
+                    },
+                  }}
+                >
+                  위탁 철회 거부
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setRejectModalHandler(true);
+                  }}
+                  variant="contained"
+                  sx={{
+                    mx: 2,
+                    width: '100px',
+                    height: '30px',
+                    backgroundColor: '#f5b8b8',
+                    borderRadius: '15px',
+                    border: '1px solid #626262',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: 'tomato',
+                      color: '#ffffff',
+                    },
+                  }}
+                >
+                  심사 탈락
+                </Button>
+              )}
+
               <Button
-                onClick={rejectCancelProgress}
-                variant="contained"
-                sx={{
-                  mx: 2,
-                  width: '130px',
-                  height: '30px',
-                  backgroundColor: '#f5b8b8',
-                  borderRadius: '15px',
-                  border: '1px solid #626262',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    backgroundColor: 'tomato',
-                    color: '#ffffff',
-                  },
+                onClick={() => {
+                  if (prevQuery === undefined) {
+                    navigate(
+                      '/m/requests/sell/lists?sort=-reqDate&filter=none&pages=1'
+                    );
+                  } else {
+                    navigate(`/m/requests/${prevCategory}/lists${prevQuery}`);
+                  }
                 }}
-              >
-                위탁 철회 거부
-              </Button>
-            ) : (
-              <Button
-                onClick={rejectProgress}
                 variant="contained"
                 sx={{
                   mx: 2,
                   width: '100px',
                   height: '30px',
-                  backgroundColor: '#f5b8b8',
-                  borderRadius: '15px',
-                  border: '1px solid #626262',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    backgroundColor: 'tomato',
-                    color: '#ffffff',
-                  },
-                }}
-              >
-                심사 탈락
-              </Button>
-            )}
-
-            <Button
-              onClick={() => {
-                if (prevQuery === undefined) {
-                  navigate(
-                    '/m/requests/sell/lists?sort=-reqDate&filter=none&pages=1'
-                  );
-                } else {
-                  navigate(`/m/requests/${prevCategory}/lists${prevQuery}`);
-                }
-              }}
-              variant="contained"
-              sx={{
-                mx: 2,
-                width: '100px',
-                height: '30px',
-                backgroundColor: '#ffffff',
-                borderRadius: '15px',
-                border: '1px solid #626262',
-                color: '#000000',
-                fontWeight: 'bold',
-                '&:hover': {
                   backgroundColor: '#ffffff',
-                  color: '#000000',
-                },
-              }}
-            >
-              신청 목록
-            </Button>
-            {requestDetail.reqProgress === '완료' ||
-            requestDetail.reqProgress === '철회 완료' ||
-            requestDetail.reqProgress === '심사 탈락' ? (
-              <></>
-            ) : requestDetail.reqProgress === '위탁 철회 요청' ? (
-              <Button
-                variant="contained"
-                onClick={cancelProgress}
-                sx={{
-                  mx: 2,
-                  width: '130px',
-                  height: '30px',
-                  backgroundColor: '#c3c36a',
                   borderRadius: '15px',
                   border: '1px solid #626262',
                   color: '#000000',
                   fontWeight: 'bold',
                   '&:hover': {
-                    backgroundColor: '#c3c36a',
-                    color: '#ffffff',
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
                   },
                 }}
               >
-                위탁 철회 승인
+                신청 목록
               </Button>
-            ) : (
-              <Button
-                variant="contained"
-                onClick={updateProgress}
-                sx={{
-                  mx: 2,
-                  width: '160px',
-                  height: '30px',
-                  backgroundColor: '#c3c36a',
-                  borderRadius: '15px',
-                  border: '1px solid #626262',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                  '&:hover': {
+              {requestDetail.reqProgress === '완료' ||
+              requestDetail.reqProgress === '철회 완료' ||
+              requestDetail.reqProgress === '심사 탈락' ? (
+                <></>
+              ) : requestDetail.reqProgress === '위탁 철회 요청' ? (
+                <Button
+                  variant="contained"
+                  onClick={cancelProgress}
+                  sx={{
+                    mx: 2,
+                    width: '130px',
+                    height: '30px',
                     backgroundColor: '#c3c36a',
-                    color: '#ffffff',
-                  },
-                }}
-              >
-                진행 상황 업데이트
-              </Button>
-            )}
-          </Box>
-          {/* 하단 버튼 표기 끝 */}
-        </>
-      )}
-    </Container>
+                    borderRadius: '15px',
+                    border: '1px solid #626262',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: '#c3c36a',
+                      color: '#ffffff',
+                    },
+                  }}
+                >
+                  위탁 철회 승인
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={updateProgress}
+                  sx={{
+                    mx: 2,
+                    width: '160px',
+                    height: '30px',
+                    backgroundColor: '#c3c36a',
+                    borderRadius: '15px',
+                    border: '1px solid #626262',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: '#c3c36a',
+                      color: '#ffffff',
+                    },
+                  }}
+                >
+                  진행 상황 업데이트
+                </Button>
+              )}
+            </Box>
+            {/* 하단 버튼 표기 끝 */}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

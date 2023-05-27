@@ -1,17 +1,6 @@
 import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
-
-const useStyles = makeStyles(() => ({
-  linkText: {
-    color: '#555555',
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-}));
 
 const UserFooter = () => {
   const mainText = {
@@ -86,7 +75,13 @@ const UserFooter = () => {
               CUSTOMER SERVICE
             </Typography>
 
-            <Link to="/notices/lists?filter=none&pages=1" style={linkText}>
+            <Link
+              to="/notices/lists?filter=none&pages=1"
+              style={linkText}
+              onClick={() => {
+                window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+              }}
+            >
               <Typography
                 variant="body2"
                 sx={{

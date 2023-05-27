@@ -1,15 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Typography,
-  InputBase,
-  Avatar,
-  Box,
-  Container,
-  TextField,
-} from '@mui/material';
-import { styled, alpha } from '@mui/system';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Typography, Avatar, Box, Container, TextField } from '@mui/material';
+import { styled } from '@mui/system';
 
 const BlackTextTypography = styled(Typography)({
   color: '#000000',
@@ -138,7 +130,7 @@ const UserHeader = () => {
             </Link>
 
             <Link
-              to="/products/lists"
+              to="/products/brand/lists"
               style={{
                 textDecoration: 'none',
               }}
@@ -159,7 +151,7 @@ const UserHeader = () => {
             </Link>
 
             <Link
-              to="/products/lists"
+              to="/recommend"
               style={{
                 textDecoration: 'none',
               }}

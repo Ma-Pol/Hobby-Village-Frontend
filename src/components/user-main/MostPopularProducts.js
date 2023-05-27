@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Grid, Typography } from '@mui/material';
 import ProductItem from './ProductItem';
 import Loading from 'components/Loading';
@@ -27,10 +27,6 @@ const MostPopularProducts = () => {
       .catch((err) => {
         console.error(err);
       });
-  };
-
-  const linkToProductsLists = () => {
-    navigate('/products/lists');
   };
 
   if (loading) {
@@ -63,22 +59,27 @@ const MostPopularProducts = () => {
             ))}
         </Grid>
 
-        <Typography
-          variant="body1"
-          sx={{
-            mb: 5,
-            color: '#000000',
-            fontSize: '17px',
-            fontWeight: 'bold',
-            '&:hover': {
-              cursor: 'pointer',
-              textDecoration: 'underline',
-            },
+        <Link
+          to="/products/lists"
+          style={{
+            marginBottom: '40px',
           }}
-          onClick={linkToProductsLists}
         >
-          인기 취미 물품 더 보기
-        </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: '#000000',
+              fontSize: '17px',
+              fontWeight: 'bold',
+              textDecoration: 'underline',
+              '&:hover': {
+                cursor: 'pointer',
+              },
+            }}
+          >
+            인기 취미 물품 더 보기
+          </Typography>
+        </Link>
       </Container>
     );
   }

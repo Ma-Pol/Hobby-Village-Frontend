@@ -16,7 +16,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/system';
 import React, { useEffect, useRef, useState } from 'react';
 import UserPurchaseProductCard from '../../components/user-purchase/UserPurchaseProductCard';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import UserHeader from '../../components/UserHeader';

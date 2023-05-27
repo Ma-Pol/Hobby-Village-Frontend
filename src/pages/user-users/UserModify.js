@@ -9,7 +9,6 @@ import {
   Box,
   Container,
   Modal,
-  CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
 import UserHeader from 'components/UserHeader';
@@ -425,7 +424,9 @@ const UserModify = () => {
         .then((res) => {
           if (res.data === 1) {
             alert('회원 탈퇴가 완료되었습니다.');
-            sessionStorage.clear();
+            sessionStorage.removeItem('hobbyvillage-email');
+            sessionStorage.removeItem('hobbyvillage-usernickname');
+            sessionStorage.removeItem('hobbyvillage-profile');
             navigate('/login');
           } else {
             alert('회원 탈퇴에 실패했습니다.');

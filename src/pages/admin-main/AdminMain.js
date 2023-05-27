@@ -63,7 +63,12 @@ const AdminMain = () => {
     const boxClass = index % 2 === 0 ? classes.box1 : classes.box2;
 
     return (
-      <Link component={RouterLink} to={url} style={{ textDecoration: 'none' }}>
+      <Link
+        key={index}
+        component={RouterLink}
+        to={url}
+        style={{ textDecoration: 'none' }}
+      >
         <Box className={`${classes.box} ${boxClass}`}>
           <Typography
             variant="h6"
@@ -85,7 +90,12 @@ const AdminMain = () => {
   };
 
   return (
-    <Box className={classes.container}>
+    <Box
+      className={classes.container}
+      sx={{
+        userSelect: 'none',
+      }}
+    >
       {urls.map((url, index) => renderBox(url, index, texts[index]))}
       <button
         onClick={() => {
