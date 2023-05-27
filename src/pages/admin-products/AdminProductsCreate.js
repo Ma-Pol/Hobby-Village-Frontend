@@ -25,6 +25,13 @@ import {
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+const pagination = {
+  clickable: true,
+  renderBullet: (index, className) => {
+    return `<span class="${className}"></span>`;
+  },
+};
+
 const modules = {
   toolbar: {
     container: [
@@ -646,12 +653,9 @@ const AdminProductsCreate = () => {
                   </Box>
                 ) : (
                   <Swiper
-                    pagination={{
-                      type: 'fraction',
-                    }}
                     loop={true}
-                    navigation={true}
-                    modules={[Navigation, Pagination]}
+                    pagination={pagination}
+                    modules={[Pagination]}
                     style={swiperStyle}
                   >
                     {imgBase64.map((img, index) => {
@@ -666,11 +670,12 @@ const AdminProductsCreate = () => {
                         >
                           <Box
                             component="img"
-                            alt="첨부된 사진이 없습니다"
+                            alt="상품 이미지"
                             src={img}
                             sx={{
-                              width: '90%',
-                              height: '83%',
+                              objectFit: 'contain',
+                              width: '100%',
+                              height: '100%',
                             }}
                           />
                         </SwiperSlide>

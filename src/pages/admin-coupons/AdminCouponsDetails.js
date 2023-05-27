@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { styled } from '@mui/system';
 import axios from 'axios';
 import { Box, Grid, Paper, Button, Typography } from '@mui/material';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -29,6 +30,7 @@ const buttonStyle = {
 };
 
 const AdminCouponsDetails = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const prevQuery = location.state?.queryString;
@@ -79,6 +81,9 @@ const AdminCouponsDetails = () => {
           setDiscount(data.discountPer + ' %');
         }
       })
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -108,279 +113,280 @@ const AdminCouponsDetails = () => {
     }
   };
 
-  if (!coupon) {
-    return <div></div>;
-  } else {
-    return (
-      <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
-        <Box
+  return (
+    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Box
+        sx={{
+          my: 5,
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
           sx={{
-            my: 5,
+            mt: 5,
+            mb: 1,
+            pl: 1,
+            pr: 1,
+            fontWeight: 'bold',
+            userSelect: 'none',
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              mt: 5,
-              mb: 1,
-              pl: 1,
-              pr: 1,
-              fontWeight: 'bold',
-              userSelect: 'none',
-            }}
-          >
-            쿠폰 목록 &gt; 상세
-          </Typography>
-        </Box>
-
-        <StyledPaper style={{ marginTop: '40px' }}>
-          <Grid container>
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                쿠폰명
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                title={coupon.couponName}
-                sx={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {coupon.couponName}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                할인 종류
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {discountType}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                할인 금액
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {discount}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                발행일
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {coupon.startDate}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                종료일
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {coupon.deadline === null ? '무기한' : coupon.deadline}
-              </Typography>
-            </Grid>
-          </Grid>
-        </StyledPaper>
-
-        <Box
-          style={{
-            textAlign: 'center',
-            marginTop: '20px',
-            marginBottom: '50px',
-          }}
-        >
-          <Button
-            onClick={deleteCoupon}
-            variant="contained"
-            sx={{
-              ...buttonStyle,
-              backgroundColor: '#f5b8b8',
-              '&:hover': {
-                backgroundColor: 'tomato',
-                color: '#ffffff',
-              },
-            }}
-          >
-            삭제
-          </Button>
-          <Button
-            onClick={handleList}
-            variant="contained"
-            sx={{
-              ...buttonStyle,
-              backgroundColor: '#ffffff',
-              '&:hover': {
-                backgroundColor: '#ffffff',
-                color: '#000000',
-              },
-            }}
-          >
-            목록
-          </Button>
-        </Box>
+          쿠폰 목록 &gt; 상세
+        </Typography>
       </Box>
-    );
-  }
+
+      {loading ? (
+        <Loading height={'70vh'} />
+      ) : (
+        <>
+          <StyledPaper style={{ marginTop: '40px' }}>
+            <Grid container>
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  쿠폰명
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  title={coupon.couponName}
+                  sx={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {coupon.couponName}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  할인 종류
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h6" component="h2">
+                  {discountType}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  할인 금액
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h6" component="h2">
+                  {discount}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  발행일
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h6" component="h2">
+                  {coupon.startDate}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  종료일
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h6" component="h2">
+                  {coupon.deadline === null ? '무기한' : coupon.deadline}
+                </Typography>
+              </Grid>
+            </Grid>
+          </StyledPaper>
+          <Box
+            style={{
+              textAlign: 'center',
+              marginTop: '20px',
+              marginBottom: '50px',
+            }}
+          >
+            <Button
+              onClick={deleteCoupon}
+              variant="contained"
+              sx={{
+                ...buttonStyle,
+                backgroundColor: '#f5b8b8',
+                '&:hover': {
+                  backgroundColor: 'tomato',
+                  color: '#ffffff',
+                },
+              }}
+            >
+              삭제
+            </Button>
+            <Button
+              onClick={handleList}
+              variant="contained"
+              sx={{
+                ...buttonStyle,
+                backgroundColor: '#ffffff',
+                '&:hover': {
+                  backgroundColor: '#ffffff',
+                  color: '#000000',
+                },
+              }}
+            >
+              목록
+            </Button>
+          </Box>{' '}
+        </>
+      )}
+    </Box>
+  );
 };
 
 export default AdminCouponsDetails;

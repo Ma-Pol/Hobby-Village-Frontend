@@ -9,14 +9,15 @@ import {
   Box,
   Container,
   Modal,
+  CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
-import './Signup.css';
 import UserHeader from 'components/UserHeader';
 import UserFooter from 'components/UserFooter';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import UserDeleteModal from 'components/user-users/UserDeleteModal';
+import Loading from 'components/Loading';
 
 const checkBtnStyle = {
   mb: '20px',
@@ -82,7 +83,7 @@ const nicknameReducer = (state, action) => {
 };
 
 const UserModify = () => {
-  const [loading, setLoading] = useState(true); // 로딩 여부
+  const [loading, setLoading] = useState(true);
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const nickname = sessionStorage.getItem('hobbyvillage-usernickname'); // 닉네임을 세션에서 가져오기
   const emailRegex = new RegExp(
@@ -439,10 +440,6 @@ const UserModify = () => {
     }
   };
 
-  if (email === null) {
-    return <Navigate to="/login" replace={true} />;
-  }
-
   const defaultInputStyle = {
     '& .MuiInput-root': {
       '&:after': {
@@ -549,8 +546,12 @@ const UserModify = () => {
     },
   };
 
+  if (email === null) {
+    return <Navigate to="/login" replace={true} />;
+  }
+
   if (loading) {
-    return <div></div>;
+    return <Loading height={'80vh'} />;
   } else {
     return (
       <>

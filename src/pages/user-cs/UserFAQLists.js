@@ -15,8 +15,10 @@ import {
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFAQRows from '../../components/user-cs/UserFAQRows';
+import Loading from 'components/Loading';
 
 const UserFAQLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const location = useLocation(); // 현재 URL 정보 가져오기
   const navigate = useNavigate(); // 페이지 이동
@@ -49,6 +51,9 @@ const UserFAQLists = () => {
             keywordRef.current.value = '';
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -79,6 +84,9 @@ const UserFAQLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -219,7 +227,13 @@ const UserFAQLists = () => {
           {/* FAQ 목록 테이블 컬럼명 표기 끝 */}
 
           {/* FAQ 목록 테이블 데이터 표기 시작 */}
-          {faqList.length === 0 ? (
+          {loading ? (
+            <Box
+              sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}
+            >
+              <Loading height={'416px'} />
+            </Box>
+          ) : faqList.length === 0 ? (
             // FAQ 데이터가 없을 경우
             <Typography
               sx={{

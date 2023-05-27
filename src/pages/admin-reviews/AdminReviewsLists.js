@@ -15,8 +15,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminReviewsRows from '../../components/admin-reviews/AdminReviewsLists/AdminReviewsRows';
+import Loading from 'components/Loading';
 
 const AdminReviewsLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const [reviewList, setReviewList] = useState([]); // 리뷰 목록
@@ -56,6 +58,9 @@ const AdminReviewsLists = () => {
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -92,6 +97,9 @@ const AdminReviewsLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -286,7 +294,11 @@ const AdminReviewsLists = () => {
         {/* 리뷰 목록 테이블 컬럼명 표기 끝 */}
 
         {/* 리뷰 목록 테이블 데이터 표기 시작 */}
-        {reviewList.length === 0 ? (
+        {loading ? (
+          <Box sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}>
+            <Loading height={'436px'} />
+          </Box>
+        ) : reviewList.length === 0 ? (
           // 리뷰 데이터가 없을 경우
           <Typography
             sx={{

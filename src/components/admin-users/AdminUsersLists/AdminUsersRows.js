@@ -1,11 +1,15 @@
 import { Grid, Typography, Button, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminUsersRows = ({
   userCode,
-  userEmail,
-  userName,
-  userDelete,
+  email,
+  name,
+  nickname,
+  profPicture,
+  checkRequest,
+  queryString,
   isLast,
 }) => {
   const userLink = `/m/users/details/${userCode}`;
@@ -44,24 +48,28 @@ const AdminUsersRows = ({
       <Grid className="userEmail" item xs={6}>
         <Typography sx={tableData}>
           <Link
-            href={userLink}
-            title={userEmail + '\n회원 상세 페이지'}
+            component={RouterLink}
+            to={userLink}
+            state={{ queryString: queryString }}
+            title={email + '\n회원 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
-            {userEmail}
+            {email}
           </Link>
         </Typography>
       </Grid>
       <Grid item xs={3}>
-        <Typography title={userName} sx={tableData}>
+        <Typography title={name} sx={tableData}>
           <Link
-            href={userLink}
-            title={userEmail + '\n회원 상세 페이지'}
+            component={RouterLink}
+            to={userLink}
+            state={{ queryString: queryString }}
+            title={email + '\n회원 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
-            {userName}
+            {name}
           </Link>
         </Typography>
       </Grid>
@@ -74,7 +82,7 @@ const AdminUsersRows = ({
       >
         <Button
           onClick={() => {
-            userDelete(userCode);
+            checkRequest(email, nickname, profPicture);
           }}
           variant="contained"
           sx={{

@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -34,6 +35,7 @@ const LabelItem = styled(Grid)(({ theme }) => ({
 }));
 
 const UserQnADetails = () => {
+  const [loading, setLoading] = useState(true);
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const [questionDetail, setQuestionDetail] = useState({});
   const [answerContent, setAnswerContent] = useState();
@@ -85,6 +87,9 @@ const UserQnADetails = () => {
           }
         })
       )
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((error) => {
         console.error('There was an error!', error);
       });
@@ -95,8 +100,8 @@ const UserQnADetails = () => {
     return <Navigate to="/login" replace={true} />;
   }
 
-  if (!questionDetail) {
-    return <div></div>;
+  if (loading) {
+    return <Loading height={'80vh'} />;
   } else {
     return (
       <Box style={{ maxWidth: '1150px', margin: 'auto', minHeight: '80vh' }}>

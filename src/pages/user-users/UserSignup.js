@@ -11,7 +11,6 @@ import {
   Container,
 } from '@mui/material';
 import axios from 'axios';
-import './Signup.css';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import UserHeader from 'components/UserHeader';
 import UserFooter from 'components/UserFooter';

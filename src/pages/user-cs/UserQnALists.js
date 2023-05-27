@@ -20,8 +20,10 @@ import {
 } from 'react-router-dom';
 import UserQnARows from '../../components/user-cs/UserQnARows';
 import UserCsTitle from '../../components/user-cs/UserCsTitle';
+import Loading from 'components/Loading';
 
 const UserQnALists = () => {
+  const [loading, setLoading] = useState(true);
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
@@ -57,6 +59,9 @@ const UserQnALists = () => {
             keywordRef.current.value = '';
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -87,11 +92,14 @@ const UserQnALists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
     }
-  }, [searchParams]);
+  }, [email, searchParams]);
 
   const filterChange = (e, value) => {
     if (value !== null) {
@@ -234,7 +242,13 @@ const UserQnALists = () => {
             </Grid>
           </Grid>
 
-          {questionList.length === 0 ? (
+          {loading ? (
+            <Box
+              sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}
+            >
+              <Loading height={'416px'} />
+            </Box>
+          ) : questionList.length === 0 ? (
             // 질문 데이터가 없을 경우
             <Typography
               sx={{

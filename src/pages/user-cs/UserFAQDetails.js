@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -28,6 +29,7 @@ const LabelItem = styled(Grid)(({ theme }) => ({
 }));
 
 const UserFAQDetail = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [faqDetail, setFaqDetail] = useState({});
   const { faqCode } = useParams();
@@ -57,13 +59,16 @@ const UserFAQDetail = () => {
       .then((detail) => {
         setFaqDetail(detail.data);
       })
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((error) => {
         console.error('There was an error!', error);
       });
   };
 
-  if (!faqDetail) {
-    return <div></div>;
+  if (loading) {
+    return <Loading height={'80vh'} />;
   } else {
     return (
       <Box style={{ maxWidth: '1150px', margin: 'auto', minHeight: '80vh' }}>

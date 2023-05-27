@@ -21,6 +21,7 @@ import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
+import Loading from 'components/Loading';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -142,6 +143,7 @@ const PriceLeftBoxRow = styled(Box)({
 });
 
 const Purchase = () => {
+  const [loading, setLoading] = useState(true);
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
 
   const navigate = useNavigate(); // 페이지 이동을 위한 훅
@@ -203,6 +205,9 @@ const Purchase = () => {
           totalShippingRef.current = 0; // 추가 결제 시 배송비는 없음
           setTotalPrice(totalPriceRef.current);
           setExactTotalPrice(totalPriceRef.current);
+          setTimeout(() => {
+            setLoading(false);
+          }, 500);
         }
       }
       // 이전 페이지에서 넘겨받은 데이터가 없는 경우 강제로 이전 페이지 이동
@@ -249,6 +254,8 @@ const Purchase = () => {
           if (prodIndex === products.length - 1 && productList.length === 0) {
             alert('주문 가능한 상품이 없습니다.');
             navigate(-1, { replace: true });
+          } else if (prodIndex === products.length - 1) {
+            setLoading(false);
           }
         })
         .catch((err) => {
@@ -1102,10 +1109,11 @@ const Purchase = () => {
     },
   };
 
-  if (userInfo === undefined || productList.length === 0) {
+  if (loading) {
     return (
       <>
         <UserHeader />
+        <Loading height={'100vh'} />
         <UserFooter />
       </>
     );
@@ -1211,7 +1219,7 @@ const Purchase = () => {
                   }}
                 >
                   {userInfo !== undefined &&
-                    userInfo.phone.replace(
+                    userInfo?.phone.replace(
                       /(\d{3})(\d{4})(\d{4})/,
                       '$1 - $2 - $3'
                     )}
@@ -1683,7 +1691,7 @@ const Purchase = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         &nbsp; 원 /&nbsp;
-                        {userInfo.savedMoney
+                        {userInfo?.savedMoney
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         &nbsp; 원
@@ -1727,10 +1735,10 @@ const Purchase = () => {
                   variant="contained"
                   size="small"
                   onClick={() => {
-                    if (exactTotalPrice < userInfo.savedMoney) {
+                    if (exactTotalPrice < userInfo?.savedMoney) {
                       savedMoneyRef.current.value = exactTotalPrice - 100;
                     } else {
-                      savedMoneyRef.current.value = userInfo.savedMoney;
+                      savedMoneyRef.current.value = userInfo?.savedMoney;
                     }
                   }}
                   sx={{

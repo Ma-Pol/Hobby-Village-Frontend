@@ -15,8 +15,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminFAQRows from '../../components/admin-faq/AdminFAQLists/AdminFAQRows';
+import Loading from 'components/Loading';
 
 const AdminFAQLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const location = useLocation(); // 현재 URL 정보 가져오기
@@ -55,6 +57,9 @@ const AdminFAQLists = () => {
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -87,6 +92,9 @@ const AdminFAQLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -292,7 +300,11 @@ const AdminFAQLists = () => {
         {/* FAQ 목록 테이블 컬럼명 표기 끝 */}
 
         {/* FAQ 목록 테이블 데이터 표기 시작 */}
-        {faqList.length === 0 ? (
+        {loading ? (
+          <Box sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}>
+            <Loading height={'436px'} />
+          </Box>
+        ) : faqList.length === 0 ? (
           // FAQ 데이터가 없을 경우
           <Typography
             sx={{

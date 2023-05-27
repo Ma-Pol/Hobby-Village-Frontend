@@ -10,13 +10,16 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminUsersRows from '../../components/admin-users/AdminUsersLists/AdminUsersRows';
+import Loading from 'components/Loading';
 
 const AdminUsersLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const [userList, setUserList] = useState([]); // 회원 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
   const [currentPage, setCurrentPage] = useState(searchParams.get('pages')); // 현재 페이지
@@ -48,6 +51,9 @@ const AdminUsersLists = () => {
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -79,6 +85,9 @@ const AdminUsersLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -114,10 +123,44 @@ const AdminUsersLists = () => {
   };
 
   // 회원 삭제 버튼 클릭 시
-  const userDelete = (userCode) => {
-    if (window.confirm('정말 해당 회원을 삭제하시겠습니까?')) {
+  const checkRequest = (email, nickname, profPicture) => {
+    axios
+      .get(`/m/users/delete/checkRequest?email=${email}`)
+      .then((res) => {
+        if (res.data > 0) {
+          alert(`판매/위탁 중인 물품 중 [완료], [심사 탈락], [철회 완료] 상태가 아닌 물품이 존재합니다.
+        \n해당 물품의 상태가 변경된 후 회원 삭제를 진행해주세요.`);
+        } else {
+          checkOrderProduct(email, nickname, profPicture);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const checkOrderProduct = (email, nickname, profPicture) => {
+    axios
+      .get(`/m/users/delete/checkOrderProduct?email=${email}`)
+      .then((res) => {
+        if (res.data > 0) {
+          alert(`반납 완료되지 않은 주문 물품이 존재합니다.
+          \n해당 물품의 반납이 완료된 후 회원 삭제를 진행해주세요.`);
+        } else {
+          userDelete(email, nickname, profPicture);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  const userDelete = (email, nickname, profPicture) => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
       axios
-        .delete(`/m/users/delete?userCode=${userCode}`)
+        .delete(
+          `/m/users/delete?email=${email}&nickname=${nickname}&profPicutre=${profPicture}`
+        )
         .then(() => {
           alert('회원이 삭제되었습니다.');
           // 마지막 페이지에서 마지막 회원을 삭제할 경우 이전 페이지로 이동
@@ -134,8 +177,8 @@ const AdminUsersLists = () => {
             window.location.reload();
           }
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((e) => {
+          console.error(e);
         });
     } else {
       return false;
@@ -242,7 +285,11 @@ const AdminUsersLists = () => {
         {/* 회원 목록 테이블 컬럼명 표기 끝 */}
 
         {/* 회원 목록 테이블 데이터 표기 시작 */}
-        {userList.length === 0 ? (
+        {loading ? (
+          <Box sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}>
+            <Loading height={'436px'} />
+          </Box>
+        ) : userList.length === 0 ? (
           // 회원 데이터가 없을 경우
           <Typography
             sx={{
@@ -262,9 +309,12 @@ const AdminUsersLists = () => {
             <AdminUsersRows
               key={user.userCode}
               userCode={user.userCode}
-              userEmail={user.email}
-              userName={user.name}
-              userDelete={userDelete}
+              email={user.email}
+              name={user.name}
+              nickname={user.nickname}
+              profPicture={user.profPicture}
+              checkRequest={checkRequest}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))

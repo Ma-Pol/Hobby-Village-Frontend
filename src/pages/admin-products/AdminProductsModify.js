@@ -24,6 +24,14 @@ import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import Loading from 'components/Loading';
+
+const pagination = {
+  clickable: true,
+  renderBullet: (index, className) => {
+    return `<span class="${className}"></span>`;
+  },
+};
 
 const modules = {
   toolbar: {
@@ -36,6 +44,7 @@ const modules = {
 };
 
 const AdminProductsModify = () => {
+  const [loading, setLoading] = useState(true);
   const { prodCode } = useParams();
   const navigate = useNavigate();
 
@@ -92,6 +101,9 @@ const AdminProductsModify = () => {
           }
         })
       )
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -371,472 +383,466 @@ const AdminProductsModify = () => {
     },
   };
 
-  if (
-    product.prodCode === undefined ||
-    brands.length === 0 ||
-    categories.length === 0
-  ) {
-    return <div></div>;
-  } else {
-    return (
-      <Container>
-        {/* 타이틀 */}
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{
-            mt: 5,
-            mb: 5,
-            pl: 1,
-            pr: 1,
-            fontWeight: 'bold',
-          }}
-        >
-          상품 목록 &#62; 수정
-        </Typography>
+  return (
+    <Container>
+      {/* 타이틀 */}
+      <Typography
+        variant="h4"
+        component="h1"
+        sx={{
+          mt: 5,
+          mb: 5,
+          pl: 1,
+          pr: 1,
+          fontWeight: 'bold',
+        }}
+      >
+        상품 목록 &#62; 수정
+      </Typography>
 
-        {/* form 시작 */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <TableContainer>
-            <Table sx={{ maxWidth: 1140 }}>
-              <TableRow>
-                <TableCell sx={tableHeadStyle}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      color: '#000000',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    상품 코드
-                  </Typography>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      color: '#000000',
-                    }}
-                  >
-                    {product.prodCode}
-                  </Typography>
-                </TableCell>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel htmlFor="prodBrand">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      브랜드
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodBrand"
-                    select
-                    fullWidth
-                    size="small"
-                    defaultValue={
-                      product.prodBrand === null ? 'none' : product.prodBrand
-                    }
-                    inputRef={prodBrandRef}
-                    sx={inputStyle}
-                  >
-                    <MenuItem value="선택" disabled>
-                      브랜드 선택
-                    </MenuItem>
-                    <MenuItem value="none">없음</MenuItem>
-                    {brands.map((brand) => (
-                      <MenuItem key={brand} value={brand}>
-                        {brand}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel
-                    htmlFor="prodPrice"
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      width: '123px',
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      대여료
-                    </Typography>
-                    <Typography
-                      sx={{ ml: '8px', fontSize: '12px', color: '#646464' }}
-                    >
-                      (7일 기준)
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodPrice"
-                    fullWidth
-                    size="small"
-                    defaultValue={product.prodPrice}
-                    placeholder="숫자만 입력해주세요. ex) 10000"
-                    inputRef={prodPriceRef}
-                    onChange={handlePriceChange}
-                    sx={inputStyle}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          &#8361;
-                        </InputAdornment>
-                      ),
-                    }}
-                  ></TextField>
-                </TableCell>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel htmlFor="prodCategory">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      카테고리
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodCategory"
-                    select
-                    fullWidth
-                    size="small"
-                    defaultValue={product.prodCategory}
-                    inputRef={prodCategoryRef}
-                    sx={inputStyle}
-                  >
-                    <MenuItem value="none" disabled>
-                      카테고리 선택
-                    </MenuItem>
-                    {categories.map((category) => (
-                      <MenuItem key={category} value={category}>
-                        {category}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel htmlFor="prodShipping">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      배송비
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodShipping"
-                    fullWidth
-                    size="small"
-                    defaultValue={product.prodShipping}
-                    placeholder="숫자만 입력해주세요. ex) 10000"
-                    inputRef={prodShippingRef}
-                    sx={inputStyle}
-                    onChange={handleShippingChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          &#8361;
-                        </InputAdornment>
-                      ),
-                    }}
-                  ></TextField>
-                </TableCell>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel for="prodName">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      상품명
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodName"
-                    fullWidth
-                    size="small"
-                    defaultValue={product.prodName}
-                    placeholder="상품명을 입력해주세요."
-                    inputRef={prodNameRef}
-                    sx={inputStyle}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={tableHeadStyle}>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                      color: '#000000',
-                      fontWeight: 'bold',
-                      mb: '5px',
-                    }}
-                  >
-                    상품 사진
-                  </Typography>
-                  {/* 파일선택 버튼: label로 연결, 실제 input은 숨김 */}
-                  <InputLabel htmlFor="prodPicture" sx={btnUploadImageStyle}>
-                    파일 선택
-                  </InputLabel>
-                  <Input
-                    id="prodPicture"
-                    inputRef={prodPictureRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={imageChange}
-                    inputProps={{ multiple: true }}
-                    sx={{ display: 'none' }}
-                  ></Input>
-                </TableCell>
-                <TableCell sx={tableBodyImageStyle}>
-                  {
-                    // 기존 이미지, 새로 추가된 이미지 모두 없는 경우
-                    prodPics.length === 0 && imgBase64.length === 0 ? (
-                      <Box sx={noImageBox}>
-                        <Typography color="#626262">
-                          등록된 사진이 없습니다.
-                        </Typography>
-                      </Box>
-                    ) : // 새로 추가된 이미지가 있는 경우
-                    imgBase64.length !== 0 ? (
-                      <Swiper
-                        pagination={{
-                          type: 'fraction',
-                        }}
-                        loop={true}
-                        navigation={true}
-                        modules={[Navigation, Pagination]}
-                        style={swiperStyle}
-                      >
-                        {imgBase64.map((img, index) => {
-                          return (
-                            <SwiperSlide
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}
-                              key={index}
-                            >
-                              <Box
-                                component="img"
-                                alt="첨부된 사진이 없습니다"
-                                src={img}
-                                sx={{
-                                  width: '90%',
-                                  height: '83%',
-                                }}
-                              />
-                            </SwiperSlide>
-                          );
-                        })}
-                      </Swiper>
-                    ) : (
-                      // 기존 이미지가 있고, 새로 추가된 이미지는 없는 경우
-                      <Swiper
-                        pagination={{
-                          type: 'fraction',
-                        }}
-                        loop={true}
-                        navigation={true}
-                        modules={[Navigation, Pagination]}
-                        style={swiperStyle}
-                      >
-                        {prodPics.map((fileName) => {
-                          const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`;
-                          return (
-                            <SwiperSlide
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}
-                              key={fileName}
-                            >
-                              <Box
-                                component="img"
-                                alt="첨부된 사진이 없습니다"
-                                src={fileSrc}
-                                sx={{
-                                  width: '90%',
-                                  height: '83%',
-                                }}
-                              />
-                            </SwiperSlide>
-                          );
-                        })}
-                      </Swiper>
-                    )
-                  }
-                </TableCell>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel htmlFor="prodContent">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      상품 설명
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <ReactQuill
-                    style={{
-                      marginTop: '10px',
-                      padding: '0 0 41px 0',
-                      height: '286px',
-                      width: '100%',
-                      backgroundColor: 'white',
-                      border: '1px solid #000000',
-                      fontSize: '1rem',
-                    }}
-                    modules={modules}
-                    placeholder="상품 설명을 입력해주세요."
-                    theme="snow"
-                    value={prodContent}
-                    onChange={setProdContent}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel for="prodHost">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      상품 제공자
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodHost"
-                    fullWidth
-                    size="small"
-                    placeholder="상품 제공자를 입력해주세요."
-                    defaultValue={product.prodHost}
-                    inputRef={prodHostRef}
-                    sx={inputStyle}
-                  />
-                </TableCell>
-                <TableCell sx={tableHeadStyle}>
-                  <InputLabel for="prodTag">
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        color: '#000000',
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      연관 검색어
-                    </Typography>
-                  </InputLabel>
-                </TableCell>
-                <TableCell sx={tableBodyStyle}>
-                  <TextField
-                    id="prodTag"
-                    fullWidth
-                    size="small"
-                    defaultValue={prodTag}
-                    placeholder="ex) 수영복, 여름, 수영, 휴가"
-                    inputRef={prodTagRef}
-                    sx={inputStyle}
-                    multiline
-                  />
-                </TableCell>
-              </TableRow>
-            </Table>
-          </TableContainer>
-
-          {/* 하단 버튼 */}
+      {loading ? (
+        <Loading height={'70vh'} />
+      ) : (
+        <>
+          {/* form 시작 */}
           <Box
             sx={{
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              my: 5,
             }}
           >
-            <Button
-              variant="outlined"
-              onClick={() => {
-                navigate(-1);
+            <TableContainer>
+              <Table sx={{ maxWidth: 1140 }}>
+                <TableRow>
+                  <TableCell sx={tableHeadStyle}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        color: '#000000',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      상품 코드
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        color: '#000000',
+                      }}
+                    >
+                      {product.prodCode}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel htmlFor="prodBrand">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        브랜드
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodBrand"
+                      select
+                      fullWidth
+                      size="small"
+                      defaultValue={
+                        product.prodBrand === null ? 'none' : product.prodBrand
+                      }
+                      inputRef={prodBrandRef}
+                      sx={inputStyle}
+                    >
+                      <MenuItem value="선택" disabled>
+                        브랜드 선택
+                      </MenuItem>
+                      <MenuItem value="none">없음</MenuItem>
+                      {brands.map((brand) => (
+                        <MenuItem key={brand} value={brand}>
+                          {brand}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel
+                      htmlFor="prodPrice"
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '123px',
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        대여료
+                      </Typography>
+                      <Typography
+                        sx={{ ml: '8px', fontSize: '12px', color: '#646464' }}
+                      >
+                        (7일 기준)
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodPrice"
+                      fullWidth
+                      size="small"
+                      defaultValue={product.prodPrice}
+                      placeholder="숫자만 입력해주세요. ex) 10000"
+                      inputRef={prodPriceRef}
+                      onChange={handlePriceChange}
+                      sx={inputStyle}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            &#8361;
+                          </InputAdornment>
+                        ),
+                      }}
+                    ></TextField>
+                  </TableCell>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel htmlFor="prodCategory">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        카테고리
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodCategory"
+                      select
+                      fullWidth
+                      size="small"
+                      defaultValue={product.prodCategory}
+                      inputRef={prodCategoryRef}
+                      sx={inputStyle}
+                    >
+                      <MenuItem value="none" disabled>
+                        카테고리 선택
+                      </MenuItem>
+                      {categories.map((category) => (
+                        <MenuItem key={category} value={category}>
+                          {category}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel htmlFor="prodShipping">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        배송비
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodShipping"
+                      fullWidth
+                      size="small"
+                      defaultValue={product.prodShipping}
+                      placeholder="숫자만 입력해주세요. ex) 10000"
+                      inputRef={prodShippingRef}
+                      sx={inputStyle}
+                      onChange={handleShippingChange}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            &#8361;
+                          </InputAdornment>
+                        ),
+                      }}
+                    ></TextField>
+                  </TableCell>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel for="prodName">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        상품명
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodName"
+                      fullWidth
+                      size="small"
+                      defaultValue={product.prodName}
+                      placeholder="상품명을 입력해주세요."
+                      inputRef={prodNameRef}
+                      sx={inputStyle}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={tableHeadStyle}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        color: '#000000',
+                        fontWeight: 'bold',
+                        mb: '5px',
+                      }}
+                    >
+                      상품 사진
+                    </Typography>
+                    {/* 파일선택 버튼: label로 연결, 실제 input은 숨김 */}
+                    <InputLabel htmlFor="prodPicture" sx={btnUploadImageStyle}>
+                      파일 선택
+                    </InputLabel>
+                    <Input
+                      id="prodPicture"
+                      inputRef={prodPictureRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={imageChange}
+                      inputProps={{ multiple: true }}
+                      sx={{ display: 'none' }}
+                    ></Input>
+                  </TableCell>
+                  <TableCell sx={tableBodyImageStyle}>
+                    {
+                      // 기존 이미지, 새로 추가된 이미지 모두 없는 경우
+                      prodPics.length === 0 && imgBase64.length === 0 ? (
+                        <Box sx={noImageBox}>
+                          <Typography color="#626262">
+                            등록된 사진이 없습니다.
+                          </Typography>
+                        </Box>
+                      ) : // 새로 추가된 이미지가 있는 경우
+                      imgBase64.length !== 0 ? (
+                        <Swiper
+                          loop={true}
+                          pagination={pagination}
+                          modules={[Pagination]}
+                          style={swiperStyle}
+                        >
+                          {imgBase64.map((img, index) => {
+                            return (
+                              <SwiperSlide
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                                key={index}
+                              >
+                                <Box
+                                  component="img"
+                                  alt="상품 이미지"
+                                  src={img}
+                                  sx={{
+                                    objectFit: 'contain',
+                                    width: '100%',
+                                    height: '100%',
+                                  }}
+                                />
+                              </SwiperSlide>
+                            );
+                          })}
+                        </Swiper>
+                      ) : (
+                        // 기존 이미지가 있고, 새로 추가된 이미지는 없는 경우
+                        <Swiper
+                          loop={true}
+                          pagination={pagination}
+                          modules={[Pagination]}
+                          style={swiperStyle}
+                        >
+                          {prodPics.map((fileName) => {
+                            const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`;
+                            return (
+                              <SwiperSlide
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                                key={fileName}
+                              >
+                                <Box
+                                  component="img"
+                                  alt="상품 이미지"
+                                  src={fileSrc}
+                                  sx={{
+                                    objectFit: 'contain',
+                                    width: '100%',
+                                    height: '100%',
+                                  }}
+                                />
+                              </SwiperSlide>
+                            );
+                          })}
+                        </Swiper>
+                      )
+                    }
+                  </TableCell>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel htmlFor="prodContent">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        상품 설명
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <ReactQuill
+                      style={{
+                        marginTop: '10px',
+                        padding: '0 0 41px 0',
+                        height: '286px',
+                        width: '100%',
+                        backgroundColor: 'white',
+                        border: '1px solid #000000',
+                        fontSize: '1rem',
+                      }}
+                      modules={modules}
+                      placeholder="상품 설명을 입력해주세요."
+                      theme="snow"
+                      value={prodContent}
+                      onChange={setProdContent}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel for="prodHost">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        상품 제공자
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodHost"
+                      fullWidth
+                      size="small"
+                      placeholder="상품 제공자를 입력해주세요."
+                      defaultValue={product.prodHost}
+                      inputRef={prodHostRef}
+                      sx={inputStyle}
+                    />
+                  </TableCell>
+                  <TableCell sx={tableHeadStyle}>
+                    <InputLabel for="prodTag">
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: '#000000',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        연관 검색어
+                      </Typography>
+                    </InputLabel>
+                  </TableCell>
+                  <TableCell sx={tableBodyStyle}>
+                    <TextField
+                      id="prodTag"
+                      fullWidth
+                      size="small"
+                      defaultValue={prodTag}
+                      placeholder="ex) 수영복, 여름, 수영, 휴가"
+                      inputRef={prodTagRef}
+                      sx={inputStyle}
+                      multiline
+                    />
+                  </TableCell>
+                </TableRow>
+              </Table>
+            </TableContainer>
+
+            {/* 하단 버튼 */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                my: 5,
               }}
-              sx={btnCancelStyle}
             >
-              취소
-            </Button>
-            <Button
-              type="submit"
-              onClick={handleSubmit}
-              variant="outlined"
-              sx={btnSubmitStyle}
-            >
-              수정
-            </Button>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  navigate(-1);
+                }}
+                sx={btnCancelStyle}
+              >
+                취소
+              </Button>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                variant="outlined"
+                sx={btnSubmitStyle}
+              >
+                수정
+              </Button>
+            </Box>
           </Box>
-        </Box>
-        {/* form 끝 */}
-      </Container>
-    );
-  }
+          {/* form 끝 */}
+        </>
+      )}
+    </Container>
+  );
 };
 
 export default AdminProductsModify;

@@ -15,8 +15,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminCouponsRows from '../../components/admin-coupons/AdminCouponsLists/AdminCouponsRows';
+import Loading from 'components/Loading';
 
 const AdminCouponsLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const location = useLocation(); // 현재 URL 정보 가져오기
@@ -57,6 +59,9 @@ const AdminCouponsLists = () => {
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -93,6 +98,9 @@ const AdminCouponsLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -319,7 +327,11 @@ const AdminCouponsLists = () => {
         {/* 쿠폰 목록 테이블 컬럼명 표기 끝 */}
 
         {/* 쿠폰 목록 테이블 데이터 표기 시작 */}
-        {couponList.length === 0 ? (
+        {loading ? (
+          <Box sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}>
+            <Loading height={'436px'} />
+          </Box>
+        ) : couponList.length === 0 ? (
           // 쿠폰 데이터가 없을 경우
           <Typography
             sx={{

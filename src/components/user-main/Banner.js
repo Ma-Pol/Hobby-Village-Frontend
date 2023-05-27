@@ -5,7 +5,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import './Banner.css';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const Banner = () => {
   const navigate = useNavigate();
@@ -18,9 +18,6 @@ const Banner = () => {
   };
   const linkToProductsBrandLists = () => {
     navigate('/products/brand/lists');
-  };
-  const linkToNoticesLists = () => {
-    navigate('/notices/lists?filter=none&pages=1');
   };
   const linkToServiceInfo = () => {
     navigate('/guide');
@@ -82,6 +79,9 @@ const Banner = () => {
             }}
           >
             <Box sx={{ ...slideTextBox, mr: 20 }}>
+              <h1 style={{ marginTop: 0, fontSize: '28px' }}>
+                취미를 빌려드립니다.
+              </h1>
               <Typography
                 sx={{
                   fontSize: '18px',
@@ -91,7 +91,6 @@ const Banner = () => {
                   },
                 }}
               >
-                <h1>취미를 빌려드립니다.</h1>
                 고가의 취미 용품,
                 <br />
                 시작하기 힘들었던 취미.
@@ -149,6 +148,11 @@ const Banner = () => {
               }}
             />
             <Box sx={{ ...slideTextBox, ml: 20 }}>
+              <h1 style={{ marginTop: 0, fontSize: '28px' }}>
+                내가 하고 싶은 취미를 빌리고,
+                <br />
+                내가 해봤던 취미를 빌려주자
+              </h1>
               <Typography
                 sx={{
                   fontSize: '18px',
@@ -159,11 +163,6 @@ const Banner = () => {
                   },
                 }}
               >
-                <h1>
-                  내가 하고 싶은 취미를 빌리고,
-                  <br />
-                  내가 해봤던 취미를 빌려주자
-                </h1>
                 우리 회사에서 소유하고 있는 물품뿐만 아니라,
                 <br />
                 개인의 취미 물품을 빌려주고, 빌릴 수 있습니다.
@@ -191,6 +190,11 @@ const Banner = () => {
             }}
           >
             <Box sx={{ ...slideTextBox, mr: 20 }}>
+              <h1 style={{ marginTop: 0, fontSize: '28px' }}>
+                브랜드의 새로운
+                <br />
+                물품까지 빌려드립니다
+              </h1>
               <Typography
                 sx={{
                   fontSize: '18px',
@@ -201,11 +205,6 @@ const Banner = () => {
                   },
                 }}
               >
-                <h1>
-                  브랜드의 새로운
-                  <br />
-                  물품까지 빌려드립니다
-                </h1>
                 제휴 브랜드의 인기 상품부터
                 <br />
                 신상품까지 빌려드립니다.
@@ -260,6 +259,11 @@ const Banner = () => {
               }}
             />
             <Box sx={{ ...slideTextBox, ml: 20 }}>
+              <h1 style={{ marginTop: 0, fontSize: '28px' }}>
+                취미빌리지 서비스의
+                <br />
+                상세 정보를 알려드립니다
+              </h1>
               <Typography
                 sx={{
                   fontSize: '18px',
@@ -270,11 +274,6 @@ const Banner = () => {
                   },
                 }}
               >
-                <h1>
-                  취미빌리지 서비스의
-                  <br />
-                  상세 정보를 알려드립니다
-                </h1>
                 취미빌리지의 취미 용품 구독 서비스와
                 <br />
                 새롭게 게시된 공지사항을 알아보세요.

@@ -5,6 +5,7 @@ import { Box, Typography, Paper, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -31,6 +32,7 @@ const buttonStyle = {
 };
 
 const AdminQnACreate = () => {
+  const [loading, setLoading] = useState(true);
   const [questionDetail, setQuestionDetail] = useState({});
   const [answerContent, setAnswerContent] = useState();
   const { qstCode } = useParams();
@@ -63,6 +65,9 @@ const AdminQnACreate = () => {
       .then((detail) => {
         setQuestionDetail(detail.data);
       })
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -94,195 +99,126 @@ const AdminQnACreate = () => {
     return false;
   };
 
-  if (!questionDetail) {
-    return <div></div>;
-  } else {
-    return (
-      <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
-        <Box
+  return (
+    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+      <Box
+        sx={{
+          my: 5,
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
           sx={{
-            my: 5,
+            mt: 5,
+            mb: 1,
+            pl: 1,
+            pr: 1,
+            fontWeight: 'bold',
+            userSelect: 'none',
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              mt: 5,
-              mb: 1,
-              pl: 1,
-              pr: 1,
-              fontWeight: 'bold',
-              userSelect: 'none',
-            }}
-          >
-            1:1 문의 &gt; 답변 작성
-          </Typography>
-        </Box>
+          1:1 문의 &gt; 답변 작성
+        </Typography>
+      </Box>
 
-        <StyledPaper style={{ marginTop: '40px' }}>
-          <Grid container>
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                제목
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                title={questionDetail.qstTitle}
-                sx={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {questionDetail.qstTitle}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                카테고리
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" component="h2">
-                {questionDetail.qstCategory}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{
-                my: 1,
-                height: '1px',
-                borderBottom: '1px solid #7d7d7d',
-              }}
-            ></Grid>
-
-            <LabelItem
-              item
-              xs={2}
-              sx={{
-                alignItems: 'flex-start',
-                pt: 1,
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                내용
-              </Typography>
-            </LabelItem>
-            <Grid
-              item
-              xs={10}
-              sx={{
-                px: 1,
-                pt: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '1.1rem',
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: questionDetail.qstContent,
-                }}
-              ></div>
-            </Grid>
-          </Grid>
-        </StyledPaper>
-
+      {loading ? (
+        <Loading height={'70vh'} />
+      ) : (
         <>
-          <hr
-            style={{
-              marginTop: '50px',
-            }}
-          />
-          <Box
-            sx={{
-              my: 5,
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                fontSize: '1.5rem',
-              }}
-            >
-              답변 작성
-            </Typography>
-          </Box>
-          <StyledPaper
-            style={{ marginTop: '30px' }}
-            sx={{
-              backgroundColor: '#ffffff',
-            }}
-          >
+          <StyledPaper style={{ marginTop: '40px' }}>
             <Grid container>
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  제목
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  title={questionDetail.qstTitle}
+                  sx={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {questionDetail.qstTitle}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  카테고리
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h6" component="h2">
+                  {questionDetail.qstCategory}
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
               <LabelItem
                 item
                 xs={2}
@@ -311,65 +247,136 @@ const AdminQnACreate = () => {
                   alignItems: 'center',
                 }}
               >
-                <ReactQuill
+                <div
                   style={{
-                    padding: '0 0 40px 0',
-                    height: '500px',
-                    width: '100%',
-                    backgroundColor: 'white',
-                    border: '1px solid #000000',
+                    fontSize: '1.1rem',
                   }}
-                  placeholder="내용을 입력해주세요."
-                  theme="snow"
-                  value={answerContent}
-                  onChange={setAnswerContent}
-                />
+                  dangerouslySetInnerHTML={{
+                    __html: questionDetail.qstContent,
+                  }}
+                ></div>
               </Grid>
             </Grid>
           </StyledPaper>
-        </>
 
-        <Box
-          style={{
-            textAlign: 'center',
-            marginTop: '20px',
-            marginBottom: '50px',
-          }}
-        >
-          <Button
-            onClick={() => {
-              navigate(`/m/qnas/details/${qstCode}`);
-            }}
-            variant="contained"
-            sx={{
-              ...buttonStyle,
-              backgroundColor: '#ffffff',
-              '&:hover': {
+          <>
+            <hr
+              style={{
+                marginTop: '50px',
+              }}
+            />
+            <Box
+              sx={{
+                my: 5,
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '1.5rem',
+                }}
+              >
+                답변 작성
+              </Typography>
+            </Box>
+            <StyledPaper
+              style={{ marginTop: '30px' }}
+              sx={{
                 backgroundColor: '#ffffff',
-                color: '#000000',
-              },
+              }}
+            >
+              <Grid container>
+                <LabelItem
+                  item
+                  xs={2}
+                  sx={{
+                    alignItems: 'flex-start',
+                    pt: 1,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    내용
+                  </Typography>
+                </LabelItem>
+                <Grid
+                  item
+                  xs={10}
+                  sx={{
+                    px: 1,
+                    pt: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <ReactQuill
+                    style={{
+                      padding: '0 0 40px 0',
+                      height: '500px',
+                      width: '100%',
+                      backgroundColor: 'white',
+                      border: '1px solid #000000',
+                    }}
+                    placeholder="내용을 입력해주세요."
+                    theme="snow"
+                    value={answerContent}
+                    onChange={setAnswerContent}
+                  />
+                </Grid>
+              </Grid>
+            </StyledPaper>
+          </>
+
+          <Box
+            style={{
+              textAlign: 'center',
+              marginTop: '20px',
+              marginBottom: '50px',
             }}
           >
-            취소
-          </Button>
-          <Button
-            onClick={answerCreate}
-            variant="contained"
-            sx={{
-              ...buttonStyle,
-              backgroundColor: '#c3c36a',
-              '&:hover': {
+            <Button
+              onClick={() => {
+                navigate(`/m/qnas/details/${qstCode}`);
+              }}
+              variant="contained"
+              sx={{
+                ...buttonStyle,
+                backgroundColor: '#ffffff',
+                '&:hover': {
+                  backgroundColor: '#ffffff',
+                  color: '#000000',
+                },
+              }}
+            >
+              취소
+            </Button>
+            <Button
+              onClick={answerCreate}
+              variant="contained"
+              sx={{
+                ...buttonStyle,
                 backgroundColor: '#c3c36a',
-                color: '#ffffff',
-              },
-            }}
-          >
-            등록
-          </Button>
-        </Box>
-      </Box>
-    );
-  }
+                '&:hover': {
+                  backgroundColor: '#c3c36a',
+                  color: '#ffffff',
+                },
+              }}
+            >
+              등록
+            </Button>
+          </Box>
+        </>
+      )}
+    </Box>
+  );
 };
 
 export default AdminQnACreate;

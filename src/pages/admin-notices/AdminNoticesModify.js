@@ -15,6 +15,7 @@ import {
 import { styled } from '@mui/system';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -68,6 +69,7 @@ const buttonStyle = {
 };
 
 const AdminNoticesModify = () => {
+  const [loading, setLoading] = useState(true);
   const { notCode } = useParams();
   const [notContent, setNotContent] = useState();
   const [notCategory, setNotCategory] = useState('none');
@@ -107,6 +109,9 @@ const AdminNoticesModify = () => {
         notTitleRef.current.value = detail.data.notTitle;
         setNotContent(detail.data.notContent);
         setNotCategory(detail.data.notCategory);
+      })
+      .finally(() => {
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -243,227 +248,238 @@ const AdminNoticesModify = () => {
         </Typography>
       </Box>
 
-      <StyledPaper style={{ marginTop: '40px' }}>
-        <Grid container>
-          <LabelItem
-            item
-            xs={2}
-            sx={{
-              alignItems: 'center',
+      {loading ? (
+        <Loading height={'70vh'} />
+      ) : (
+        <>
+          <StyledPaper style={{ marginTop: '40px' }}>
+            <Grid container>
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  제목
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <TextField
+                  inputRef={notTitleRef}
+                  size="small"
+                  placeholder="제목을 입력해주세요."
+                  sx={{ ...textField, width: '100%' }}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  카테고리
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <CategorySelect
+                  value={notCategory}
+                  onChange={categoryChange}
+                  size="small"
+                >
+                  <MenuItem value="none" disabled>
+                    카테고리 선택
+                  </MenuItem>
+                  <MenuItem value="안내">안내</MenuItem>
+                  <MenuItem value="이벤트">이벤트</MenuItem>
+                </CategorySelect>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  my: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'flex-start',
+                  pt: 1,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  내용
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  pt: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <ReactQuill
+                  style={{
+                    marginTop: '10px',
+                    padding: '0 0 40px 0',
+                    height: '500px',
+                    width: '100%',
+                    backgroundColor: 'white',
+                    border: '1px solid #000000',
+                    fontSize: '1.2rem',
+                  }}
+                  // modules={modules}
+                  placeholder="내용을 입력해주세요."
+                  theme="snow"
+                  value={notContent}
+                  onChange={setNotContent}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  mt: 3,
+                  mb: 1,
+                  height: '1px',
+                  borderBottom: '1px solid #7d7d7d',
+                }}
+              ></Grid>
+
+              <LabelItem
+                item
+                xs={2}
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 'bold',
+                  }}
+                >
+                  첨부파일
+                </Typography>
+              </LabelItem>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  px: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <input
+                  type="file"
+                  ref={filesRef}
+                  multiple
+                  onChange={fileChange}
+                />
+              </Grid>
+            </Grid>
+          </StyledPaper>
+
+          <Box
+            style={{
+              textAlign: 'center',
+              marginTop: '20px',
+              marginBottom: '50px',
             }}
           >
-            <Typography
-              variant="h6"
-              component="h2"
+            <Button
+              onClick={() => {
+                navigate(-1);
+              }}
+              variant="contained"
               sx={{
-                fontWeight: 'bold',
+                ...buttonStyle,
+                backgroundColor: '#ffffff',
+                '&:hover': {
+                  backgroundColor: '#ffffff',
+                  color: '#000000',
+                },
               }}
             >
-              제목
-            </Typography>
-          </LabelItem>
-          <Grid
-            item
-            xs={10}
-            sx={{
-              px: 1,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <TextField
-              inputRef={notTitleRef}
-              size="small"
-              placeholder="제목을 입력해주세요."
-              sx={{ ...textField, width: '100%' }}
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sx={{
-              my: 1,
-              height: '1px',
-              borderBottom: '1px solid #7d7d7d',
-            }}
-          ></Grid>
-
-          <LabelItem
-            item
-            xs={2}
-            sx={{
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="h6"
-              component="h2"
+              취소
+            </Button>
+            <Button
+              onClick={modifyNoticeBtn}
+              variant="contained"
               sx={{
-                fontWeight: 'bold',
+                ...buttonStyle,
+                backgroundColor: '#c3c36a',
+                '&:hover': {
+                  backgroundColor: '#c3c36a',
+                  color: '#ffffff',
+                },
               }}
             >
-              카테고리
-            </Typography>
-          </LabelItem>
-          <Grid
-            item
-            xs={10}
-            sx={{
-              px: 1,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <CategorySelect
-              value={notCategory}
-              onChange={categoryChange}
-              size="small"
-            >
-              <MenuItem value="none" disabled>
-                카테고리 선택
-              </MenuItem>
-              <MenuItem value="안내">안내</MenuItem>
-              <MenuItem value="이벤트">이벤트</MenuItem>
-            </CategorySelect>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sx={{
-              my: 1,
-              height: '1px',
-              borderBottom: '1px solid #7d7d7d',
-            }}
-          ></Grid>
-
-          <LabelItem
-            item
-            xs={2}
-            sx={{
-              alignItems: 'flex-start',
-              pt: 1,
-            }}
-          >
-            <Typography
-              variant="h6"
-              component="h2"
-              sx={{
-                fontWeight: 'bold',
-              }}
-            >
-              내용
-            </Typography>
-          </LabelItem>
-          <Grid
-            item
-            xs={10}
-            sx={{
-              px: 1,
-              pt: 1,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <ReactQuill
-              style={{
-                marginTop: '10px',
-                padding: '0 0 40px 0',
-                height: '500px',
-                width: '100%',
-                backgroundColor: 'white',
-                border: '1px solid #000000',
-                fontSize: '1.2rem',
-              }}
-              // modules={modules}
-              placeholder="내용을 입력해주세요."
-              theme="snow"
-              value={notContent}
-              onChange={setNotContent}
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sx={{
-              mt: 3,
-              mb: 1,
-              height: '1px',
-              borderBottom: '1px solid #7d7d7d',
-            }}
-          ></Grid>
-
-          <LabelItem
-            item
-            xs={2}
-            sx={{
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="h6"
-              component="h2"
-              sx={{
-                fontWeight: 'bold',
-              }}
-            >
-              첨부파일
-            </Typography>
-          </LabelItem>
-          <Grid
-            item
-            xs={10}
-            sx={{
-              px: 1,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <input type="file" ref={filesRef} multiple onChange={fileChange} />
-          </Grid>
-        </Grid>
-      </StyledPaper>
-
-      <Box
-        style={{
-          textAlign: 'center',
-          marginTop: '20px',
-          marginBottom: '50px',
-        }}
-      >
-        <Button
-          onClick={() => {
-            navigate(-1);
-          }}
-          variant="contained"
-          sx={{
-            ...buttonStyle,
-            backgroundColor: '#ffffff',
-            '&:hover': {
-              backgroundColor: '#ffffff',
-              color: '#000000',
-            },
-          }}
-        >
-          취소
-        </Button>
-        <Button
-          onClick={modifyNoticeBtn}
-          variant="contained"
-          sx={{
-            ...buttonStyle,
-            backgroundColor: '#c3c36a',
-            '&:hover': {
-              backgroundColor: '#c3c36a',
-              color: '#ffffff',
-            },
-          }}
-        >
-          수정
-        </Button>
-      </Box>
+              수정
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

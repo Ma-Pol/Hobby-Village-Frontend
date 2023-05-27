@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FileSaver from 'file-saver';
 import { styled } from '@mui/system';
+import Loading from 'components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -20,6 +21,7 @@ const LabelItem = styled(Grid)(({ theme }) => ({
 }));
 
 const UserNoticesDetails = () => {
+  const [loading, setLoading] = useState(true);
   const { notCode } = useParams();
   const [noticeDetail, setNoticeDetail] = useState({});
   const [fileList, setFileList] = useState([]);
@@ -84,6 +86,9 @@ const UserNoticesDetails = () => {
           setFileList([]);
         }
       })
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -106,8 +111,8 @@ const UserNoticesDetails = () => {
       });
   };
 
-  if (fileList === null) {
-    return <div></div>;
+  if (loading) {
+    return <Loading height={'80vh'} />;
   } else {
     return (
       <Container sx={{ minHeight: '80vh' }}>
