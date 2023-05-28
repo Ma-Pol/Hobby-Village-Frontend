@@ -163,7 +163,7 @@ const UserRequests = () => {
   }, []);
 
   const onSubmit = () => {
-    // 판매/위탁 여부, 물품 카테고리, 상품 명, 상품 설명, 이미지, 은행, 계좌번호, 동의 여부
+    // 판매/위탁 여부, 물품 카테고리, 물품 명, 물품 설명, 이미지, 은행, 계좌번호, 동의 여부
 
     if (category === 'none') {
       alert('물품 카테고리를 선택해주세요.');
@@ -171,13 +171,13 @@ const UserRequests = () => {
     }
 
     if (titleRef.current.value === '') {
-      alert('상품명을 입력해주세요.');
+      alert('물품명을 입력해주세요.');
       titleRef.current.focus();
       return false;
     }
 
     if (content === '') {
-      alert('상품 설명을 입력해주세요.');
+      alert('물품 설명을 입력해주세요.');
       return false;
     }
 
@@ -194,17 +194,13 @@ const UserRequests = () => {
       }
     }
 
-    if (!ckbAgreeRef.current.checked) {
-      alert('약관에 동의해주세요.');
+    if (imgFiles.length < 2) {
+      alert('물품에 대한 사진을 2장 이상 첨부해주세요.');
       return false;
     }
 
-    if (
-      imgFiles.length === 0 &&
-      window.confirm(
-        '사진을 첨부하지 않은 신청은 심사 탈락 가능성이 높아집니다.\n그래도 등록하시겠습니까?'
-      ) === false
-    ) {
+    if (!ckbAgreeRef.current.checked) {
+      alert('약관에 동의해주세요.');
       return false;
     }
 
@@ -252,6 +248,7 @@ const UserRequests = () => {
     if (imageFiles.length > 10) {
       alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
       setImgFiles([]);
+      setImgBase64([]);
       filesRef.current.value = '';
       return false;
     }
@@ -471,7 +468,7 @@ const UserRequests = () => {
           </Grid>
           {/* 물품 카테고리 선택 라인 끝 */}
 
-          {/* 상품 명 라인 시작 */}
+          {/* 물품 명 라인 시작 */}
           <Grid item xs={2} sx={tableLines}>
             <Typography
               variant="h6"
@@ -480,20 +477,20 @@ const UserRequests = () => {
                 fontSize: '1.3rem',
               }}
             >
-              상품 명
+              물품 명
             </Typography>
           </Grid>
           <Grid item xs={10} sx={tableLines}>
             <TextField
               inputRef={titleRef}
               size="small"
-              placeholder="상품 명을 입력해주세요."
+              placeholder="물품 명을 입력해주세요."
               sx={{ ...textField, width: '100%' }}
             />
           </Grid>
-          {/* 상품 명 라인 끝 */}
+          {/* 물품 명 라인 끝 */}
 
-          {/* 상품 설명 라인 시작 */}
+          {/* 물품 설명 라인 시작 */}
           <Grid item xs={2} sx={tableLines}>
             <Typography
               variant="h6"
@@ -502,7 +499,7 @@ const UserRequests = () => {
                 fontSize: '1.3rem',
               }}
             >
-              상품 설명
+              물품 설명
             </Typography>
           </Grid>
           <Grid
@@ -524,13 +521,13 @@ const UserRequests = () => {
                 border: '1px solid #000000',
                 fontSize: '1.2rem',
               }}
-              placeholder="상품에 대한 설명을 입력해주세요."
+              placeholder="물품에 대한 설명을 입력해주세요."
               theme="snow"
               value={content}
               onChange={setContent}
             />
           </Grid>
-          {/* 상품 설명 라인 끝 */}
+          {/* 물품 설명 라인 끝 */}
 
           {/* 사진 첨부 라인 시작 */}
           <Grid
@@ -557,7 +554,7 @@ const UserRequests = () => {
                 title={
                   <>
                     <Typography variant="h6" sx={{ fontSize: '1rem' }}>
-                      상품의 상태를 정확히 파악할 수 있는
+                      물품의 상태를 정확히 파악할 수 있는
                       <br />
                       사진(jpg, jpeg, png)을 첨부해주시기
                       <br />
@@ -821,7 +818,7 @@ const UserRequests = () => {
           )}
           {/* 계좌번호 입력 라인 끝 */}
 
-          {/* 상품 판매/위탁 약관 표기 라인 시작 */}
+          {/* 물품 판매/위탁 약관 표기 라인 시작 */}
           <Grid
             item
             xs={12}
@@ -833,9 +830,9 @@ const UserRequests = () => {
           >
             <Terms />
           </Grid>
-          {/* 상품 판매/위탁 약관 표기 라인 끝 */}
+          {/* 물품 판매/위탁 약관 표기 라인 끝 */}
 
-          {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 시작 */}
+          {/* 물품 판매/위탁 약관 동의 체크박스 표시 라인 시작 */}
           <Grid
             item
             xs={12}
@@ -859,7 +856,7 @@ const UserRequests = () => {
               </label>
             </Typography>
           </Grid>
-          {/* 상품 판매/위탁 약관 동의 체크박스 표시 라인 끝 */}
+          {/* 물품 판매/위탁 약관 동의 체크박스 표시 라인 끝 */}
 
           {/* 등록/취소 버튼 표시 라인 시작 */}
           <Grid

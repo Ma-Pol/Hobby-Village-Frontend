@@ -119,7 +119,6 @@ const AdminRequestsDetails = () => {
       )
       .finally(() => {
         setLoading(false);
-        console.log(reqFileList);
       })
       .catch((err) => {
         console.error(err);
@@ -139,6 +138,7 @@ const AdminRequestsDetails = () => {
             alert('진행 상황이 업데이트되었습니다.');
             getRequestData(reqCode);
           } else if (res.data === 100) {
+            // 최종 심사 완료 시
             alert(
               '최종 심사가 완료되었습니다.\n상품 등록 페이지로 이동합니다.'
             );
@@ -186,7 +186,11 @@ const AdminRequestsDetails = () => {
   const cancelProgress = () => {
     if (window.confirm('위탁 철회 요청을 승인하시겠습니까?')) {
       axios
-        .patch(`/m/requests/cancelProgress/${reqCode}`)
+        .patch(`/m/requests/updateProgress/${reqCode}`, {
+          reqProgress: requestDetail.reqProgress,
+          reqTitle: requestDetail.reqTitle,
+          reqPhone: requestDetail.phone,
+        })
         .then((res) => {
           if (res.data === 1) {
             alert('위탁 철회 요청을 승인했습니다.');
@@ -206,7 +210,10 @@ const AdminRequestsDetails = () => {
   const rejectCancelProgress = () => {
     if (window.confirm('위탁 철회 요청을 거부하시겠습니까?')) {
       axios
-        .patch(`/m/requests/rejectCancelProgress/${reqCode}`)
+        .patch(`/m/requests/rejectCancelProgress/${reqCode}`, {
+          reqTitle: requestDetail.reqTitle,
+          reqPhone: requestDetail.phone,
+        })
         .then((res) => {
           if (res.data === 1) {
             alert('위탁 철회 요청을 거부했습니다.');

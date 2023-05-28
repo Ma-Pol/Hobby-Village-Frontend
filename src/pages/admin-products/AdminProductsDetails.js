@@ -401,7 +401,7 @@ const AdminProductsDetails = () => {
                         style={swiperStyle}
                       >
                         {prodPics.map((fileName) => {
-                          const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+                          const fileSrc = `http://localhost:8080/m/products/upload/product/${fileName}`; // 여기에 이미지 요청 경로 넣기
                           return (
                             <SwiperSlide
                               key={fileName}

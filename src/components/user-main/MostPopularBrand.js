@@ -65,9 +65,9 @@ const MostPopularBrand = () => {
               color: '#000000',
               fontSize: '17px',
               fontWeight: 'bold',
+              textDecoration: 'underline',
               '&:hover': {
                 cursor: 'pointer',
-                textDecoration: 'underline',
               },
             }}
           >

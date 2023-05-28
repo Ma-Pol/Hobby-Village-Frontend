@@ -695,7 +695,7 @@ const AdminProductsModify = () => {
                           style={swiperStyle}
                         >
                           {prodPics.map((fileName) => {
-                            const fileSrc = `http://localhost:8080/m/products/upload/${fileName}`;
+                            const fileSrc = `http://localhost:8080/m/products/upload/product/${fileName}`;
                             return (
                               <SwiperSlide
                                 style={{

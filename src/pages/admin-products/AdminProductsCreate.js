@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
@@ -43,6 +43,12 @@ const modules = {
 };
 
 const AdminProductsCreate = () => {
+  const location = useLocation();
+
+  const requestData = location.state ? location.state : null;
+
+  console.log(requestData);
+
   const prodCodeRef = useRef();
   const prodBrandRef = useRef();
   const prodPriceRef = useRef();
@@ -66,6 +72,7 @@ const AdminProductsCreate = () => {
   useEffect(() => {
     getBrandList();
     getCategoryList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getBrandList = () => {
@@ -87,6 +94,11 @@ const AdminProductsCreate = () => {
         const { data } = res;
         setCategories(data);
       })
+      .finally(() => {
+        if (requestData) {
+          setProdContent(requestData.requestDetail.reqContent);
+        }
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -97,6 +109,14 @@ const AdminProductsCreate = () => {
   const imageChange = (e) => {
     // input에 저장된 파일 목록을 가져옴
     const imageFiles = e.target.files;
+
+    if (imageFiles.length > 10) {
+      alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
+      setImgFiles([]);
+      setImgBase64([]);
+      prodPictureRef.current.value = '';
+      return false;
+    }
 
     // 만약 이미지 파일만을 저장하고 싶은 경우, 확장자 명을 확인할 것
     // 예시문) jpg, png, jpeg만 저장하고, 파일명의 특수문자를 체크하는 for문
@@ -212,7 +232,7 @@ const AdminProductsCreate = () => {
       return false;
     }
 
-    if (imgFiles.length === 0) {
+    if (requestData.reqFileList === null && imgFiles.length === 0) {
       alert('상품 이미지를 등록해주세요.');
       return false;
     }
@@ -258,7 +278,9 @@ const AdminProductsCreate = () => {
         prodTag: arr,
       })
       .then((res) => {
-        if (imgFiles.length === 0) {
+        if (requestData !== null && imgFiles.length === 0) {
+          requestImageUpload();
+        } else if (requestData === null && imgFiles.length === 0) {
           alert('상품이 등록되었습니다.');
           navigate(`/m/products/details/${prodCodeRef.current.value}`);
         } else {
@@ -270,7 +292,27 @@ const AdminProductsCreate = () => {
       });
   };
 
-  // 이미지 업로드
+  // 이미지 업로드(기존 판매/위탁 신청 이미지 업로드)
+  const requestImageUpload = () => {
+    axios
+      .post(`/m/products/upload/requestImg/${prodCodeRef.current.value}`, {
+        requestImg: requestData.reqFileList,
+      })
+      .then((res) => {
+        if (res.data !== 0) {
+          alert('상품이 등록되었습니다.');
+          navigate(`/m/products/details/${prodCodeRef.current.value}`);
+        } else {
+          alert('상품이 등록되었으나, 이미지 업로드에 실패하였습니다.');
+          navigate(`/m/products/details/${prodCodeRef.current.value}`);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  // 이미지 업로드(새 이미지 업로드)
   const imageUpload = () => {
     // <form></form> 형식으로 데이터를 보내기 위해 사용
     const formData = new FormData();
@@ -550,7 +592,11 @@ const AdminProductsCreate = () => {
                   select
                   fullWidth
                   size="small"
-                  defaultValue="none"
+                  defaultValue={
+                    requestData !== null
+                      ? requestData.requestDetail.reqCategory
+                      : 'none'
+                  }
                   inputRef={prodCategoryRef}
                   sx={inputStyle}
                 >
@@ -617,6 +663,11 @@ const AdminProductsCreate = () => {
                   size="small"
                   placeholder="상품명을 입력해주세요."
                   inputRef={prodNameRef}
+                  defaultValue={
+                    requestData !== null
+                      ? requestData.requestDetail.reqTitle
+                      : ''
+                  }
                   sx={inputStyle}
                 />
               </TableCell>
@@ -649,7 +700,39 @@ const AdminProductsCreate = () => {
                 ></Input>
               </TableCell>
               <TableCell sx={tableBodyImageStyle}>
-                {imgBase64.length === 0 ? (
+                {requestData !== null && imgFiles.length === 0 ? (
+                  <Swiper
+                    loop={true}
+                    pagination={pagination}
+                    modules={[Pagination]}
+                    style={swiperStyle}
+                  >
+                    {requestData.reqFileList.map((imgName, index) => {
+                      const img = `http://localhost:8080/m/products/upload/request/${imgName}`;
+                      return (
+                        <SwiperSlide
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          key={index}
+                        >
+                          <Box
+                            component="img"
+                            alt="상품 이미지"
+                            src={img}
+                            sx={{
+                              objectFit: 'contain',
+                              width: '100%',
+                              height: '100%',
+                            }}
+                          />
+                        </SwiperSlide>
+                      );
+                    })}
+                  </Swiper>
+                ) : imgBase64.length === 0 ? (
                   <Box sx={noImageBox}>
                     <Typography color="#626262">
                       등록된 사진이 없습니다.
@@ -742,7 +825,11 @@ const AdminProductsCreate = () => {
                   fullWidth
                   size="small"
                   placeholder="상품 제공자를 입력해주세요."
-                  defaultValue="취미빌리지"
+                  defaultValue={
+                    requestData !== null
+                      ? requestData.requestDetail.nickname
+                      : '취미빌리지'
+                  }
                   inputRef={prodHostRef}
                   sx={inputStyle}
                 />

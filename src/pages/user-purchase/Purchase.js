@@ -234,8 +234,10 @@ const Purchase = () => {
       await axios
         .get(`/purchase/productState/${product.prodCode}`)
         .then((state) => {
-          if (state.data === 1) {
-            alert(`${product.prodName} 은(는) 이미 대여 중인 상품입니다.`);
+          if (state.data !== 0) {
+            alert(
+              `${product.prodName} 은(는) 이미 대여 중이거나 삭제된 상품입니다.`
+            );
           } else {
             const newProduct = productList;
             newProduct.push(product);
@@ -581,9 +583,9 @@ const Purchase = () => {
           .get(`/purchase/productState/${product.prodCode}`)
           .then((state) => {
             // 대여 중인 상품이 있다면 구매 불가
-            if (state.data === 1) {
+            if (state.data !== 0) {
               alert(
-                `결제에 실패했습니다. 다시 시도해주세요.\nERROR: 이미 대여중인 상품이 존재합니다.\n\n${product.prodName}`
+                `결제에 실패했습니다. 다시 시도해주세요.\nERROR: 이미 대여중이거나 삭제된 상품이 존재합니다.\n\n${product.prodName}`
               );
 
               failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
