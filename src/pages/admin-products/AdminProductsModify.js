@@ -593,7 +593,7 @@ const AdminProductsModify = () => {
                     ></TextField>
                   </TableCell>
                   <TableCell sx={tableHeadStyle}>
-                    <InputLabel for="prodName">
+                    <InputLabel htmlFor="prodName">
                       <Typography
                         variant="h6"
                         component="h2"
@@ -757,7 +757,7 @@ const AdminProductsModify = () => {
                 </TableRow>
                 <TableRow>
                   <TableCell sx={tableHeadStyle}>
-                    <InputLabel for="prodHost">
+                    <InputLabel htmlFor="prodHost">
                       <Typography
                         variant="h6"
                         component="h2"
@@ -782,7 +782,7 @@ const AdminProductsModify = () => {
                     />
                   </TableCell>
                   <TableCell sx={tableHeadStyle}>
-                    <InputLabel for="prodTag">
+                    <InputLabel htmlFor="prodTag">
                       <Typography
                         variant="h6"
                         component="h2"

@@ -47,8 +47,6 @@ const AdminProductsCreate = () => {
 
   const requestData = location.state ? location.state : null;
 
-  console.log(requestData);
-
   const prodCodeRef = useRef();
   const prodBrandRef = useRef();
   const prodPriceRef = useRef();
@@ -185,12 +183,32 @@ const AdminProductsCreate = () => {
     prodShippingRef.current.value = shipping.replace(/[^0-9]/gi, '');
   };
 
-  const handleSubmit = () => {
+  // 등록 버튼 클릭 시 상품 코드 중복 체크
+  const checkProdCode = () => {
     if (prodCodeRef.current.value === '') {
       alert('상품 코드를 입력해주세요.');
       prodCodeRef.current.focus();
       return false;
     }
+
+    axios
+      .get(`/m/products/check/${prodCodeRef.current.value}`)
+      .then((res) => {
+        if (res.data === 1) {
+          alert('이미 등록된 상품 코드입니다.');
+          prodCodeRef.current.value = '';
+          prodCodeRef.current.focus();
+        } else {
+          handleSubmit();
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+  // 중복 체크 후 등록 과정
+  const handleSubmit = () => {
     if (prodBrandRef.current.value === '선택') {
       alert('브랜드를 선택해주세요.');
       prodBrandRef.current.focus();
@@ -232,7 +250,7 @@ const AdminProductsCreate = () => {
       return false;
     }
 
-    if (requestData.reqFileList === null && imgFiles.length === 0) {
+    if (requestData === null && imgFiles.length === 0) {
       alert('상품 이미지를 등록해주세요.');
       return false;
     }
@@ -643,7 +661,7 @@ const AdminProductsCreate = () => {
                 ></TextField>
               </TableCell>
               <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodName">
+                <InputLabel htmlFor="prodName">
                   <Typography
                     variant="h6"
                     component="h2"
@@ -806,7 +824,7 @@ const AdminProductsCreate = () => {
             </TableRow>
             <TableRow>
               <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodHost">
+                <InputLabel htmlFor="prodHost">
                   <Typography
                     variant="h6"
                     component="h2"
@@ -835,7 +853,7 @@ const AdminProductsCreate = () => {
                 />
               </TableCell>
               <TableCell sx={tableHeadStyle}>
-                <InputLabel for="prodTag">
+                <InputLabel htmlFor="prodTag">
                   <Typography
                     variant="h6"
                     component="h2"
@@ -882,7 +900,7 @@ const AdminProductsCreate = () => {
           </Button>
           <Button
             type="submit"
-            onClick={handleSubmit}
+            onClick={checkProdCode}
             variant="outlined"
             sx={btnSubmitStyle}
           >

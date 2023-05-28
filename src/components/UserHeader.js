@@ -109,7 +109,7 @@ const UserHeader = () => {
             }}
           >
             <Link
-              to="/products/lists"
+              to="/products/lists?category=all&sort=all&array=recent&pages=1"
               style={{
                 textDecoration: 'none',
               }}
@@ -130,7 +130,7 @@ const UserHeader = () => {
             </Link>
 
             <Link
-              to="/products/brand/lists"
+              to="/products/brand/lists?brand=all&sort=all&array=recent&pages=1"
               style={{
                 textDecoration: 'none',
               }}
@@ -244,12 +244,13 @@ const UserHeader = () => {
               {/* 검색창 시작 */}
               <TextField
                 variant="standard"
-                autoFocus={searchMode}
                 inputRef={searchRef}
                 placeholder="물품 또는 취미를 검색해보세요"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    // passwordRef.current.focus();
+                    navigate(
+                      `/products/lists/search?category=all&sort=all&array=recent&pages=1&keyword=${searchRef.current.value}`
+                    );
                   }
                 }}
                 sx={{
