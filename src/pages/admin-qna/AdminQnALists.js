@@ -15,7 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminQnARows from '../../components/admin-qna/AdminQnALists/AdminQnARows';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const AdminQnALists = () => {
   const [loading, setLoading] = useState(true);

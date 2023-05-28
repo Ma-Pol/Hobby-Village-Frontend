@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
-import UserHeader from 'components/UserHeader';
-import UserFooter from 'components/UserFooter';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserLogin = () => {
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기

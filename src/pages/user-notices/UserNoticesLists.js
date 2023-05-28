@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import UserNoticesRows from '../../components/user-notices/UserNoticesLists/UserNoticesRows';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const UserNoticesLists = () => {
   const [loading, setLoading] = useState(true);

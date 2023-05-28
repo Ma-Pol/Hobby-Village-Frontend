@@ -15,7 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminReviewsRows from '../../components/admin-reviews/AdminReviewsLists/AdminReviewsRows';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const AdminReviewsLists = () => {
   const [loading, setLoading] = useState(true);

@@ -1,14 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Grid, Typography } from '@mui/material';
 import ProductItem from './ProductItem';
-import Loading from 'components/Loading';
+import Loading from '../Loading';
 
 const MostPopularProducts = () => {
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {

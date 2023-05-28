@@ -11,12 +11,12 @@ import {
   Modal,
 } from '@mui/material';
 import axios from 'axios';
-import UserHeader from 'components/UserHeader';
-import UserFooter from 'components/UserFooter';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import UserDeleteModal from 'components/user-users/UserDeleteModal';
-import Loading from 'components/Loading';
+import UserDeleteModal from '../../components/user-users/UserDeleteModal';
+import Loading from '../../components/Loading';
 
 const checkBtnStyle = {
   mb: '20px',

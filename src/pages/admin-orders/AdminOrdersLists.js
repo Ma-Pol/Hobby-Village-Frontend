@@ -15,7 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminOrdersRows from '../../components/admin-orders/AdminOrdersLists/AdminOrdersRows';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const AdminOrdersLists = () => {
   const [loading, setLoading] = useState(true);

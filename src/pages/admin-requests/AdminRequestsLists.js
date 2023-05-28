@@ -22,7 +22,7 @@ import axios from 'axios';
 import AdminRequestsRows from '../../components/admin-requests/AdminRequestsLists/AdminRequestsRows';
 import AdminRequestsFilterSell from '../../components/admin-requests/AdminRequestsLists/AdminRequestsFilterSell';
 import AdminRequestsFilterConsign from '../../components/admin-requests/AdminRequestsLists/AdminRequestsFilterConsign';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const AdminRequestsLists = () => {
   const [loading, setLoading] = useState(true);

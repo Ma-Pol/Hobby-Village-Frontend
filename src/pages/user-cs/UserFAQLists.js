@@ -13,10 +13,9 @@ import {
   Grid,
 } from '@mui/material';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import UserCsTitle from '../../components/user-cs/UserCsTitle';
 import UserFAQRows from '../../components/user-cs/UserFAQRows';
-import Loading from 'components/Loading';
 import UserCsTitleBottom from '../../components/user-cs/UserCsTitleBottom';
+import Loading from '../../components/Loading';
 
 const UserFAQLists = () => {
   const [loading, setLoading] = useState(true);

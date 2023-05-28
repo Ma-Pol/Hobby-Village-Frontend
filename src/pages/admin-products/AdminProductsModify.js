@@ -24,7 +24,7 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const pagination = {
   clickable: true,

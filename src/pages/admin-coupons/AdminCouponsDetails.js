@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { styled } from '@mui/system';
 import axios from 'axios';
 import { Box, Grid, Paper, Button, Typography } from '@mui/material';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

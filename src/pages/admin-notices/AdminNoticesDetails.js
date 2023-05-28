@@ -4,7 +4,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import FileSaver from 'file-saver';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FileSaver from 'file-saver';
 import { styled } from '@mui/system';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

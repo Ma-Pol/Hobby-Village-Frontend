@@ -15,7 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminCouponsRows from '../../components/admin-coupons/AdminCouponsLists/AdminCouponsRows';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const AdminCouponsLists = () => {
   const [loading, setLoading] = useState(true);

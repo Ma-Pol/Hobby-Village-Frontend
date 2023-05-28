@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import { Box, Typography, Paper, Button, Grid, Divider } from '@mui/material'; // Divider import
 import { styled } from '@mui/system';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

@@ -21,7 +21,7 @@ import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />

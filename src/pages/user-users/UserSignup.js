@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import DaumPostcodeEmbed from 'react-daum-postcode';
-import UserHeader from 'components/UserHeader';
-import UserFooter from 'components/UserFooter';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 

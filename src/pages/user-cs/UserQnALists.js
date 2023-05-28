@@ -19,8 +19,8 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import UserQnARows from '../../components/user-cs/UserQnARows';
-import Loading from 'components/Loading';
 import UserCsTitleBottom from '../../components/user-cs/UserCsTitleBottom';
+import Loading from '../../components/Loading';
 
 const UserQnALists = () => {
   const [loading, setLoading] = useState(true);

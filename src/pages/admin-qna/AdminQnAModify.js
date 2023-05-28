@@ -5,7 +5,7 @@ import { Box, Typography, Paper, Button, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),

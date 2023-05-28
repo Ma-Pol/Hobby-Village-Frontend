@@ -4,8 +4,8 @@ import UserReviewsLists from './UserReviewsLists';
 import UserReviewsDetails from './UserReviewsDetails';
 import UserReviewsCreate from './UserReviewsCreate';
 import UserReviewsModify from './UserReviewsModify';
-import UserHeader from 'components/UserHeader';
-import UserFooter from 'components/UserFooter';
+import UserHeader from '../../components/UserHeader';
+import UserFooter from '../../components/UserFooter';
 
 const UserReviews = () => {
   const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
