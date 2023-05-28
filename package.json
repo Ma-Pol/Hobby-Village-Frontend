@@ -29,6 +29,7 @@
     "react-simple-image-slider": "^2.4.1",
     "swiper": "^9.3.2",
     "styled-components": "^5.3.10",
+    "react-simple-image-slider": "^2.4.1",
     "web-vitals": "^2.1.0",
     "yarn": "^1.22.19"
   },
