@@ -1,21 +1,16 @@
-import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import {
-  Box,
-  Link,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import Loading from '../Loading';
 
 // 상품 목록 출력 컴포넌트 (상품별 이미지 파일명 및 이미지 불러오기)
 const Product = ({ product }) => {
-  const [pictureList, setPictureList] = useState([]); // 상품 이미지 이름 목록
+  const [loading, setLoading] = useState(true); // 이미지 로딩 여부
+  const [picture, setPicture] = useState(); // 상품 이미지 이름 목록
   const prodLink = `/products/details/${product.prodCode}`;
+
+  const navigate = useNavigate();
 
   // 이미지 파일명 불러오기
   const getProdPictureNames = (prodCode) => {
@@ -23,7 +18,10 @@ const Product = ({ product }) => {
       .get(`/products/lists/getProdPictures?prodCode=${prodCode}`)
       .then((res) => {
         const { data } = res;
-        setPictureList(data);
+        setPicture(data);
+      })
+      .finally(() => {
+        setLoading(false);
       })
       .catch((e) => {
         console.error(e);
@@ -32,111 +30,125 @@ const Product = ({ product }) => {
 
   useEffect(() => {
     getProdPictureNames(product.prodCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const swiperStyle = {
-    backgroundColor: '#f1f1f1',
-    // borderRadius: '5px',
-    width: '200px',
-    minHeight: '200px',
-    height: '200px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
   const prodCardStyle = {
-    width: '220px',
-    height: '330px',
-    border: 'none',
-    boxShadow: 'none',
+    m: 0,
+    p: '24px 20px 8px 20px',
+    borderRadius: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '&:hover': {
+      cursor: 'pointer',
+      boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.5)',
+      backgroundColor: '#f5f5f5',
+    },
   };
 
   return (
     <>
-      <Card sx={prodCardStyle}>
-        <Swiper navigation={false} style={swiperStyle}>
-          {pictureList.map((fileName) => {
-            const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`;
-
-            return (
-              <SwiperSlide
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+      <Box
+        sx={prodCardStyle}
+        onClick={() => {
+          window.scrollTo({ left: 0, top: 0 });
+          navigate(prodLink);
+        }}
+      >
+        <Box
+          sx={{
+            m: 0,
+            p: 0,
+            width: '200px',
+            height: '200px',
+            position: 'relative',
+          }}
+        >
+          {product.prodIsRental === 1 && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '201.6px',
+                height: '201.6px',
+                backgroundColor: '#dddddd',
+                opacity: '0.7',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '1.5rem',
+                  color: '#000000',
+                  textShadow:
+                    '-1px 0px #ffffff, 0px 1px #ffffff, 1px 0px #ffffff, 0px -1px #ffffff',
                 }}
               >
-                <Box
-                  component="img"
-                  alt={product.prodCode}
-                  src={fileSrc}
-                  sx={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-                {product.prodIsRental == 1 ? (
-                  <Box
-                    alt={product.prodCode}
-                    sx={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'gray',
-                      opacity: [0.7],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography variant="h5">대여중</Typography>
-                  </Box>
-                ) : null}
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-        <CardContent>
+                대여중
+              </Typography>
+            </Box>
+          )}
+
+          {loading ? (
+            <Loading height={'200px'} />
+          ) : (
+            <Box
+              component="img"
+              sx={{
+                width: '200px',
+                height: '200px',
+                objectFit: 'cover',
+                border: '1px solid #d0d0d0',
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+              alt={product.prodName}
+              src={`http://localhost:8080/products/lists/upload/${picture}`}
+            />
+          )}
+        </Box>
+
+        <Box sx={{ m: 0, width: '200px', my: 1 }}>
           <Typography
+            title={product.prodBrand}
+            variant="body1"
             sx={{
-              mt: '-5px',
-              ml: '-5px',
-              mb: '-25px',
+              fontSize: '1.3rem',
               fontWeight: 'bold',
-              fontSize: '1.2rem',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {product.prodBrand}
           </Typography>
-        </CardContent>
-        <CardActions>
-          <Link
+          <Typography
+            title={product.prodName}
+            variant="body1"
             sx={{
-              mt: '5px',
-              ml: '3px',
-              color: 'black',
-              fontSize: '1.2rem',
-              textDecoration: 'none',
-              '&:hover': {
-                color: '#C3C36A',
-              },
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
-            href={prodLink}
           >
             {product.prodName}
-          </Link>
-        </CardActions>
-        <CardContent sx={{ mt: '-22px' }}>
-          <Typography sx={{ ml: '-4px' }}>{product.prodPrice}원</Typography>
-          <Typography
-            sx={{ ml: '-4px', color: '#ADADAD', fontWeight: 'Regular' }}
-          >
-            관심 {product.prodDibs}
           </Typography>
-        </CardContent>
-      </Card>
+          <Typography variant="body1">
+            {String(product.prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+              '원'}
+          </Typography>
+          <Typography variant="body1">{'관심 ' + product.prodDibs}</Typography>
+        </Box>
+      </Box>
     </>
   );
 };

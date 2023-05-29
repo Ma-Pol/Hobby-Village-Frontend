@@ -53,6 +53,7 @@ const Product = ({ product }) => {
       <Box
         sx={prodCardStyle}
         onClick={() => {
+          window.scrollTo({ left: 0, top: 0 });
           navigate(prodLink);
         }}
       >
@@ -71,8 +72,8 @@ const Product = ({ product }) => {
                 position: 'absolute',
                 top: '0',
                 left: '0',
-                width: '200px',
-                height: '200px',
+                width: '201.6px',
+                height: '201.6px',
                 backgroundColor: '#dddddd',
                 opacity: '0.7',
                 display: 'flex',
@@ -86,6 +87,8 @@ const Product = ({ product }) => {
                   fontWeight: 'bold',
                   fontSize: '1.5rem',
                   color: '#000000',
+                  textShadow:
+                    '-1px 0px #ffffff, 0px 1px #ffffff, 1px 0px #ffffff, 0px -1px #ffffff',
                 }}
               >
                 대여중
@@ -133,75 +136,6 @@ const Product = ({ product }) => {
           </Typography>
           <Typography variant="body1">{'관심 ' + product.prodDibs}</Typography>
         </Box>
-
-        {/* <Swiper navigation={false} style={swiperStyle}>
-          {pictureList.map((fileName) => {
-            const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`;
-
-            return (
-              <SwiperSlide
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Box
-                  component="img"
-                  alt={product.prodCode}
-                  src={fileSrc}
-                  sx={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-                {product.prodIsRental === 1 ? (
-                  <Box
-                    alt={product.prodCode}
-                    sx={{
-                      position: 'absolute',
-                      width: '100%',
-                      height: '100%',
-                      backgroundColor: 'gray',
-                      opacity: [0.7],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography variant="h5">대여중</Typography>
-                  </Box>
-                ) : null}
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-        <CardActions>
-          <Link
-            sx={{
-              mt: '5px',
-              ml: '2px',
-              color: 'black',
-              fontSize: '1.2rem',
-              textDecoration: 'none',
-              '&:hover': {
-                color: '#C3C36A',
-              },
-            }}
-            href={prodLink}
-          >
-            {product.prodName}
-          </Link>
-        </CardActions>
-        <CardContent sx={{ mt: '-22px' }}>
-          <Typography sx={{ ml: '-5px' }}>{product.prodPrice}원</Typography>
-          <Typography
-            sx={{ ml: '-5px', color: '#ADADAD', fontWeight: 'Regular' }}
-          >
-            관심 {product.prodDibs}
-          </Typography>
-        </CardContent> */}
       </Box>
     </>
   );

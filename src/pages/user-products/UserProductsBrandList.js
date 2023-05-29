@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box,
@@ -12,13 +12,14 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import BrandAds from '../../components/user-products/BrandAds';
-import Product from '../../components/user-products/UserBrandProductCard';
+import UserBrandProductCard from '../../components/user-products/UserBrandProductCard';
+import Loading from '../../components/Loading';
 
 // 대표 페이지
 // http://localhost:3000/products/brand/lists?brand=all&sort=all&array=recent&pages=1
 
 const UserProductsBrandList = () => {
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
 
   const [brandList, setBrandList] = useState([]); // 브랜드 목록
@@ -87,6 +88,9 @@ const UserProductsBrandList = () => {
           }
         })
       )
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -94,6 +98,7 @@ const UserProductsBrandList = () => {
 
   useEffect(() => {
     getProductList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const handleBrandChange = (e, value) => {
@@ -121,6 +126,7 @@ const UserProductsBrandList = () => {
 
   // 페이징 클릭
   const handlePaging = (e, value) => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
     searchParams.set('pages', value);
     setSearchParams(searchParams);
   };
@@ -128,6 +134,7 @@ const UserProductsBrandList = () => {
   // 스타일
 
   const brandStyle = {
+    mr: '5px',
     border: 'none',
     height: '30px',
     backgroundColor: 'none',
@@ -142,63 +149,77 @@ const UserProductsBrandList = () => {
     '&.Mui-selected': {
       backgroundColor: '#FFFFFF',
       color: '#C3C36A',
-      // fontSize: '1.3rem',
+      fontSize: '1.2rem',
     },
     '&.Mui-selected:hover': {
       backgroundColor: '#FFFFFF',
       color: '#C3C36A',
-      // fontSize: '1.3rem',
+      fontSize: '1.2rem',
     },
   };
 
   const filterStyle = {
-    width: 100,
-    height: 35,
+    width: '130px',
     border: '1px solid #575757',
     borderRadius: '5px',
     fontSize: '0.95rem',
     color: '#575757',
-    margin: '20px 0 0 20px',
+    margin: '10px 0 0 20px',
     '&.MuiNativeSelect-iconOutlined': {
       padding: '0',
       margin: '0',
     },
-    // '&.Mui-selected': {
-    //   backgroundColor: '#C3C36A',
-    // },
   };
 
   return (
     <>
-      <Box>
-        <BrandAds></BrandAds>
-      </Box>
-      <Container fixed>
-        {/* 브랜드 목록 */}
-        <Box sx={{ mt: '50px' }}>
+      <BrandAds />
+      <Container
+        sx={{
+          minHeight: '80vh',
+          userSelect: 'none',
+        }}
+      >
+        {/* 브랜드 리스트 */}
+        <Box
+          sx={{
+            m: 0,
+            mt: '30px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <ToggleButtonGroup
             onChange={handleBrandChange}
             color="primary"
             value={brand}
             exclusive
-            aria-label="brand"
+            sx={{
+              width: '1150px',
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+            }}
           >
             <ToggleButton
               value="all"
-              onClick={handleBrandChange}
-              sx={brandStyle}
+              sx={{ ...brandStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
             >
               전체
             </ToggleButton>
+            {/* 카테고리 불러오기 */}
             {brandList.map((brand) => {
               return (
-                <ToggleButton value={brand} sx={brandStyle}>
+                <ToggleButton key={brand} value={brand} sx={brandStyle}>
                   {brand}
                 </ToggleButton>
               );
             })}
           </ToggleButtonGroup>
         </Box>
+
         {/* 필터링 */}
         <Box sx={{ float: 'right' }}>
           <NativeSelect
@@ -214,11 +235,11 @@ const UserProductsBrandList = () => {
             disableUnderline
             IconComponent={KeyboardArrowDownIcon}
           >
-            <option value="recent">최신순</option>
-            <option value="revwRate">평점순</option>
-            <option value="popular">인기순</option>
-            <option value="expensive">가격높은순</option>
-            <option value="cheap">가격낮은순</option>
+            <option value="recent">최신 순</option>
+            <option value="revwRate">평점 순</option>
+            <option value="popular">인기 순</option>
+            <option value="expensive">가격 높은 순</option>
+            <option value="cheap">가격 낮은 순</option>
           </NativeSelect>
           <NativeSelect
             inputRef={sortRef}
@@ -238,20 +259,52 @@ const UserProductsBrandList = () => {
             <option value="rented">대여중</option>
           </NativeSelect>
         </Box>
+
         {/* 상품목록 */}
-        <Grid container spacing={12} sx={{ mt: '0.1rem' }}>
-          {productList.map((product) => {
-            return (
-              <Grid item xs={6} sm={3}>
-                <Product key={product.prodCode} product={product}></Product>
-              </Grid>
-            );
-          })}
-        </Grid>
+        {loading ? (
+          <Loading height="38vh" />
+        ) : (
+          <Box
+            sx={{
+              mt: '50px',
+              pt: '30px',
+              mx: 'auto',
+              width: '1100px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Grid container>
+              {productList.map((product) => {
+                return (
+                  <Grid
+                    item
+                    key={product.prodCode}
+                    xs={3}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      mb: 4,
+                    }}
+                  >
+                    <UserBrandProductCard
+                      key={product.prodCode}
+                      product={product}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>
+        )}
+
         {/* 페이징 */}
         <Box
           sx={{
-            mt: '5rem',
+            mt: 2,
+            mb: 10,
             width: '100%',
             display: 'flex',
             justifyContent: 'center',

@@ -3,39 +3,52 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const BrandAds = () => {
+  const navigate = useNavigate();
   const brandAds = [
     {
+      brand: '아레나',
       url: process.env.PUBLIC_URL + '/AdImage/arenaAD1.png',
     },
     {
+      brand: '멜킨',
       url: process.env.PUBLIC_URL + '/AdImage/melkinAD1.png',
     },
     {
+      brand: '레트로스',
       url: process.env.PUBLIC_URL + '/AdImage/retrosAD1.png',
     },
     {
+      brand: '야마하',
       url: process.env.PUBLIC_URL + '/AdImage/yamahaAD1.png',
     },
   ];
 
   const brandAdStyle = {
-    backgroundColor: '#f1f1f1',
+    margin: '0',
+    padding: '0',
     width: '100%',
-    height: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '--swiper-pagination-color': '#C3C36A',
+    height: '400px',
+    cursor: 'pointer',
   };
 
   return (
-    <Container fixed>
-      <Box>
+    <>
+      <Box
+        sx={{
+          width: '100%',
+          m: 0,
+          p: 0,
+          userSelect: 'none',
+          borderBottom: '1px solid #d5d5d5',
+        }}
+      >
         <Swiper
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          loop={true}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           pagination={true}
           modules={[Autoplay, Pagination]}
           style={brandAdStyle}
@@ -43,10 +56,11 @@ const BrandAds = () => {
           {brandAds.map((ad) => {
             return (
               <SwiperSlide
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                key={ad.brand}
+                onClick={() => {
+                  navigate(
+                    `/products/brand/lists?brand=${ad.brand}&sort=all&array=recent&pages=1`
+                  );
                 }}
               >
                 <Box
@@ -54,9 +68,10 @@ const BrandAds = () => {
                   alt="이미지를 불러오는 데에 실패했습니다."
                   src={ad.url}
                   sx={{
-                    position: 'relative',
+                    m: 0,
+                    objectFit: 'cover',
                     width: '100%',
-                    height: '100%',
+                    height: '400px',
                   }}
                 />
               </SwiperSlide>
@@ -64,7 +79,7 @@ const BrandAds = () => {
           })}
         </Swiper>
       </Box>
-    </Container>
+    </>
   );
 };
 

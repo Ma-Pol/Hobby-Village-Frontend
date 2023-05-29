@@ -138,6 +138,7 @@ const UserProductsSearch = () => {
     <Container
       sx={{
         minHeight: '80vh',
+        userSelect: 'none',
       }}
     >
       {/* 검색결과 */}

@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box,
@@ -187,6 +187,7 @@ const UserProductsList = () => {
     <Container
       sx={{
         minHeight: '80vh',
+        userSelect: 'none',
       }}
     >
       {/* 카테고리 리스트 */}
@@ -228,6 +229,7 @@ const UserProductsList = () => {
           })}
         </ToggleButtonGroup>
       </Box>
+
       {/* 필터링 */}
       <Box sx={{ float: 'right' }}>
         <NativeSelect
