@@ -1,9 +1,10 @@
 import React from 'react';
+import AdminReviewsDetail from 'components/admin-reviews/AdminReviewsDetail';
 
 const AdminReviewsDetails = () => {
   return (
     <div>
-      <div>관리자 리뷰 상세 페이지</div>
+      <AdminReviewsDetail />
     </div>
   );
 };
