@@ -306,7 +306,14 @@ const AdminReviewsDetail = () => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={tableBodyStyle}>
-                    <Typography variant="h6" component="h2">
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Rating value={detail.revwRate} readOnly />
                     </Typography>
                   </TableCell>
@@ -444,7 +451,6 @@ const AdminReviewsDetail = () => {
                       component="h2"
                       sx={{
                         display: 'flex',
-                        alignItems: 'center',
                         height: '350px',
                         overflow: 'auto',
                         whiteSpace: 'pre-wrap',

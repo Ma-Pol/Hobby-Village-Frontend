@@ -54,7 +54,7 @@ const ProductItem = ({ product }) => {
             sx={{
               width: '170px',
               height: '170px',
-              objectFit: 'cover',
+              objectFit: 'contain',
               border: '1px solid #d0d0d0',
               '&:hover': {
                 cursor: 'pointer',

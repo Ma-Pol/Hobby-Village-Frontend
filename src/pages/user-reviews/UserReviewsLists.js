@@ -18,7 +18,6 @@ import UserReviewsRows from '../../components/user-reviews/UserReviewsRows';
 const UserReviewsLists = () => {
   const [loading, setLoading] = useState(true);
   const sessionEmail = sessionStorage.getItem('hobbyvillage-email');
-  const nickname = sessionStorage.getItem('hobbyvillage-usernickname');
   const { email } = useParams();
 
   const location = useLocation();
@@ -34,9 +33,9 @@ const UserReviewsLists = () => {
   useEffect(() => {
     axios
       .all([
-        axios.get(`/users/reviews/count?revwWriter=${nickname}`),
+        axios.get(`/users/reviews/count?email=${email}`),
         axios.get(
-          `/users/reviews/lists?revwWriter=${nickname}&sort=${searchParams.get(
+          `/users/reviews/lists?email=${email}&sort=${searchParams.get(
             'sort'
           )}&pages=${searchParams.get('pages')}`
         ),
@@ -55,7 +54,7 @@ const UserReviewsLists = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [nickname, searchParams]);
+  }, [email, searchParams]);
 
   const sortChange = () => {
     const sort = sortRef.current.value;
@@ -206,7 +205,7 @@ const UserReviewsLists = () => {
               userSelect: 'none',
             }}
           >
-            리뷰 데이터가 존재하지 않습니다.
+            리뷰가 존재하지 않습니다.
           </Typography>
         ) : (
           // 리뷰 데이터가 있을 경우

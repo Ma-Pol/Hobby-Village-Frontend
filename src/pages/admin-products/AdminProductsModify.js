@@ -113,6 +113,14 @@ const AdminProductsModify = () => {
   const imageChange = (e) => {
     const imageFiles = e.target.files;
 
+    if (imageFiles.length > 10) {
+      alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
+      setImgFiles([]);
+      setImgBase64([]);
+      prodPictureRef.current.value = '';
+      return false;
+    }
+
     for (let i = 0; i < imageFiles.length; i++) {
       let check = false;
       const regExp = /[\[\]\{\}\/\?\\\*\|\<\>\"\'\:\;\`\^]/g;
