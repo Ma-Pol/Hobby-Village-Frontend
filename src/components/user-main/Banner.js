@@ -11,13 +11,13 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const linkToProductsLists = () => {
-    navigate('/products/lists');
+    navigate('/products/lists?category=all&sort=all&array=recent&pages=1');
   };
   const linkToRequests = () => {
     navigate('/requests');
   };
   const linkToProductsBrandLists = () => {
-    navigate('/products/brand/lists');
+    navigate('/products/brand/lists?brand=all&sort=all&array=recent&pages=1');
   };
   const linkToServiceInfo = () => {
     navigate('/guide');

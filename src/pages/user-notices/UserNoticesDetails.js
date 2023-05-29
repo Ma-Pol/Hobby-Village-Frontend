@@ -1,7 +1,7 @@
 import { Box, Container, Typography, Button, Paper, Grid } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import FileSaver from 'file-saver';
 import { styled } from '@mui/system';
 import Loading from '../../components/Loading';
@@ -12,6 +12,15 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 950,
   boxShadow: 'none',
   backgroundColor: '#f1f1f1',
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  border: '1px solid black',
+  color: 'black',
+  fontSize: '1.0rem',
+  height: '35px',
+  fontWeight: 'bold',
+  padding: theme.spacing(1),
 }));
 
 const LabelItem = styled(Grid)(({ theme }) => ({
@@ -131,7 +140,6 @@ const UserNoticesDetails = () => {
         >
           공지사항
         </Typography>
-
         <StyledPaper style={{ marginTop: '40px' }}>
           <Grid container>
             <LabelItem
@@ -333,37 +341,21 @@ const UserNoticesDetails = () => {
         </StyledPaper>
 
         <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'Center',
+          style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            marginBottom: '50px',
           }}
         >
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              if (prevQuery === undefined) {
-                navigate(`/notices/lists?filter=none&pages=1`);
-              } else {
-                navigate(`/notices/lists${prevQuery}`);
-              }
-            }}
-            sx={{
-              mt: 1,
-              mr: 1,
-              height: '25px',
-              float: 'center',
-              backgroundColor: '#FFFFFF',
-              color: '#000000',
-              border: '1px solid #000000',
-              '&:hover': {
-                backgroundColor: '#c6c6c6',
-                color: '#000000',
-              },
-            }}
+          <Link
+            to={
+              prevQuery === undefined
+                ? `/notices/lists?filter=none&pages=1`
+                : `/notices/lists${prevQuery}`
+            }
           >
-            목록
-          </Button>
+            <StyledButton>목록</StyledButton>
+          </Link>
         </Box>
       </Container>
     );

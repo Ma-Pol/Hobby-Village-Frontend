@@ -1,48 +1,49 @@
-* {
+/* * {
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
     list-style-type : none;
     text-decoration-line : none; color:black;
     
-}
+} */
+
 .listpage {
-    margin : 60px
+  margin: 60px;
 }
 .pagetitle {
-    margin-left : 10%;
-    font-weight : 700;
-    font-size : 40px;
-    line-height : 48px;
-    display : flex;
+  margin-left: 10%;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  display: flex;
 }
 
 .listTable {
-    white-space : nowrap;
-    margin-top : 35px;
-    width : 80%;
-    border-bottom : 1px solid;
-    border-collapse : collapse;
+  white-space: nowrap;
+  margin-top: 35px;
+  width: 80%;
+  border-bottom: 1px solid;
+  border-collapse: collapse;
 }
 .listTable th {
-    border-top : 1px solid;
-    border-bottom : 1px solid;
-    padding : 5px;
-    font-size : 18px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  padding: 5px;
+  font-size: 18px;
 }
 .listTable td {
-    border-top : 1px solid #D8D8D8;
-    padding : 5px;
+  border-top: 1px solid #d8d8d8;
+  padding: 5px;
 }
 .listdata {
-    text-align : left;
+  text-align: left;
 }
 .listRate {
-    text-align : center; 
+  text-align: center;
 }
 .listdate {
-    text-align : center; 
+  text-align: center;
 }
 .listreport {
-    text-align : center; 
+  text-align: center;
 }
