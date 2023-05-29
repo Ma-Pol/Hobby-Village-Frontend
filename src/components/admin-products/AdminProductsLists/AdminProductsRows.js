@@ -48,8 +48,10 @@ const AdminProductsRows = ({
       <Grid item xs={2}>
         <Typography sx={tableData}>
           <Link
-            href={prodLink}
-            title={prodCode + '\n상품 상세 페이지'}
+            component={RouterLink}
+            to={prodLink}
+            state={{ queryString: queryString }}
+            title={prodName + '\n상품 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >

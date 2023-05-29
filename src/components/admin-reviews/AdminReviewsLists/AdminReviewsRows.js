@@ -1,5 +1,6 @@
 import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminReviewsRows = ({
   revwCode,
@@ -8,6 +9,7 @@ const AdminReviewsRows = ({
   revwTitle,
   revwRegiDate,
   revwReport,
+  queryString,
   isLast,
 }) => {
   const prodLink = `/m/products/details/${prodCode}`;
@@ -122,7 +124,9 @@ const AdminReviewsRows = ({
           sx={revwReport >= 5 ? tableTitleData[1] : tableTitleData[0]}
         >
           <Link
-            href={revwLink}
+            component={RouterLink}
+            to={revwLink}
+            state={{ queryString: queryString }}
             title={revwTitle + '\n리뷰 상세 페이지'}
             underline="hover"
           >

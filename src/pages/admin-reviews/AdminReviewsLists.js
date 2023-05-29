@@ -12,7 +12,7 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminReviewsRows from '../../components/admin-reviews/AdminReviewsLists/AdminReviewsRows';
 import Loading from '../../components/Loading';
@@ -20,6 +20,7 @@ import Loading from '../../components/Loading';
 const AdminReviewsLists = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const [reviewList, setReviewList] = useState([]); // 리뷰 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
@@ -323,6 +324,7 @@ const AdminReviewsLists = () => {
               revwTitle={review.revwTitle}
               revwRegiDate={review.revwRegiDate}
               revwReport={review.revwReport}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
