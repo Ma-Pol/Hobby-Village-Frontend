@@ -29,6 +29,7 @@ const ProductItem = ({ product }) => {
     <Grid item xs={3}>
       <Box
         onClick={() => {
+          window.scrollTo(0, 0);
           navigate(`/products/details/${product.prodCode}`);
         }}
         sx={{
