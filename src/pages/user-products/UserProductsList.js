@@ -19,7 +19,6 @@ import Loading from '../../components/Loading';
 
 const UserProductsList = () => {
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
 
   // 카테고리(category), 분류(sort)-전체/대여중/미대여,
@@ -106,6 +105,7 @@ const UserProductsList = () => {
 
   useEffect(() => {
     getProductList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // 상품 목록 불러오기 끝 ---------------------------------------------------------------------------------------------
@@ -144,22 +144,6 @@ const UserProductsList = () => {
     setSearchParams(searchParams);
   };
 
-  // // 검색 클릭 -- 헤더에 적용 필요
-  // const handleSearch = () => {
-  //   const sort = sortRef.current.value;
-  //   const array = arrayRef.current.value;
-  //   const keyword = keywordRef.current.value;
-  //   if (keyword === null) {
-  //     navigate(
-  //       `/products/lists?category=${category}&sort=${sort}&array=${array}&pages=1`
-  //     );
-  //   } else {
-  //     navigate(
-  //       `/products/lists/search?category=${category}&sort=${sort}&array=${array}&pages=1&keyword=${keyword}`
-  //     );
-  //   }
-  // };
-
   // 스타일
   const categoryStyle = {
     mr: '5px',
@@ -197,9 +181,6 @@ const UserProductsList = () => {
       padding: '0',
       margin: '0',
     },
-    // '&.Mui-selected': {
-    //   backgroundColor: '#C3C36A',
-    // },
   };
 
   return (
@@ -286,6 +267,7 @@ const UserProductsList = () => {
           <option value="rented">대여중</option>
         </NativeSelect>
       </Box>
+
       {/* 상품목록 */}
       {loading ? (
         <Loading height="38vh" />
