@@ -10,13 +10,15 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from '@mui/material';
-import Product from '../../components/user-products/UserProductCard';
+import UserProductCard from '../../components/user-products/UserProductCard';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Loading from '../../components/Loading';
 
 // 기본 페이지 주소
 // http://localhost:3000/products/lists?category=all&sort=all&array=recent&pages=1
 
 const UserProductsList = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
 
@@ -33,7 +35,6 @@ const UserProductsList = () => {
 
   const sortRef = useRef(); // 대여 여부
   const arrayRef = useRef(); // 정렬
-  const keywordRef = useRef(); // 현재 검색 키워드
 
   // 카테고리 불러오기
   const getCategories = () => {
@@ -44,7 +45,6 @@ const UserProductsList = () => {
         setCategories(data);
       })
       .catch((e) => {
-        console.log('카테고리 불러오기 에러!!!');
         console.error(e);
       });
   };
@@ -94,15 +94,13 @@ const UserProductsList = () => {
           } else {
             arrayRef.current.value = searchParams.get('array');
           }
-          if (searchParams.get('keyword') === null) {
-            return;
-          } else {
-            keywordRef.current.value = searchParams.get('keyword'); // 현재 검색어
-          }
         })
       )
+      .finally(() => {
+        setLoading(false);
+      })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       });
   };
 
@@ -115,6 +113,7 @@ const UserProductsList = () => {
   // category 변경
   const handleCategoryChange = (e, value) => {
     if (value !== null) {
+      setLoading(true);
       searchParams.set('category', value);
       setSearchParams(searchParams);
       setCategory(value);
@@ -124,6 +123,7 @@ const UserProductsList = () => {
 
   // array 변경
   const handleArrayChange = () => {
+    setLoading(true);
     const array = arrayRef.current.value;
     searchParams.set('array', array);
     setSearchParams(searchParams);
@@ -131,6 +131,7 @@ const UserProductsList = () => {
 
   // sort 변경
   const handleSortChange = () => {
+    setLoading(true);
     const sort = sortRef.current.value;
     searchParams.set('sort', sort);
     setSearchParams(searchParams);
@@ -138,28 +139,30 @@ const UserProductsList = () => {
 
   // 페이징 클릭
   const handlePaging = (e, value) => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
     searchParams.set('pages', value);
     setSearchParams(searchParams);
   };
 
-  // 검색 클릭 -- 헤더에 적용 필요
-  const handleSearch = () => {
-    const sort = sortRef.current.value;
-    const array = arrayRef.current.value;
-    const keyword = keywordRef.current.value;
-    if (keyword === null) {
-      navigate(
-        `/products/lists?category=${category}&sort=${sort}&array=${array}&pages=1`
-      );
-    } else {
-      navigate(
-        `/products/lists/search?category=${category}&sort=${sort}&array=${array}&pages=1&keyword=${keyword}`
-      );
-    }
-  };
+  // // 검색 클릭 -- 헤더에 적용 필요
+  // const handleSearch = () => {
+  //   const sort = sortRef.current.value;
+  //   const array = arrayRef.current.value;
+  //   const keyword = keywordRef.current.value;
+  //   if (keyword === null) {
+  //     navigate(
+  //       `/products/lists?category=${category}&sort=${sort}&array=${array}&pages=1`
+  //     );
+  //   } else {
+  //     navigate(
+  //       `/products/lists/search?category=${category}&sort=${sort}&array=${array}&pages=1&keyword=${keyword}`
+  //     );
+  //   }
+  // };
 
   // 스타일
   const categoryStyle = {
+    mr: '5px',
     border: 'none',
     height: '30px',
     backgroundColor: 'none',
@@ -174,23 +177,22 @@ const UserProductsList = () => {
     '&.Mui-selected': {
       backgroundColor: '#FFFFFF',
       color: '#C3C36A',
-      fontSize: '1.3rem',
+      fontSize: '1.2rem',
     },
     '&.Mui-selected:hover': {
       backgroundColor: '#FFFFFF',
       color: '#C3C36A',
-      fontSize: '1.3rem',
+      fontSize: '1.2rem',
     },
   };
 
   const filterStyle = {
-    width: 100,
-    height: 35,
+    width: '130px',
     border: '1px solid #575757',
     borderRadius: '5px',
     fontSize: '0.95rem',
     color: '#575757',
-    margin: '20px 0 0 20px',
+    margin: '10px 0 0 20px',
     '&.MuiNativeSelect-iconOutlined': {
       padding: '0',
       margin: '0',
@@ -201,27 +203,44 @@ const UserProductsList = () => {
   };
 
   return (
-    <Container fixed>
+    <Container
+      sx={{
+        minHeight: '80vh',
+      }}
+    >
       {/* 카테고리 리스트 */}
-      <Box>
+      <Box
+        sx={{
+          m: 0,
+          mt: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <ToggleButtonGroup
           onChange={handleCategoryChange}
           color="primary"
           value={category}
           exclusive
-          aria-label="category"
+          sx={{
+            width: '1150px',
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+          }}
         >
           <ToggleButton
             value="all"
-            onClick={handleCategoryChange}
-            sx={categoryStyle}
+            sx={{ ...categoryStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
           >
             전체
           </ToggleButton>
           {/* 카테고리 불러오기 */}
           {categories.map((category) => {
             return (
-              <ToggleButton value={category} sx={categoryStyle}>
+              <ToggleButton key={category} value={category} sx={categoryStyle}>
                 {category}
               </ToggleButton>
             );
@@ -243,11 +262,11 @@ const UserProductsList = () => {
           disableUnderline
           IconComponent={KeyboardArrowDownIcon}
         >
-          <option value="recent">최신순</option>
-          <option value="revwRate">평점순</option>
-          <option value="popular">인기순</option>
-          <option value="expensive">가격높은순</option>
-          <option value="cheap">가격낮은순</option>
+          <option value="recent">최신 순</option>
+          <option value="revwRate">평점 순</option>
+          <option value="popular">인기 순</option>
+          <option value="expensive">가격 높은 순</option>
+          <option value="cheap">가격 낮은 순</option>
         </NativeSelect>
         <NativeSelect
           inputRef={sortRef}
@@ -268,19 +287,47 @@ const UserProductsList = () => {
         </NativeSelect>
       </Box>
       {/* 상품목록 */}
-      <Grid container spacing={12} sx={{ mt: '0.1rem' }}>
-        {productList.map((product) => {
-          return (
-            <Grid item xs={6} sm={3}>
-              <Product key={product.prodCode} product={product}></Product>
-            </Grid>
-          );
-        })}
-      </Grid>
+      {loading ? (
+        <Loading height="38vh" />
+      ) : (
+        <Box
+          sx={{
+            mt: '50px',
+            pt: '30px',
+            mx: 'auto',
+            width: '1100px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Grid container>
+            {productList.map((product) => {
+              return (
+                <Grid
+                  item
+                  key={product.prodCode}
+                  xs={3}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    mb: 4,
+                  }}
+                >
+                  <UserProductCard key={product.prodCode} product={product} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Box>
+      )}
+
       {/* 페이징 */}
       <Box
         sx={{
-          mt: '5rem',
+          mt: 2,
+          mb: 10,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',

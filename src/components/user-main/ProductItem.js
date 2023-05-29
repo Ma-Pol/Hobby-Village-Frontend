@@ -2,8 +2,10 @@ import { Box, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Loading';
 
 const ProductItem = ({ product }) => {
+  const [loading, setLoading] = useState(true);
   const [productImage, setProductImage] = useState();
   const navigate = useNavigate();
 
@@ -12,6 +14,9 @@ const ProductItem = ({ product }) => {
       .get(`/main/getImageName/${product.prodCode}`)
       .then((image) => {
         setProductImage(image.data);
+      })
+      .finally(() => {
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -40,20 +45,25 @@ const ProductItem = ({ product }) => {
           },
         }}
       >
-        <Box
-          component="img"
-          sx={{
-            width: '170px',
-            height: '170px',
-            objectFit: 'cover',
-            border: '1px solid #d0d0d0',
-            '&:hover': {
-              cursor: 'pointer',
-            },
-          }}
-          alt={product.prodName}
-          src={'http://localhost:8080/main/viewImage/' + productImage}
-        />
+        {loading ? (
+          <Loading height={'170px'} />
+        ) : (
+          <Box
+            component="img"
+            sx={{
+              width: '170px',
+              height: '170px',
+              objectFit: 'cover',
+              border: '1px solid #d0d0d0',
+              '&:hover': {
+                cursor: 'pointer',
+              },
+            }}
+            alt={product.prodName}
+            src={'http://localhost:8080/main/viewImage/' + productImage}
+          />
+        )}
+
         <Box sx={{ m: 0, width: '170px', my: 1 }}>
           {product.prodBrand !== null && (
             <Typography

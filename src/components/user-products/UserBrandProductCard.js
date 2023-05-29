@@ -24,10 +24,8 @@ const Product = ({ product }) => {
       .then((res) => {
         const { data } = res;
         setPictureList(data);
-        console.log('이미지 파일명 불러오기 성공~~');
       })
       .catch((e) => {
-        console.log('이미지 파일명 불러오기 실패!!!');
         console.error(e);
       });
   };

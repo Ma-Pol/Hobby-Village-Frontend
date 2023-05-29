@@ -249,7 +249,7 @@ const UserHeader = () => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     navigate(
-                      `/products/lists/search?category=all&sort=all&array=recent&pages=1&keyword=${searchRef.current.value}`
+                      `/products/lists/search?category=all&sort=all&array=recent&keyword=${searchRef.current.value}&pages=1`
                     );
                   }
                 }}

@@ -13,7 +13,7 @@ import Product from '../../components/user-products/UserProductCard';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // 예시 페이지 주소
-// http://localhost:3000/products/lists/search?category=all&sort=all&array=recent&pages=1&keyword=수영
+// http://localhost:3000/products/lists/search?category=all&sort=all&array=recent&keyword=수영&pages=1
 
 const UserProductsSearch = () => {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ const UserProductsSearch = () => {
         })
       )
       .catch((e) => {
-        console.log(e);
+        console.error(e);
       });
   };
 
