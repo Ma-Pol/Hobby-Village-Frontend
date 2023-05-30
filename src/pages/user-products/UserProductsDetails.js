@@ -111,7 +111,10 @@ const UserProductsDetails = () => {
             .get(
               `/products/lists/updateDibs?email=${userEmail}&prodCode=${prodCode}`
             )
-            .then(window.alert('찜 목록에 추가되었습니다.'));
+            .then(() => {
+              window.alert('찜 목록에 추가되었습니다.');
+              window.location.reload();
+            });
         }
       });
   };
