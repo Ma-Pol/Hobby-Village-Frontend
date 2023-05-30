@@ -307,7 +307,11 @@ const UserHeader = () => {
                 </Link>
               )}
               <Link
-                to={email !== null ? `/mypages/${email}/orders` : '/login'}
+                to={
+                  email !== null
+                    ? `/mypages/${email}/orders?odrState=payment-completed`
+                    : '/login'
+                }
                 style={{
                   textDecoration: 'none',
                   marginRight: '1rem',
@@ -333,7 +337,11 @@ const UserHeader = () => {
                 </BlackTextTypography>
               </Link>
               <Link
-                to={email !== null ? `/mypages/${email}/orders` : '/login'}
+                to={
+                  email !== null
+                    ? `/mypages/${email}/orders?odrState=payment-completed`
+                    : '/login'
+                }
                 style={{ textDecoration: 'none' }}
               >
                 <Avatar

@@ -175,7 +175,7 @@ const UserQnALists = () => {
           }}
         >
           {/* 필터 선택용 Toggle Button 표기 시작 */}
-          <Box sx={{ float: 'right', pr: 3, mb: 1 }}>
+          <Box sx={{ float: 'right', mb: 1 }}>
             <ToggleButtonGroup
               value={String(currentFilter)}
               exclusive
