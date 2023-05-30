@@ -220,23 +220,45 @@ const UserProductsSearch = () => {
           }}
         >
           <Grid container>
-            {productList.map((product) => {
-              return (
-                <Grid
-                  item
-                  key={product.prodCode}
-                  xs={3}
+            {productList.length === 0 ? (
+              <Box
+                sx={{
+                  height: '33vh',
+                  mx: 'auto',
+                  width: '1100px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h4"
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    mb: 4,
+                    fontWeight: 'bold',
                   }}
                 >
-                  <UserProductCard key={product.prodCode} product={product} />
-                </Grid>
-              );
-            })}
+                  상품이 없습니다.
+                </Typography>
+              </Box>
+            ) : (
+              productList.map((product) => {
+                return (
+                  <Grid
+                    item
+                    key={product.prodCode}
+                    xs={3}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      mb: 4,
+                    }}
+                  >
+                    <UserProductCard key={product.prodCode} product={product} />
+                  </Grid>
+                );
+              })
+            )}
           </Grid>
         </Box>
       )}

@@ -450,7 +450,15 @@ const UserReviewsModify = () => {
                 </Typography>
               </Box>
               <Box sx={tableCell2}>
-                <Typography variant="body1" component="h2" sx={{}}>
+                <Typography
+                  variant="body1"
+                  component="h2"
+                  sx={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   {detail.prodName}
                 </Typography>
               </Box>
@@ -608,7 +616,7 @@ const UserReviewsModify = () => {
                   onChange={imageChange}
                 />
               </Box>
-              <Box sx={tableCell3}>
+              <Box sx={{ ...tableCell3, justifyContent: 'center' }}>
                 {
                   // 기존 이미지, 새로 추가된 이미지 모두 없는 경우
                   prevRevwImages.length === 0 && imgBase64.length === 0 ? (

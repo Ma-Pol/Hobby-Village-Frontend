@@ -250,7 +250,15 @@ const UserReviewsDetails = () => {
                 </Typography>
               </Box>
               <Box sx={tableCell2}>
-                <Typography variant="body1" component="h2" sx={{}}>
+                <Typography
+                  variant="body1"
+                  component="h2"
+                  sx={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
                   {detail.prodName}
                 </Typography>
               </Box>

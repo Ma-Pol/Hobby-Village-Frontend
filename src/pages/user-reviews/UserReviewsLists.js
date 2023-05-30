@@ -79,7 +79,11 @@ const UserReviewsLists = () => {
 
   if (sessionEmail !== email) {
     alert('잘못된 접근입니다.');
-    return <Navigate to={`/reviews/${sessionEmail}/lists`} />;
+    return (
+      <Navigate
+        to={`/reviews/${sessionEmail}/lists?sort=-revwRegiDate&pages=1`}
+      />
+    );
   }
 
   return (
