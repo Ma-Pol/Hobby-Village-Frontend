@@ -57,7 +57,7 @@ const Product = ({ product }) => {
   return (
     <>
       <Card sx={prodCardStyle}>
-        <Swiper navigation={false} style={swiperStyle}>
+        <Swiper loop={true} navigation={false} style={swiperStyle}>
           {pictureList.map((fileName) => {
             const fileSrc = `http://localhost:8080/products/lists/upload/${fileName}`;
 
