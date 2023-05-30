@@ -161,7 +161,7 @@ const UserFAQLists = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Box sx={{ float: 'right', pr: 3, mb: 1 }}>
+          <Box sx={{ float: 'right', mb: 1 }}>
             <ToggleButtonGroup
               value={String(currentFilter)}
               exclusive

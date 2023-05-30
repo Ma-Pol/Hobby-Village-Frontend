@@ -632,9 +632,12 @@ const UserReviewsCreate = () => {
                 sx={cancelBtnStyle}
                 onClick={() => {
                   if (window.confirm('리뷰 작성을 취소하시겠습니까?')) {
-                    navigate(`/mypages/${sessionEmail}/orders`, {
-                      replace: true,
-                    });
+                    navigate(
+                      `/mypages/${sessionEmail}/orders?odrState=payment-completed`,
+                      {
+                        replace: true,
+                      }
+                    );
                   }
                 }}
               >

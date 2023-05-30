@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import MyPagesOrders from './MyPagesOrders';
 import MyPagesRequests from './MyPagesRequests';
 import MyPagesAddressesLists from './MyPagesAddressesLists';
@@ -9,11 +9,18 @@ import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
 
 const UserMyPages = () => {
-  const email = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
+  const sessionEmail = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
+  const { email } = useParams();
 
-  if (email === null) {
+  if (sessionEmail === null) {
     alert('로그인 후 이용해주세요.');
     return <Navigate to="/login" replace={true} />;
+  }
+
+  if (sessionEmail !== email) {
+    alert('접근 권한이 없습니다.');
+    const url = `/mypages/${sessionEmail}/orders?odrState=payment-completed`;
+    return <Navigate to={url} replace={true} />;
   }
 
   return (
