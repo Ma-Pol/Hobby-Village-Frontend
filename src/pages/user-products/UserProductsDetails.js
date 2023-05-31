@@ -551,7 +551,7 @@ const UserProductsDetails = () => {
               </Select>
 
               <Button
-                disabled={period === 0 || product.prodIsRental === 1}
+                disabled={period === 0}
                 variant="contained"
                 sx={{
                   boxSizing: 'border-box',
