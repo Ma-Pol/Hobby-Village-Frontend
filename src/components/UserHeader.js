@@ -151,7 +151,7 @@ const UserHeader = () => {
             </Link>
 
             <Link
-              to="/recommend"
+              to="/recommend/home"
               style={{
                 textDecoration: 'none',
               }}

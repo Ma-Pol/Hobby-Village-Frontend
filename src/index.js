@@ -16,16 +16,18 @@ import UserRequests from './pages/user-request/UserRequests';
 import UserNotices from './pages/user-notices/UserNotices';
 import UserCs from './pages/user-cs/UserCs';
 import Admin from './pages/Admin';
+import React from 'react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <React.StrictMode>
   <BrowserRouter>
     <Routes>
       <Route exact path="/" element={<UserMain />} />
       <Route exact path="/login" element={<UserLogin />} />
       <Route exact path="/signup" element={<UserSignup />} />
       <Route exact path="/users/:email/modify" element={<UserModify />} />
-      <Route exact path="/recommend" element={<Recommend />} />
+      <Route exact path="/recommend/*" element={<Recommend />} />
       <Route exact path="/guide" element={<UserGuide />} />
       <Route exact path="/mypages/:email/*" element={<UserMyPages />} />
       <Route
@@ -59,4 +61,5 @@ root.render(
       />
     </Routes>
   </BrowserRouter>
+  </React.StrictMode>
 );
