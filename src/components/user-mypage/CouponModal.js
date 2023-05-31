@@ -87,6 +87,25 @@ const CouponModal = ({ getUserData, setCouponListModal }) => {
       >
         {loading ? (
           <Loading height={'100%'} />
+        ) : couponList.length === 0 ? (
+          <Typography
+            variant="body1"
+            sx={{
+              m: 0,
+              p: 0,
+              mt: '20px',
+              mb: '20px',
+              width: '340px',
+              height: '390px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+            }}
+          >
+            보유 중인 쿠폰이 없습니다.
+          </Typography>
         ) : (
           couponList.map((coupon) => {
             const deadline =

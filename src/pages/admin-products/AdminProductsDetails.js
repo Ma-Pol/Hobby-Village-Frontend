@@ -95,7 +95,7 @@ const AdminProductsDetails = () => {
   };
 
   const tableHeadStyle = {
-    width: 170,
+    width: 172,
     fontSize: 18,
     border: '1px solid #E0E0E0',
     userSelect: 'none',
@@ -212,7 +212,7 @@ const AdminProductsDetails = () => {
             }}
           >
             <TableContainer>
-              <Table sx={{ width: 1140 }}>
+              <Table sx={{ width: 1150 }}>
                 <TableRow>
                   <TableCell sx={tableHeadStyle}>
                     <Typography

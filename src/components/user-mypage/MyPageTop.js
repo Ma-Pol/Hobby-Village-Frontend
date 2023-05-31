@@ -36,7 +36,7 @@ const profPictureCoverStyle = {
 
 const profPictureStyle = {
   boxSizing: 'border-box',
-  objectFit: 'contain',
+  objectFit: 'cover',
   width: '150px',
   height: '150px',
   borderRadius: '50%',
@@ -472,7 +472,7 @@ const MyPageTop = () => {
                         color: '#000000',
                       }}
                     >
-                      쿠폰 관리
+                      쿠폰 관리 &gt;
                     </Typography>
                   </Box>
                   <Box

@@ -71,6 +71,7 @@ const MainAds = () => {
                 navigate(
                   `/products/brand/lists?brand=${ad.brand}&sort=all&array=recent&pages=1`
                 );
+                window.scrollTo(0, 0);
               }}
             >
               <Box

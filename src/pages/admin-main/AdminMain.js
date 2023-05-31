@@ -97,13 +97,6 @@ const AdminMain = () => {
       }}
     >
       {urls.map((url, index) => renderBox(url, index, texts[index]))}
-      <button
-        onClick={() => {
-          window.location.href = '/';
-        }}
-      >
-        사용자 메인 페이지
-      </button>
     </Box>
   );
 };

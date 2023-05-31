@@ -73,6 +73,7 @@ const ProfPictureUpdateModal = ({ setProfPictureModal }) => {
         if (res.data !== null) {
           alert('프로필 사진이 변경되었습니다.');
           sessionStorage.setItem('hobbyvillage-profile', res.data);
+          window.location.reload();
         } else {
           alert('프로필 사진 변경에 실패했습니다.');
         }

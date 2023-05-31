@@ -17,8 +17,6 @@ const Result = () => {
     setResultData(result);
   }, [mbti]);
 
-  console.log(resultData);
-
   return (
     <Wrapper
       style={{

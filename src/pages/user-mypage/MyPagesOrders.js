@@ -100,7 +100,7 @@ const MyPagesOrders = () => {
 
         <Container
           sx={{
-            minHeight: '40vh',
+            minHeight: '60vh',
             mt: '40px',
             userSelect: 'none',
             width: '1100px',

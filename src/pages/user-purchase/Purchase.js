@@ -234,7 +234,7 @@ const Purchase = () => {
       await axios
         .get(`/purchase/productState/${product.prodCode}`)
         .then((state) => {
-          if (state.data !== 0) {
+          if (state.data !== 1) {
             alert(
               `${product.prodName} 은(는) 이미 대여 중이거나 삭제된 상품입니다.`
             );
@@ -1971,7 +1971,13 @@ const Purchase = () => {
                     쿠폰 할인
                   </Typography>
                   <Typography variant="h6" component="h2">
-                    {selectedCoupon !== 'none' ? selectedCoupon : '0'}&nbsp;원
+                    {selectedCoupon !== 'none'
+                      ? String(selectedCoupon).replace(
+                          /\B(?=(\d{3})+(?!\d))/g,
+                          ','
+                        )
+                      : '0'}
+                    &nbsp;원
                   </Typography>
                 </PriceLeftBoxRow>
 
@@ -2019,7 +2025,10 @@ const Purchase = () => {
                     }}
                   >
                     {location.state !== null &&
-                      exactTotalPrice - exactSavedMoney}
+                      String(exactTotalPrice - exactSavedMoney).replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ','
+                      )}
                     &nbsp;원
                   </Typography>
                 </PriceLeftBoxRow>

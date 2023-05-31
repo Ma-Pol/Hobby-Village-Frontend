@@ -1,5 +1,4 @@
-import { React, useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -8,19 +7,10 @@ import 'swiper/css/navigation';
 import { FreeMode, Navigation } from 'swiper';
 import {
   Box,
-  Link,
-  Card,
-  CardActions,
-  CardContent,
   Typography,
-  Grid,
   Rating,
-  Stack,
   Avatar,
-  TextField,
   Button,
-  Divider,
-  Chip,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -30,6 +20,7 @@ import { styled } from '@mui/material/styles';
 const MyAccordion = styled((props) => (
   <Accordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
+  margin: '0',
   borderTop: `1px solid ${theme.palette.divider}`,
   borderBottom: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
@@ -59,21 +50,24 @@ const MyAccordionSummary = styled((props) => <AccordionSummary {...props} />)(
 );
 
 const MyAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  padding: '0 0 20px 300px',
+  padding: '0',
 }));
 
 const Review = ({ review, expanded, handleChange }) => {
   const [pictureList, setPictureList] = useState([]); // 리뷰 이미지 파일명 목록
-  const [profPic, setProfPic] = useState(); // 프로필 이미지
-  const profPicFile = `http://localhost:8080/prodReview/upload/profPic/${profPic}`;
   const [isReported, setIsReported] = useState();
-  // const userEmail = sessionStorage.getItem(email); // 이메일 가져오기
-  const userEmail = '취미빌리지';
+  const userEmail = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
 
-  // 이미지 파일명 불러오기
-  const getRevwPicsNames = (revwCode) => {
+  useEffect(() => {
+    getRevwPicsNames();
+    checkReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 리뷰 이미지 파일명 불러오기
+  const getRevwPicsNames = () => {
     axios
-      .get(`/prodReview/imgName?revwCode=${revwCode}`)
+      .get(`/prodReview/imgName?revwCode=${review.revwCode}`)
       .then((res) => {
         const { data } = res;
         setPictureList(data);
@@ -83,25 +77,8 @@ const Review = ({ review, expanded, handleChange }) => {
       });
   };
 
-  // 프로필 사진 파일명 불러오기
-  const getProfPicsName = (revwWriter) => {
-    axios
-      .get(`/prodReview/profPic?revwWriter=${revwWriter}`)
-      .then((res) => {
-        setProfPic(res.data);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
-
-  useEffect(() => {
-    getRevwPicsNames(review.revwCode);
-    getProfPicsName(review.revwWriter);
-  }, []);
-
-  // 리뷰 신고
-  const handleReportReview = () => {
+  // 리뷰 신고 여부 확인
+  const checkReport = () => {
     axios
       .get(
         `/prodReview/checkReport?email=${userEmail}&revwCode=${review.revwCode}`
@@ -112,10 +89,15 @@ const Review = ({ review, expanded, handleChange }) => {
       .catch((e) => {
         console.error(e);
       });
+  };
+
+  // 리뷰 신고 버튼 클릭
+  const handleReportReview = () => {
     if (isReported >= 1) {
       window.alert('이미 신고한 리뷰입니다.');
-      return;
+      return false;
     }
+
     if (window.confirm(`${review.revwWriter} 님의 리뷰를 신고하시겠습니까?`)) {
       axios
         .get(
@@ -124,46 +106,41 @@ const Review = ({ review, expanded, handleChange }) => {
         .then(() => {
           alert('리뷰가 신고되었습니다. 감사합니다.');
         })
+        .finally(() => {
+          checkReport();
+        })
         .catch((e) => {
           console.error(e);
         });
     }
   };
 
-  const profPicStyle = {
-    bgcolor: '#C3C36A',
-    width: '30',
-    height: '30',
-    '&.MuiAvatar-root': {
-      position: 'relative',
-      right: -70,
-    },
-  };
-
   const swiperStyle = {
-    width: '350px',
+    width: '400px',
     height: '100px',
-    padding: '0',
+    padding: '0 10px',
     margin: '0',
     '--swiper-navigation-color': '#626262',
     '--swiper-navigation-size': '15pt',
+    userSelect: 'none',
   };
 
   const btnReportStyle = {
-    width: '40px',
-    minWidth: '40px',
-    height: '25px',
-    minHeight: '25px',
-    fontSize: '13px',
+    position: 'absolute',
+    right: '5px',
+    bottom: '5px',
+    boxSizing: 'border-box',
+    width: '70px',
+    m: 0,
+    p: 0,
     border: '1px solid #626262',
     borderRadius: '10px',
-    margin: '0',
-    padding: '0',
-    color: '#000000',
-    bgcolor: '#F5B8B8',
+    backgroundColor: '#F5B8B8',
     shadow: 'none',
+    fontWeight: 'bold',
+    color: '#000000',
     '&:hover': {
-      bgcolor: '#FC4D4D',
+      backgroundColor: 'tomato',
       color: '#FFFFFF',
     },
   };
@@ -175,95 +152,99 @@ const Review = ({ review, expanded, handleChange }) => {
         onChange={handleChange(review.revwCode)}
       >
         <MyAccordionSummary>
-          <Rating
-            name="read-only"
-            value={review.revwRate}
-            size="small"
-            sx={{ width: '200px', ml: '-15px' }}
-            readOnly
-          />
-          <Box display="flex">
+          <Box
+            sx={{
+              width: '1000px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Rating
+              value={review.revwRate}
+              size="small"
+              sx={{ width: '200px' }}
+              readOnly
+            />
             <Typography
               variant="body1"
-              component="body1"
-              sx={{ width: '550px' }}
+              title={review.revwTitle}
+              sx={{
+                width: '540px',
+                mr: '20px',
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
             >
               {review.revwTitle}
             </Typography>
-            <Typography variant="body1" component="body1">
+            <Typography
+              variant="body1"
+              sx={{ width: '90px', textAlign: 'center' }}
+            >
               {review.revwRegiDate}
             </Typography>
-          </Box>
-          <Chip
-            variant="plain"
-            avatar={
+            <Box
+              sx={{
+                m: 0,
+                p: 0,
+                pl: '20px',
+                width: '130px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                variant="body1"
+                title={review.revwWriter}
+                sx={{
+                  width: '100px',
+                  textAlign: 'right',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {review.revwWriter}
+              </Typography>
               <Avatar
-                display="inline"
-                sx={profPicStyle}
-                src={profPicFile}
-              ></Avatar>
-            }
-            label={review.revwWriter}
-            sx={{
-              bgcolor: '#FFFFFF',
-              fontSize: '15px',
-            }}
-          />
+                sx={{
+                  border: '1px solid #d0d0d0',
+                  boxSizing: 'border-box',
+                  ml: '10px',
+                  width: '25px',
+                  height: '25px',
+                }}
+                src={`http://localhost:8080/prodReview/upload/profPic/${review.profPicture}`}
+              />
+            </Box>
+          </Box>
         </MyAccordionSummary>
+
         <MyAccordionDetails>
           <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
             sx={{
-              width: '520px',
-              height: 'auto',
-              borderRadius: '10px',
-              backgroundColor: '#E0E0B4',
-              padding: '15px',
+              width: '1000px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: review.revwContent,
-              }}
-              sx={{ color: '#3E3E3E', mb: '10px' }}
-            ></Typography>
-            {/* 리뷰이미지 및 신고버튼 */}
             <Box
-              display="flex"
-              flex-direction="row"
-              justifyContent="space-between"
-              alignItems="flex-end"
+              sx={{
+                ml: '200px',
+                mr: '260px',
+                my: '10px',
+                p: '10px',
+                width: '520px',
+                backgroundColor: '#E0E0B4',
+                borderRadius: '10px',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
             >
-              <Swiper
-                slidesPerView={3}
-                spaceBetween={0}
-                freeMode={true}
-                navigation={true}
-                modules={[FreeMode, Navigation]}
-                style={swiperStyle}
-              >
-                {pictureList.map((fileName) => {
-                  const fileSrc = `http://localhost:8080/prodReview/upload/${fileName}`;
-                  return (
-                    <SwiperSlide>
-                      <Box
-                        component="img"
-                        alt={review.revwCode}
-                        src={fileSrc}
-                        sx={{
-                          position: 'relative',
-                          minWidht: '100px',
-                          width: '100px',
-                          height: '100px',
-                          minHeight: '100px',
-                        }}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
               <Button
                 variant="contained"
                 sx={btnReportStyle}
@@ -271,6 +252,45 @@ const Review = ({ review, expanded, handleChange }) => {
               >
                 신고
               </Button>
+              <Typography
+                sx={{
+                  width: '100%',
+                  mb: pictureList.length > 0 ? '10px' : '30px',
+                }}
+              >
+                {review.revwContent}
+              </Typography>
+              {pictureList.length > 0 && (
+                <Swiper
+                  slidesPerView={3}
+                  spaceBetween={0}
+                  freeMode={true}
+                  navigation={true}
+                  modules={[FreeMode, Navigation]}
+                  style={swiperStyle}
+                >
+                  {pictureList.map((fileName) => {
+                    const fileSrc = `http://localhost:8080/prodReview/upload/${fileName}`;
+                    return (
+                      <SwiperSlide key={fileName}>
+                        <Box
+                          component="img"
+                          alt={fileName}
+                          src={fileSrc}
+                          sx={{
+                            boxSizing: 'border-box',
+                            border: '1px solid #d0d0a4',
+                            position: 'relative',
+                            objectFit: 'contain',
+                            width: '100px',
+                            height: '100px',
+                          }}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              )}
             </Box>
           </Box>
         </MyAccordionDetails>

@@ -212,6 +212,9 @@ const MypagesOrdersRows = ({ order }) => {
               </Typography>
               <Typography
                 title={order.prodName}
+                onClick={() => {
+                  navigate(`/products/details/${order.prodCode}`);
+                }}
                 variant="h6"
                 sx={{
                   width: '100%',
@@ -219,6 +222,10 @@ const MypagesOrdersRows = ({ order }) => {
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
+                  '&:hover': {
+                    TextDecoration: 'underline',
+                    cursor: 'pointer',
+                  },
                 }}
               >
                 {order.prodName}
@@ -265,8 +272,18 @@ const MypagesOrdersRows = ({ order }) => {
                 fontSize: '1.1rem',
               }}
             >
-              대여 기간: {order.rentalPeriod}일
-              <br />~ {order.deadline}까지
+              {order.odrState === '취소 요청' ? (
+                <strong>취소 요청 중</strong>
+              ) : order.odrState === '취소 처리 완료' ? (
+                <>
+                  <strong>취소 처리 완료</strong>
+                </>
+              ) : (
+                <>
+                  대여 기간: {order.rentalPeriod}일
+                  <br />~ {order.deadline}까지
+                </>
+              )}
             </Typography>
           </Box>
 

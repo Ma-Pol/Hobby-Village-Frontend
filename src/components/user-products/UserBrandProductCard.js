@@ -15,7 +15,7 @@ const Product = ({ product }) => {
   // 이미지 파일명 불러오기
   const getProdPictureNames = (prodCode) => {
     axios
-      .get(`/products/lists/getProdPictures?prodCode=${prodCode}`)
+      .get(`/products/lists/getProdPicture?prodCode=${prodCode}`)
       .then((res) => {
         const { data } = res;
         setPicture(data);
