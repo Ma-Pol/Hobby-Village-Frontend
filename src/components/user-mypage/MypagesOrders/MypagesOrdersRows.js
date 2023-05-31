@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 const MypagesOrdersRows = ({ order }) => {
   const API_KEY = process.env.REACT_APP_SWEETTRACKER_API_KEY;
-  const email = sessionStorage.getItem('hobbyvillage-email');
   const nickname = sessionStorage.getItem('hobbyvillage-usernickname');
   const navigate = useNavigate();
 

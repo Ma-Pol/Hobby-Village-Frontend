@@ -1,6 +1,6 @@
 import { Box, Container, Modal, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfPictureUpdateModal from './ProfPictureUpdateModal';
 import CouponModal from './CouponModal';
@@ -65,7 +65,7 @@ const MyPageTop = () => {
   const [savedMoney, setSavedMoney] = useState(0);
 
   const [profPictureModal, setProfPictureModal] = useState(false);
-  const [couponListBox, setCouponListBox] = useState(false);
+  // const [couponListBox, setCouponListBox] = useState(false);
   const [couponListModal, setCouponListModal] = useState(false);
 
   useEffect(() => {
