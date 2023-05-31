@@ -59,7 +59,8 @@ const MostPopularProducts = () => {
         </Grid>
 
         <Link
-          to="/products/lists"
+          onClick={() => window.scrollTo(0, 0)}
+          to="/products/lists?category=all&sort=all&array=popular&pages=1"
           style={{
             marginBottom: '40px',
           }}

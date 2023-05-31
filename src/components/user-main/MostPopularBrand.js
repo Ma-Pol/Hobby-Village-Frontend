@@ -58,7 +58,11 @@ const MostPopularBrand = () => {
             ))}
         </Grid>
 
-        <Link to="/products/brand/lists" style={{ marginBottom: '40px' }}>
+        <Link
+          onClick={() => window.scrollTo(0, 0)}
+          to="/products/brand/lists?brand=all&sort=all&array=popular&pages=1"
+          style={{ marginBottom: '40px' }}
+        >
           <Typography
             variant="body1"
             sx={{
