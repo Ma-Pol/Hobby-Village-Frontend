@@ -242,16 +242,9 @@ const UserRequests = () => {
   };
 
   const imageChange = (e) => {
-    setImgFiles([]);
-    const imageFiles = e.target.files;
+    const imageFiles = Array.from(e.target.files);
 
-    if (imageFiles.length > 10) {
-      alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
-      setImgFiles([]);
-      setImgBase64([]);
-      filesRef.current.value = '';
-      return false;
-    }
+    let lengthCheck = false;
 
     for (let i = 0; i < imageFiles.length; i++) {
       let check = false;
@@ -271,18 +264,26 @@ const UserRequests = () => {
         check = true;
       }
 
+      if (imageFiles[i].size > 100000000) {
+        alert('100MB 이상의 파일은 업로드할 수 없습니다.');
+        check = true;
+      }
+
       if (check) {
-        filesRef.current.value = '';
-        setImgFiles([]);
-        setImgBase64([]);
-        return false;
+        imageFiles.splice(i, 1);
+        i--;
       }
     }
 
-    setImgFiles(imageFiles);
+    if (imgFiles.length + imageFiles.length > 10) {
+      alert('이미지는 최대 10장까지만 업로드할 수 있습니다.');
+      imageFiles.splice(10 - imgFiles.length);
+    }
+
+    const newImgFiles = [...imgFiles, ...imageFiles];
+    setImgFiles(newImgFiles);
 
     // 이미지 미리보기
-    setImgBase64([]);
     for (let i = 0; i < imageFiles.length; i++) {
       if (imageFiles[i]) {
         const imgViewer = new FileReader();
