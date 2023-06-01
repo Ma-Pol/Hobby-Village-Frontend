@@ -2,9 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import MyPagesOrders from './MyPagesOrders';
 import MyPagesRequests from './MyPagesRequests';
-import MyPagesAddressesLists from './MyPagesAddressesLists';
-import MyPagesAddressesCreate from './MyPagesAddressesCreate';
-import MyPagesAddressesModify from './MyPagesAddressesModify';
+import MyPagesAddresses from './MyPagesAddresses';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
 
@@ -29,21 +27,7 @@ const UserMyPages = () => {
       <Routes>
         <Route exact path="orders" element={<MyPagesOrders />} />
         <Route exact path="requests/lists" element={<MyPagesRequests />} />
-        <Route
-          exact
-          path="addresses/lists"
-          element={<MyPagesAddressesLists />}
-        />
-        <Route
-          exact
-          path="addresses/create"
-          element={<MyPagesAddressesCreate />}
-        />
-        <Route
-          exact
-          path="addresses/modify/:addressCode"
-          element={<MyPagesAddressesModify />}
-        />
+        <Route exact path="addresses/*" element={<MyPagesAddresses />} />
         <Route
           path="*"
           element={

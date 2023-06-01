@@ -187,13 +187,12 @@ const MypagesOrdersRows = ({ order }) => {
             sx={{
               m: 0,
               p: 0,
-              py: '10px',
               width: '350px',
-              height: '180px',
+              height: '200px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              alignItems: 'flex-start',
+              alignItems: 'space-between',
             }}
           >
             <Box
@@ -207,6 +206,7 @@ const MypagesOrdersRows = ({ order }) => {
                 variant="h6"
                 sx={{
                   fontSize: '1rem',
+                  mb: '5px',
                 }}
               >
                 {order.prodHost}
@@ -222,7 +222,9 @@ const MypagesOrdersRows = ({ order }) => {
                   fontWeight: 'bold',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
                   '&:hover': {
                     TextDecoration: 'underline',
                     cursor: 'pointer',
@@ -365,10 +367,11 @@ const MypagesOrdersRows = ({ order }) => {
                       color: '#000000',
                       fontWeight: 'bold',
                       fontSize: '1rem',
+                      border: '2px solid #C3C36A',
                       backgroundColor: '#ffffff',
                       '&:hover': {
                         backgroundColor: '#ffffff',
-                        color: '#000000',
+                        color: '#818128',
                       },
                     }}
                   >
@@ -563,6 +566,54 @@ const MypagesOrdersRows = ({ order }) => {
               )
             )}
           </Box>
+        </Box>
+
+        {/* 배송지 주소 시작 */}
+        <Box
+          sx={{
+            width: '920px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            mt: '15px',
+            backgroundColor: '#EFE8E880',
+            borderRadius: '10px',
+            p: '15px',
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              width: '100%',
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+              color: '#000000',
+              mb: '10px',
+            }}
+          >
+            배송지 주소
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              width: '100%',
+              fontSize: '1rem',
+              color: '#000000',
+            }}
+          >
+            [{order.odrZipCode}]&nbsp;
+            {order.odrAddress1}&nbsp;
+            {order.odrAddress2}
+          </Typography>
+
+          <Typography
+            sx={{
+              width: '100%',
+              fontSize: '1rem',
+              color: '#000000',
+            }}
+          ></Typography>
         </Box>
       </Box>
     );

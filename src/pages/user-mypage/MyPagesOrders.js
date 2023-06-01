@@ -4,7 +4,7 @@ import MyPageTop from '../../components/user-mypage/MyPageTop';
 import { Box, Container, Typography } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import MypagesOrdersRows from 'components/user-mypage/MypagesOrders/MypagesOrdersRows';
+import MypagesOrdersRows from '../../components/user-mypage/MypagesOrders/MypagesOrdersRows';
 
 const stateBox = {
   m: 0,
@@ -91,32 +91,32 @@ const MyPagesOrders = () => {
     setSearchParams(searchParams);
   };
 
-  if (loading) {
-    return <Loading height="40vh" />;
-  } else {
-    return (
-      <>
-        <MyPageTop />
+  return (
+    <>
+      <MyPageTop />
 
-        <Container
+      <Container
+        sx={{
+          minHeight: '60vh',
+          mt: '40px',
+          userSelect: 'none',
+          width: '1100px',
+        }}
+      >
+        <Typography
+          variant="h4"
           sx={{
-            minHeight: '60vh',
-            mt: '40px',
-            userSelect: 'none',
-            width: '1100px',
+            fontWeight: 'bold',
+            margin: '30px 0 20px 0',
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 'bold',
-              margin: '30px 0 20px 0',
-            }}
-          >
-            주문 내역
-          </Typography>
+          주문 내역
+        </Typography>
 
-          {/* 주문내역 전체 내용 */}
+        {loading ? (
+          <Loading height={'30vh'} />
+        ) : (
+          // 주문내역 전체 내용
           <Box
             sx={{
               width: '1000px',
@@ -440,10 +440,10 @@ const MyPagesOrders = () => {
               )}
             </Box>
           </Box>
-        </Container>
-      </>
-    );
-  }
+        )}
+      </Container>
+    </>
+  );
 };
 
 export default MyPagesOrders;

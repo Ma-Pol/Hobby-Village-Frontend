@@ -96,343 +96,345 @@ const MyPageTop = () => {
   if (loading) {
     return <Loading height={'422.79px'} />;
   } else {
-  }
-  return (
-    <>
-      <Modal
-        open={profPictureModal}
-        onClose={() => {
-          setProfPictureModal(false);
-        }}
-      >
-        <>
-          <ProfPictureUpdateModal setProfPictureModal={setProfPictureModal} />
-        </>
-      </Modal>
-
-      <Modal
-        open={couponListModal}
-        onClose={() => {
-          setCouponListModal(false);
-        }}
-      >
-        <>
-          <CouponModal
-            getUserData={getUserData}
-            setCouponListModal={setCouponListModal}
-          />
-        </>
-      </Modal>
-
-      {/* 마이페이지 상단부 시작 */}
-      <Box
-        sx={{
-          width: '100%',
-          mb: '20px',
-          pb: '60px',
-          borderBottom: '1px solid #e0e0e0',
-        }}
-      >
-        <Container
-          sx={{
-            userSelect: 'none',
-            width: '1100px',
+    return (
+      <>
+        <Modal
+          open={profPictureModal}
+          onClose={() => {
+            setProfPictureModal(false);
           }}
         >
-          {/* My Page 표기 시작 */}
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 'bold',
-              margin: '30px 0 20px 0',
-            }}
-          >
-            My Page
-          </Typography>
-          {/* My Page 표기 끝 */}
+          <>
+            <ProfPictureUpdateModal setProfPictureModal={setProfPictureModal} />
+          </>
+        </Modal>
 
-          {/* 좌측 프로필 사진 / 우측 버튼모음 표기 시작 */}
-          <Box
+        <Modal
+          open={couponListModal}
+          onClose={() => {
+            setCouponListModal(false);
+          }}
+        >
+          <>
+            <CouponModal
+              getUserData={getUserData}
+              setCouponListModal={setCouponListModal}
+            />
+          </>
+        </Modal>
+
+        {/* 마이페이지 상단부 시작 */}
+        <Box
+          sx={{
+            width: '100%',
+            mb: '20px',
+            pb: '60px',
+            borderBottom: '1px solid #e0e0e0',
+          }}
+        >
+          <Container
             sx={{
-              width: '1000px',
-              mx: 'auto',
-              mt: '30px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              userSelect: 'none',
+              width: '1100px',
             }}
           >
-            {/* 프로필 사진, 닉네임, 회원 정보 변경, 배송지 관리 시작 */}
+            {/* My Page 표기 시작 */}
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 'bold',
+                margin: '30px 0 20px 0',
+              }}
+            >
+              My Page
+            </Typography>
+            {/* My Page 표기 끝 */}
+
+            {/* 좌측 프로필 사진 / 우측 버튼모음 표기 시작 */}
             <Box
               sx={{
-                width: '180px',
+                width: '1000px',
+                mx: 'auto',
+                mt: '30px',
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 alignItems: 'center',
               }}
             >
-              {/* 프로필 사진 시작 */}
-              <Box
-                onClick={() => {
-                  setProfPictureModal(true);
-                }}
-                sx={profPictureBoxStyle}
-              >
-                <Box sx={profPictureCoverStyle}>
-                  프로필 사진
-                  <br />
-                  변경
-                </Box>
-                <Box
-                  component="img"
-                  sx={profPictureStyle}
-                  src={`http://localhost:8080/users/mypages/profile/${profilePicture}`}
-                  alt="프로필 사진"
-                />
-              </Box>
-              {/* 프로필 사진 끝 */}
-
-              <Typography
-                variant="h6"
-                sx={{
-                  mt: '10px',
-                  fontSize: '1.5rem',
-                  width: '100%',
-                  textAlign: 'center',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {nickname}
-              </Typography>
-
-              {/* 회원 정보 변경, 배송지 관리 시작 */}
-              <Link
-                style={{
-                  textDecoration: 'none',
-                }}
-                to={`/users/${email}/modify`}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mt: '10px',
-                    fontSize: '1rem',
-                    width: '100%',
-                    color: '#000000',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  회원 정보 변경
-                </Typography>
-              </Link>
-
-              <Link
-                style={{
-                  textDecoration: 'none',
-                }}
-                to={`/mypages/${email}/addresses/lists`}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mt: '5px',
-                    fontSize: '1rem',
-                    width: '100%',
-                    color: '#000000',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  배송지 관리
-                </Typography>
-              </Link>
-              {/* 회원 정보 변경, 배송지 관리 끝 */}
-            </Box>
-            {/* 프로필 사진, 닉네임, 회원 정보 변경, 배송지 관리 끝 */}
-
-            {/* 버튼 모음 시작 */}
-            {/* 우측 적립금, 쿠폰, 주문 내역, 리뷰 관리, 찜 목록, 물품 판매/위탁 버튼모음 표기 시작 */}
-            <Box
-              sx={{
-                width: '680px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {/* 상단 라인 적립금, 주문 내역, 리뷰 관리 버튼모음 표기 시작 */}
+              {/* 프로필 사진, 닉네임, 회원 정보 변경, 배송지 관리 시작 */}
               <Box
                 sx={{
-                  mb: '10px',
-                  width: '100%',
+                  width: '180px',
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
+                {/* 프로필 사진 시작 */}
+                <Box
+                  onClick={() => {
+                    setProfPictureModal(true);
+                  }}
+                  sx={profPictureBoxStyle}
+                >
+                  <Box sx={profPictureCoverStyle}>
+                    프로필 사진
+                    <br />
+                    변경
+                  </Box>
+                  <Box
+                    component="img"
+                    sx={profPictureStyle}
+                    src={`http://localhost:8080/users/mypages/profile/${profilePicture}`}
+                    alt="프로필 사진"
+                  />
+                </Box>
+                {/* 프로필 사진 끝 */}
+
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mt: '10px',
+                    fontSize: '1.5rem',
+                    width: '100%',
+                    textAlign: 'center',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {nickname}
+                </Typography>
+
+                {/* 회원 정보 변경, 배송지 관리 시작 */}
+                <Link
+                  style={{
+                    textDecoration: 'none',
+                  }}
+                  to={`/users/${email}/modify`}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mt: '10px',
+                      fontSize: '1rem',
+                      width: '100%',
+                      color: '#000000',
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    회원정보 수정
+                  </Typography>
+                </Link>
+
+                <Link
+                  style={{
+                    textDecoration: 'none',
+                  }}
+                  to={`/mypages/${email}/addresses/lists`}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mt: '5px',
+                      fontSize: '1rem',
+                      width: '100%',
+                      color: '#000000',
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    배송지 관리
+                  </Typography>
+                </Link>
+                {/* 회원 정보 변경, 배송지 관리 끝 */}
+              </Box>
+              {/* 프로필 사진, 닉네임, 회원 정보 변경, 배송지 관리 끝 */}
+
+              {/* 버튼 모음 시작 */}
+              {/* 우측 적립금, 쿠폰, 주문 내역, 리뷰 관리, 찜 목록, 물품 판매/위탁 버튼모음 표기 시작 */}
+              <Box
+                sx={{
+                  width: '680px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                {/* 상단 라인 적립금, 주문 내역, 리뷰 관리 버튼모음 표기 시작 */}
                 <Box
                   sx={{
-                    ...myPageTopButtonStyle,
-                    mr: '10px',
-                    width: '280px',
-                    backgroundColor: '#C3C36A',
+                    mb: '10px',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   <Box
                     sx={{
-                      display: 'flex',
+                      ...myPageTopButtonStyle,
+                      mr: '10px',
+                      width: '280px',
+                      backgroundColor: '#C3C36A',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        height: '30px',
+                      }}
+                    >
+                      <img
+                        width="30px"
+                        height="30px"
+                        src="https://img.icons8.com/ios-filled/50/us-dollar-circled--v2.png"
+                        alt="us-dollar-circled--v2"
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          ml: '10px',
+                          fontSize: '1.2rem',
+                          width: '100%',
+                          color: '#000000',
+                        }}
+                      >
+                        적립금
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        mt: '10px',
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                        height: '60px',
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: '2.5rem',
+                          color: '#000000',
+                        }}
+                      >
+                        {String(savedMoney).replace(
+                          /\B(?=(\d{3})+(?!\d))/g,
+                          ','
+                        )}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          ml: '10px',
+                          pb: '5px',
+                          fontSize: '1.5rem',
+                          color: '#000000',
+                        }}
+                      >
+                        원
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    onClick={() => {
+                      navigate(
+                        `/mypages/${email}/orders?odrState=payment-completed`
+                      );
+                    }}
+                    sx={{
+                      ...myPageTopButtonStyle,
+                      mr: '10px',
+                      width: '190px',
+                      backgroundColor: '#ECECEC',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      height: '30px',
+                      cursor: 'pointer',
                     }}
                   >
                     <img
-                      width="30px"
-                      height="30px"
-                      src="https://img.icons8.com/ios-filled/50/us-dollar-circled--v2.png"
-                      alt="us-dollar-circled--v2"
+                      width="80px"
+                      height="80px"
+                      src="https://img.icons8.com/ios-filled/100/shipped.png"
+                      alt="shipped"
                     />
                     <Typography
                       variant="body1"
                       sx={{
-                        ml: '10px',
                         fontSize: '1.2rem',
-                        width: '100%',
                         color: '#000000',
                       }}
                     >
-                      적립금
+                      주문 내역 &gt;
                     </Typography>
                   </Box>
+
                   <Box
+                    onClick={() => {
+                      navigate(
+                        `/reviews/${email}/lists?sort=-revwRegiDate&pages=1`
+                      );
+                    }}
                     sx={{
-                      mt: '10px',
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-end',
-                      height: '60px',
+                      ...myPageTopButtonStyle,
+                      width: '190px',
+                      backgroundColor: '#C3C36A',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
                     }}
                   >
+                    <img
+                      width="80px"
+                      height="80px"
+                      src="https://img.icons8.com/ios-filled/100/very-popular-topic.png"
+                      alt="very-popular-topic"
+                    />
                     <Typography
                       variant="body1"
                       sx={{
-                        fontSize: '2.5rem',
+                        fontSize: '1.2rem',
                         color: '#000000',
                       }}
                     >
-                      {String(savedMoney).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        ml: '10px',
-                        pb: '5px',
-                        fontSize: '1.5rem',
-                        color: '#000000',
-                      }}
-                    >
-                      원
+                      리뷰 관리 &gt;
                     </Typography>
                   </Box>
                 </Box>
+                {/* 상단 라인 적립금, 주문 내역, 리뷰 관리 버튼모음 표기 끝 */}
 
+                {/* 하단 라인 쿠폰, 찜 목록, 물품 판매/위탁 버튼모음 표기 시작 */}
                 <Box
-                  onClick={() => {
-                    navigate(
-                      `/mypages/${email}/orders?odrState=payment-completed`
-                    );
-                  }}
                   sx={{
-                    ...myPageTopButtonStyle,
-                    mr: '10px',
-                    width: '190px',
-                    backgroundColor: '#ECECEC',
+                    width: '100%',
+                    display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    cursor: 'pointer',
                   }}
                 >
-                  <img
-                    width="80px"
-                    height="80px"
-                    src="https://img.icons8.com/ios-filled/100/shipped.png"
-                    alt="shipped"
-                  />
-                  <Typography
-                    variant="body1"
+                  <Box
+                    onClick={() => {
+                      // setCouponListBox(!couponListBox);
+                      setCouponListModal(true);
+                    }}
                     sx={{
-                      fontSize: '1.2rem',
-                      color: '#000000',
+                      ...myPageTopButtonStyle,
+                      mr: '10px',
+                      width: '280px',
+                      backgroundColor: '#ECECEC',
+                      cursor: 'pointer',
+                      position: 'relative',
                     }}
                   >
-                    주문 내역 &gt;
-                  </Typography>
-                </Box>
-
-                <Box
-                  onClick={() => {
-                    navigate(
-                      `/reviews/${email}/lists?sort=-revwRegiDate&pages=1`
-                    );
-                  }}
-                  sx={{
-                    ...myPageTopButtonStyle,
-                    width: '190px',
-                    backgroundColor: '#C3C36A',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <img
-                    width="80px"
-                    height="80px"
-                    src="https://img.icons8.com/ios-filled/100/very-popular-topic.png"
-                    alt="very-popular-topic"
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: '#000000',
-                    }}
-                  >
-                    리뷰 관리 &gt;
-                  </Typography>
-                </Box>
-              </Box>
-              {/* 상단 라인 적립금, 주문 내역, 리뷰 관리 버튼모음 표기 끝 */}
-
-              {/* 하단 라인 쿠폰, 찜 목록, 물품 판매/위탁 버튼모음 표기 시작 */}
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Box
-                  onClick={() => {
-                    // setCouponListBox(!couponListBox);
-                    setCouponListModal(true);
-                  }}
-                  sx={{
-                    ...myPageTopButtonStyle,
-                    mr: '10px',
-                    width: '280px',
-                    backgroundColor: '#ECECEC',
-                    cursor: 'pointer',
-                    position: 'relative',
-                  }}
-                >
-                  {/* <Box
+                    {/* <Box
                     sx={{
                       position: 'absolute',
                       left: '0',
@@ -450,134 +452,135 @@ const MyPageTop = () => {
                   >
                     테스트
                   </Box> */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        height: '30px',
+                      }}
+                    >
+                      <img
+                        width="30px"
+                        height="30px"
+                        src="https://img.icons8.com/ios-filled/50/loyalty-card.png"
+                        alt="loyalty-card"
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          ml: '10px',
+                          fontSize: '1.2rem',
+                          width: '100%',
+                          color: '#000000',
+                        }}
+                      >
+                        쿠폰 관리 &gt;
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        mt: '10px',
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                        height: '60px',
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: '2.5rem',
+                          color: '#000000',
+                        }}
+                      >
+                        {couponCount}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          ml: '10px',
+                          pb: '5px',
+                          fontSize: '1.5rem',
+                          color: '#000000',
+                        }}
+                      >
+                        장
+                      </Typography>
+                    </Box>
+                  </Box>
+
                   <Box
+                    onClick={() => {
+                      navigate(`/dibs/${email}/lists/all`);
+                    }}
                     sx={{
-                      display: 'flex',
+                      ...myPageTopButtonStyle,
+                      mr: '10px',
+                      width: '190px',
+                      backgroundColor: '#C3C36A',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      height: '30px',
+                      cursor: 'pointer',
                     }}
                   >
                     <img
-                      width="30px"
-                      height="30px"
-                      src="https://img.icons8.com/ios-filled/50/loyalty-card.png"
-                      alt="loyalty-card"
+                      width="80px"
+                      height="80px"
+                      src="https://img.icons8.com/material-outlined/96/hearts.png"
+                      alt="hearts"
                     />
                     <Typography
                       variant="body1"
                       sx={{
-                        ml: '10px',
                         fontSize: '1.2rem',
-                        width: '100%',
                         color: '#000000',
                       }}
                     >
-                      쿠폰 관리 &gt;
+                      찜 목록 &gt;
                     </Typography>
                   </Box>
+
                   <Box
+                    onClick={() => {
+                      navigate(`/mypages/${email}/requests/lists?filter=none`);
+                    }}
                     sx={{
-                      mt: '10px',
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-end',
-                      height: '60px',
+                      ...myPageTopButtonStyle,
+                      width: '190px',
+                      backgroundColor: '#ECECEC',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
                     }}
                   >
+                    <img
+                      width="80px"
+                      height="80px"
+                      src="https://img.icons8.com/pastel-glyph/64/hand-box.png"
+                      alt="hand-box"
+                    />
                     <Typography
                       variant="body1"
                       sx={{
-                        fontSize: '2.5rem',
+                        fontSize: '1.2rem',
                         color: '#000000',
                       }}
                     >
-                      {couponCount}
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        ml: '10px',
-                        pb: '5px',
-                        fontSize: '1.5rem',
-                        color: '#000000',
-                      }}
-                    >
-                      장
+                      물품 판매/위탁 &gt;
                     </Typography>
                   </Box>
                 </Box>
-
-                <Box
-                  onClick={() => {
-                    navigate(`/dibs/${email}/lists/all`);
-                  }}
-                  sx={{
-                    ...myPageTopButtonStyle,
-                    mr: '10px',
-                    width: '190px',
-                    backgroundColor: '#C3C36A',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <img
-                    width="80px"
-                    height="80px"
-                    src="https://img.icons8.com/material-outlined/96/hearts.png"
-                    alt="hearts"
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: '#000000',
-                    }}
-                  >
-                    찜 목록 &gt;
-                  </Typography>
-                </Box>
-
-                <Box
-                  onClick={() => {
-                    navigate(`/mypages/${email}/requests/lists?filter=none`);
-                  }}
-                  sx={{
-                    ...myPageTopButtonStyle,
-                    width: '190px',
-                    backgroundColor: '#ECECEC',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <img
-                    width="80px"
-                    height="80px"
-                    src="https://img.icons8.com/pastel-glyph/64/hand-box.png"
-                    alt="hand-box"
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: '1.2rem',
-                      color: '#000000',
-                    }}
-                  >
-                    물품 판매/위탁 &gt;
-                  </Typography>
-                </Box>
+                {/* 하단 라인 쿠폰, 찜 목록, 물품 판매/위탁 버튼모음 표기 끝 */}
               </Box>
-              {/* 하단 라인 쿠폰, 찜 목록, 물품 판매/위탁 버튼모음 표기 끝 */}
+              {/* 버튼 모음 끝 */}
             </Box>
-            {/* 버튼 모음 끝 */}
-          </Box>
-          {/* 좌측 프로필 사진 / 우측 버튼모음 표기 끝 */}
-        </Container>
-      </Box>
-      {/* 마이페이지 상단부 끝 */}
-    </>
-  );
+            {/* 좌측 프로필 사진 / 우측 버튼모음 표기 끝 */}
+          </Container>
+        </Box>
+        {/* 마이페이지 상단부 끝 */}
+      </>
+    );
+  }
 };
 
 export default MyPageTop;
