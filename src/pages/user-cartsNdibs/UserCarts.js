@@ -1,9 +1,10 @@
 import React from 'react';
+import UserCart from "components/user-cartsNdibs/UserCart"
 
 const UserCarts = () => {
   return (
     <div>
-      <div></div>
+      <UserCart></UserCart>
     </div>
   );
 };
