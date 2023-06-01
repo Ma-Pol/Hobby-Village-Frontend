@@ -392,7 +392,7 @@ const AdminProductsModify = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 타이틀 */}
       <Typography
         variant="h4"
@@ -403,6 +403,7 @@ const AdminProductsModify = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
+          fontSize: '3vh',
         }}
       >
         상품 목록 &#62; 수정
@@ -752,7 +753,6 @@ const AdminProductsModify = () => {
                         height: '286px',
                         width: '100%',
                         backgroundColor: 'white',
-                        border: '1px solid #000000',
                         fontSize: '1rem',
                       }}
                       modules={modules}

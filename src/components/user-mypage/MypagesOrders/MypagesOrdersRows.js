@@ -152,7 +152,8 @@ const MypagesOrdersRows = ({ order }) => {
               color: '#616161',
             }}
           >
-            총 결제 금액 : {order.exactPrice}원
+            총 결제 금액 :{' '}
+            {String(order.exactPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
           </Typography>
         </Box>
 
@@ -269,7 +270,7 @@ const MypagesOrdersRows = ({ order }) => {
             <Typography
               variant="h6"
               sx={{
-                fontSize: '1.1rem',
+                fontSize: '1rem',
               }}
             >
               {order.odrState === '취소 요청' ? (

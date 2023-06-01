@@ -130,7 +130,7 @@ const AdminQnADetails = () => {
   };
 
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', userSelect: 'none' }}>
       <Box
         sx={{
           my: 5,
@@ -145,7 +145,7 @@ const AdminQnADetails = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           1:1 문의 &gt; 상세

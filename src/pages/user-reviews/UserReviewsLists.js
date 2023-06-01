@@ -103,6 +103,7 @@ const UserReviewsLists = () => {
           pr: 1,
           fontWeight: 'bold',
           userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         리뷰 관리 &gt; 목록

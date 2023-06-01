@@ -188,7 +188,7 @@ const AdminCouponsCreate = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 타이틀 */}
       <Typography
         variant="h4"
@@ -199,6 +199,7 @@ const AdminCouponsCreate = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
+          fontSize: '3vh',
         }}
       >
         쿠폰 목록 &gt; 발행

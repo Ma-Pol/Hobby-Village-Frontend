@@ -237,7 +237,7 @@ const AdminRequestsLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 신청 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -248,7 +248,7 @@ const AdminRequestsLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         물품 판매/위탁 신청 목록
@@ -366,7 +366,6 @@ const AdminRequestsLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 신청 목록 테이블 컬럼명 표기 시작 */}
@@ -411,7 +410,6 @@ const AdminRequestsLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             신청 데이터가 존재하지 않습니다.

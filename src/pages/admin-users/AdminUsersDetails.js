@@ -72,7 +72,6 @@ const AdminUsersDetails = () => {
     fontWeight: 'bold',
     width: '140px',
     mr: '60px',
-    userSelect: 'none',
   };
 
   const contentStyle = {
@@ -80,7 +79,7 @@ const AdminUsersDetails = () => {
   };
 
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', userSelect: 'none' }}>
       <Box
         sx={{
           my: 5,
@@ -95,7 +94,7 @@ const AdminUsersDetails = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           회원 목록 &gt; 상세
@@ -144,7 +143,6 @@ const AdminUsersDetails = () => {
                     borderRadius: '50%',
                     objectFit: 'cover',
                     border: '1px solid #d5d5d5',
-                    userSelect: 'none',
                   }}
                   component="img"
                   src={
@@ -183,7 +181,6 @@ const AdminUsersDetails = () => {
                       sx={{
                         fontWeight: 'bold',
                         mr: '50px',
-                        userSelect: 'none',
                       }}
                     >
                       이메일
@@ -209,7 +206,6 @@ const AdminUsersDetails = () => {
                       sx={{
                         fontWeight: 'bold',
                         mr: '50px',
-                        userSelect: 'none',
                       }}
                     >
                       닉네임

@@ -590,54 +590,42 @@ const UserRequests = () => {
               height: 'auto',
             }}
           >
-            <Button
-              htmlFor="fileBox"
-              component="label"
-              disableRipple
-              sx={{
-                mr: '20px',
-                mb: '20px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100px',
-                height: '100px',
-                border: '1px solid #000000',
-                backgroundColor: '#ffffff',
-                '&:hover': {
+            {imgFiles.length < 10 && (
+              <Button
+                htmlFor="fileBox"
+                component="label"
+                disableRipple
+                sx={{
+                  boxSizing: 'border-box',
+                  mr: '20px',
+                  mb: '20px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100px',
+                  height: '100px',
+                  border: '1px solid #000000',
                   backgroundColor: '#ffffff',
-                },
-                '&:click': {
-                  backgroundColor: '#ffffff',
-                },
-              }}
-            >
-              {imgFiles.length === 0 ? (
+                  '&:hover': {
+                    backgroundColor: '#dddddd',
+                  },
+                }}
+              >
                 <img
                   width="40"
                   height="40"
                   src="https://img.icons8.com/ios-filled/50/CECECE/plus-math.png"
                   alt="fileUpload"
                 />
-              ) : (
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: '2rem',
-                    color: '#000000',
-                  }}
-                >
-                  {imgFiles.length}
-                </Typography>
-              )}
-            </Button>
+              </Button>
+            )}
 
             {imgBase64.map((img, index) => {
               return (
-                <>
+                <React.Fragment key={index}>
                   <Box
                     sx={{
+                      boxSizing: 'border-box',
                       mr: '20px',
                       mb: '20px',
                       position: 'relative',
@@ -656,6 +644,7 @@ const UserRequests = () => {
                       alt="미리보기 이미지"
                       src={img}
                       sx={{
+                        objectFit: 'contain',
                         width: '100%',
                         height: '100%',
                         borderRadius: '5px',
@@ -682,7 +671,7 @@ const UserRequests = () => {
                       }}
                     />
                   </Box>
-                </>
+                </React.Fragment>
               );
             })}
 
@@ -696,79 +685,6 @@ const UserRequests = () => {
             />
           </Grid>
           {/* 사진 첨부 라인 끝 */}
-
-          {/* 첨부 사진 미리보기 라인 시작 */}
-          {/* {imgFiles.length !== 0 && (
-            <>
-              <Grid
-                item
-                xs={2}
-                sx={{
-                  mt: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '410px',
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: '1.3rem',
-                  }}
-                >
-                  사진 미리보기
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                xs={10}
-                sx={{
-                  mt: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '410px',
-                }}
-              >
-                <Swiper
-                  pagination={{
-                    type: 'fraction',
-                  }}
-                  navigation={true}
-                  loop={true}
-                  modules={[Navigation, Pagination]}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                >
-                  {imgBase64.map((img, index) => {
-                    return (
-                      <SwiperSlide
-                        key={index}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          alt="미리보기 이미지"
-                          src={img}
-                          style={{
-                            maxHeight: '350px',
-                            maxWidth: '70%',
-                          }}
-                        />
-                      </SwiperSlide>
-                    );
-                  })}
-                </Swiper>
-              </Grid>
-            </>
-          )} */}
-          {/* 첨부 사진 미리보기 라인 끝 */}
 
           {/* 계좌번호 입력 라인 시작 */}
           {sellConsign === 'consign' && (

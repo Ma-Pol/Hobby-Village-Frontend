@@ -169,7 +169,7 @@ const AdminNoticesCreate = () => {
   };
 
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', userSelect: 'none' }}>
       <Box
         sx={{
           my: 5,
@@ -184,7 +184,7 @@ const AdminNoticesCreate = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           공지사항 &gt; 등록

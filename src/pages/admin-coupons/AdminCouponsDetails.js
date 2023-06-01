@@ -114,7 +114,7 @@ const AdminCouponsDetails = () => {
   };
 
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', userSelect: 'none' }}>
       <Box
         sx={{
           my: 5,
@@ -129,7 +129,7 @@ const AdminCouponsDetails = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           쿠폰 목록 &gt; 상세
@@ -382,7 +382,7 @@ const AdminCouponsDetails = () => {
             >
               목록
             </Button>
-          </Box>{' '}
+          </Box>
         </>
       )}
     </Box>

@@ -117,7 +117,6 @@ const AdminReviewsDetail = () => {
     width: 170,
     fontSize: 18,
     border: '1px solid #E0E0E0',
-    userSelect: 'none',
   };
 
   const tableBodyStyle = { width: 400, border: '1px solid #E0E0E0' };
@@ -127,7 +126,6 @@ const AdminReviewsDetail = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    userSelect: 'none',
   };
 
   const noImageBox = {
@@ -185,7 +183,7 @@ const AdminReviewsDetail = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 타이틀 */}
       <Typography
         variant="h4"
@@ -196,7 +194,7 @@ const AdminReviewsDetail = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         리뷰 목록 &#62; 상세

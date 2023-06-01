@@ -68,6 +68,7 @@ const MostPopularProducts = () => {
           <Typography
             variant="body1"
             sx={{
+              // fontFamily: 'SCDream4',
               color: '#000000',
               fontSize: '17px',
               fontWeight: 'bold',

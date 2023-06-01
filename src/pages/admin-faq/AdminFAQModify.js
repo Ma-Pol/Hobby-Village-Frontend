@@ -165,7 +165,7 @@ const AdminFAQModify = () => {
   };
 
   return (
-    <Box style={{ maxWidth: '1150px', margin: 'auto' }}>
+    <Box style={{ maxWidth: '1150px', margin: 'auto', userSelect: 'none' }}>
       <Box
         sx={{
           my: 5,
@@ -180,7 +180,7 @@ const AdminFAQModify = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           FAQ 자주 묻는 질문 &gt; 수정

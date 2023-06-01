@@ -136,6 +136,7 @@ const UserNoticesDetails = () => {
             pr: 1,
             fontWeight: 'bold',
             userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           공지사항
@@ -154,6 +155,7 @@ const UserNoticesDetails = () => {
                 component="h2"
                 sx={{
                   fontWeight: 'bold',
+                  userSelect: 'none',
                 }}
               >
                 제목
@@ -204,6 +206,7 @@ const UserNoticesDetails = () => {
                 component="h2"
                 sx={{
                   fontWeight: 'bold',
+                  userSelect: 'none',
                 }}
               >
                 카테고리
@@ -246,6 +249,7 @@ const UserNoticesDetails = () => {
                 component="h2"
                 sx={{
                   fontWeight: 'bold',
+                  userSelect: 'none',
                 }}
               >
                 내용
@@ -292,6 +296,7 @@ const UserNoticesDetails = () => {
                 component="h2"
                 sx={{
                   fontWeight: 'bold',
+                  userSelect: 'none',
                 }}
               >
                 첨부파일

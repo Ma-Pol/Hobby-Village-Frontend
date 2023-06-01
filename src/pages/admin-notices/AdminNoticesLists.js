@@ -176,7 +176,7 @@ const AdminNoticesLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 공지사항 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -187,7 +187,7 @@ const AdminNoticesLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         공지사항 목록
@@ -267,7 +267,6 @@ const AdminNoticesLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 공지사항 목록 테이블 컬럼명 표기 시작 */}
@@ -309,7 +308,6 @@ const AdminNoticesLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             공지사항 데이터가 존재하지 않습니다.

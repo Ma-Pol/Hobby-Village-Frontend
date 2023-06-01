@@ -160,7 +160,7 @@ const UserNoticesLists = () => {
   };
 
   return (
-    <Container sx={{ minHeight: '80vh' }}>
+    <Container sx={{ minHeight: '80vh', userSelect: 'none' }}>
       {/* 공지사항 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -171,7 +171,7 @@ const UserNoticesLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         공지사항

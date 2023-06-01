@@ -618,6 +618,7 @@ const UserProductsDetails = () => {
             sx={{
               m: 0,
               p: 0,
+              mb: '10px',
               width: '100%',
               height: '40px',
               boxSizing: 'border-box',

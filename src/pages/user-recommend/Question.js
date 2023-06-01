@@ -69,11 +69,7 @@ const Question = () => {
   };
 
   return (
-    <Wrapper
-      style={{
-        userSelect: 'none',
-      }}
-    >
+    <Wrapper>
       <Wrapper2>
         <Line>
           <LinearProgress
@@ -149,6 +145,7 @@ const Wrapper = styled.div`
   margin: 2rem auto;
   font-weight: 700;
   font-size: 40px;
+  user-select: none;
 `;
 const Wrapper2 = styled.div`
   max-width: 1600px;

@@ -26,12 +26,12 @@ const UserProductsList = () => {
   // 정렬(array)-최신(regiDate)/평점(리뷰)/인기(찜기준)/고가/저가, 페이징(page)
 
   const [categories, setCategories] = useState([]); // 카테고리 목록
-  const [category, setCategory] = useState(); // 현재 카테고리
+  const [category, setCategory] = useState('all'); // 현재 카테고리
 
   const [productList, setProductList] = useState([]); // 상품 목록
 
-  const [totalPage, setTotalPage] = useState(); // 총 페이지 수
-  const [currentPage, setCurrentPage] = useState(); // 현재 페이지
+  const [totalPage, setTotalPage] = useState(0); // 총 페이지 수
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
 
   const sortRef = useRef(); // 대여 여부
   const arrayRef = useRef(); // 정렬
@@ -191,84 +191,100 @@ const UserProductsList = () => {
         userSelect: 'none',
       }}
     >
-      {/* 카테고리 리스트 */}
       <Box
         sx={{
           m: 0,
-          mt: '20px',
+          p: 0,
+          width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-end',
         }}
       >
-        <ToggleButtonGroup
-          onChange={handleCategoryChange}
-          color="primary"
-          value={category}
-          exclusive
+        {/* 카테고리 리스트 */}
+        <Box
           sx={{
-            width: '1150px',
+            m: 0,
+            mt: '20px',
+            width: '850px',
             display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          <ToggleButton
-            value="all"
-            sx={{ ...categoryStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
+          <ToggleButtonGroup
+            onChange={handleCategoryChange}
+            color="primary"
+            value={category}
+            exclusive
+            sx={{
+              display: 'flex',
+              width: '850px',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+            }}
           >
-            전체
-          </ToggleButton>
-          {/* 카테고리 불러오기 */}
-          {categories.map((category) => {
-            return (
-              <ToggleButton key={category} value={category} sx={categoryStyle}>
-                {category}
-              </ToggleButton>
-            );
-          })}
-        </ToggleButtonGroup>
-      </Box>
+            <ToggleButton
+              value="all"
+              sx={{ ...categoryStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
+            >
+              전체
+            </ToggleButton>
+            {/* 카테고리 불러오기 */}
+            {categories.map((category) => {
+              return (
+                <ToggleButton
+                  key={category}
+                  value={category}
+                  sx={categoryStyle}
+                >
+                  {category}
+                </ToggleButton>
+              );
+            })}
+          </ToggleButtonGroup>
+        </Box>
 
-      {/* 필터링 */}
-      <Box sx={{ float: 'right' }}>
-        <NativeSelect
-          inputRef={arrayRef}
-          onChange={handleArrayChange}
-          sx={filterStyle}
-          variant="outlined"
-          defaultValue="recent"
-          inputProps={{
-            name: 'array',
-            style: { textAlign: 'center' },
-          }}
-          disableUnderline
-          IconComponent={KeyboardArrowDownIcon}
-        >
-          <option value="recent">최신 순</option>
-          <option value="revwRate">평점 순</option>
-          <option value="popular">인기 순</option>
-          <option value="expensive">가격 높은 순</option>
-          <option value="cheap">가격 낮은 순</option>
-        </NativeSelect>
-        <NativeSelect
-          inputRef={sortRef}
-          onChange={handleSortChange}
-          sx={filterStyle}
-          variant="outlined"
-          defaultValue="all"
-          inputProps={{
-            name: 'sort',
-            style: { textAlign: 'center' },
-          }}
-          disableUnderline
-          IconComponent={KeyboardArrowDownIcon}
-        >
-          <option value="all">전체</option>
-          <option value="available">미대여</option>
-          <option value="rented">대여중</option>
-        </NativeSelect>
+        {/* 필터링 */}
+        <Box sx={{ float: 'right' }}>
+          <NativeSelect
+            inputRef={arrayRef}
+            onChange={handleArrayChange}
+            sx={filterStyle}
+            variant="outlined"
+            defaultValue="recent"
+            inputProps={{
+              name: 'array',
+              style: { textAlign: 'center' },
+            }}
+            disableUnderline
+            IconComponent={KeyboardArrowDownIcon}
+          >
+            <option value="recent">최신 순</option>
+            <option value="revwRate">평점 순</option>
+            <option value="popular">인기 순</option>
+            <option value="expensive">가격 높은 순</option>
+            <option value="cheap">가격 낮은 순</option>
+          </NativeSelect>
+          <NativeSelect
+            inputRef={sortRef}
+            onChange={handleSortChange}
+            sx={filterStyle}
+            variant="outlined"
+            defaultValue="all"
+            inputProps={{
+              name: 'sort',
+              style: { textAlign: 'center' },
+            }}
+            disableUnderline
+            IconComponent={KeyboardArrowDownIcon}
+          >
+            <option value="all">전체</option>
+            <option value="available">미대여</option>
+            <option value="rented">대여중</option>
+          </NativeSelect>
+        </Box>
       </Box>
 
       {/* 상품목록 */}
@@ -277,7 +293,7 @@ const UserProductsList = () => {
       ) : (
         <Box
           sx={{
-            mt: '50px',
+            mt: '0px',
             pt: '30px',
             mx: 'auto',
             width: '1100px',
@@ -318,7 +334,7 @@ const UserProductsList = () => {
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      mb: 4,
+                      mb: '25px',
                     }}
                   >
                     <UserProductCard key={product.prodCode} product={product} />

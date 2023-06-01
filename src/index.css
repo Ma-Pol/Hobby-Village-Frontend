@@ -1,0 +1,24 @@
+#root p,
+#root h1,
+#root h2,
+#root h3,
+#root h4,
+#root h5,
+#root h6 {
+  font-family: 'SCDream4', 'Noto Sans KR', sans-serif;
+}
+
+@font-face {
+  font-family: 'SCDream4';
+  src: url(../public/Fonts/S-Core_Dream_OTF/SCDream4.otf);
+}
+
+@font-face {
+  font-family: 'The Jamsil 2 Light';
+  src: url(../public/Fonts/The_Jamsil_TTF/The\ Jamsil\ 2\ Light.ttf);
+}
+
+@font-face {
+  font-family: 'The Jamsil 1 Thin';
+  src: url(../public/Fonts/The_Jamsil_TTF/The\ Jamsil\ 1\ Thin.ttf);
+}

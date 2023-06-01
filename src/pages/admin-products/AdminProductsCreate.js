@@ -455,11 +455,7 @@ const AdminProductsCreate = () => {
   };
 
   return (
-    <Container
-      sx={{
-        userSelect: 'none',
-      }}
-    >
+    <Container sx={{ userSelect: 'none' }}>
       {/* 타이틀 */}
       <Typography
         variant="h4"
@@ -470,6 +466,7 @@ const AdminProductsCreate = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
+          fontSize: '3vh',
         }}
       >
         상품 목록 &#62; 등록
@@ -811,7 +808,6 @@ const AdminProductsCreate = () => {
                     height: '286px',
                     width: '100%',
                     backgroundColor: 'white',
-                    border: '1px solid #000000',
                     fontSize: '1rem',
                   }}
                   modules={modules}

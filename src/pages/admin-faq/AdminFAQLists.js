@@ -169,7 +169,7 @@ const AdminFAQLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* FAQ 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -180,7 +180,7 @@ const AdminFAQLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         FAQ 목록
@@ -271,7 +271,6 @@ const AdminFAQLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* FAQ 목록 테이블 컬럼명 표기 시작 */}
@@ -313,7 +312,6 @@ const AdminFAQLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             FAQ 데이터가 존재하지 않습니다.

@@ -64,7 +64,7 @@ const AdminOrdersDetails = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 주문 목록 > 주문 상세 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -75,7 +75,7 @@ const AdminOrdersDetails = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         주문 목록 &gt; 주문 상세

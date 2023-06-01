@@ -24,12 +24,12 @@ const UserProductsBrandList = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
 
   const [brandList, setBrandList] = useState([]); // 브랜드 목록
-  const [brand, setBrand] = useState(); // 현재 브랜드
+  const [brand, setBrand] = useState('all'); // 현재 브랜드
 
   const [productList, setProductList] = useState([]); // 상품 목록
 
-  const [totalPage, setTotalPage] = useState(); // 총 페이지 수
-  const [currentPage, setCurrentPage] = useState(); // 현재 페이지
+  const [totalPage, setTotalPage] = useState(0); // 총 페이지 수
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
 
   const sortRef = useRef(); // 대여 여부
   const arrayRef = useRef(); // 정렬

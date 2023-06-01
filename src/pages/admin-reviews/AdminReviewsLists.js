@@ -176,7 +176,7 @@ const AdminReviewsLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 리뷰 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -187,7 +187,7 @@ const AdminReviewsLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         리뷰 목록
@@ -263,7 +263,6 @@ const AdminReviewsLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 리뷰 목록 테이블 컬럼명 표기 시작 */}
@@ -308,7 +307,6 @@ const AdminReviewsLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             리뷰 데이터가 존재하지 않습니다.

@@ -9,18 +9,18 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleClickButton = () => {
-    // useHistory
     navigate('/recommend/question');
   };
 
   return (
-    <Wrapper
-      style={{
-        userSelect: 'none',
-      }}
-    >
+    <Wrapper>
       <Wrapper2>
-        <Header style={{ color: '#595F88', marginBottom: '10px' }}>
+        <Header
+          style={{
+            color: '#595F88',
+            marginBottom: '10px',
+          }}
+        >
           나의 취미 찾기
         </Header>
         <Contents>
@@ -57,6 +57,7 @@ const Wrapper = styled.div`
   margin: 2rem auto;
   font-weight: 700;
   font-size: 40px;
+  user-select: none;
 `;
 const Wrapper2 = styled.div`
   padding: 1.5rem 1rem;

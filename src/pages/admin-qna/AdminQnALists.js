@@ -173,7 +173,7 @@ const AdminQnALists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 질문 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -184,7 +184,7 @@ const AdminQnALists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         1:1 문의 목록
@@ -276,7 +276,6 @@ const AdminQnALists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 질문 목록 테이블 컬럼명 표기 시작 */}
@@ -321,7 +320,6 @@ const AdminQnALists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             질문 데이터가 존재하지 않습니다.

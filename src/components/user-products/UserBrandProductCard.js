@@ -7,7 +7,7 @@ import Loading from '../Loading';
 // 상품 목록 출력 컴포넌트 (상품별 이미지 파일명 및 이미지 불러오기)
 const Product = ({ product }) => {
   const [loading, setLoading] = useState(true); // 이미지 로딩 여부
-  const [picture, setPicture] = useState(); // 상품 이미지 이름 목록
+  const [picture, setPicture] = useState(''); // 상품 이미지 이름 목록
   const prodLink = `/products/details/${product.prodCode}`;
 
   const navigate = useNavigate();
@@ -35,15 +35,19 @@ const Product = ({ product }) => {
 
   const prodCardStyle = {
     m: 0,
-    p: '24px 20px 8px 20px',
-    borderRadius: '5px',
+    p: 0,
+    boxSizing: 'border-box',
+    border: '1px solid #D8D8D8',
+    width: '250px',
+    borderRadius: '20px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    transition: 'all 0.2s',
     '&:hover': {
       cursor: 'pointer',
-      boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.5)',
-      backgroundColor: '#f5f5f5',
+      // boxShadow: '0px 0px 3px 0px rgba(0,0,0,0.5)',
+      // backgroundColor: '#f5f5f5',
     },
   };
 
@@ -60,7 +64,7 @@ const Product = ({ product }) => {
           sx={{
             m: 0,
             p: 0,
-            width: '200px',
+            width: '250px',
             height: '200px',
             position: 'relative',
           }}
@@ -71,9 +75,10 @@ const Product = ({ product }) => {
                 position: 'absolute',
                 top: '0',
                 left: '0',
-                width: '201.6px',
-                height: '201.6px',
+                width: '250px',
+                height: '200px',
                 backgroundColor: '#dddddd',
+                borderRadius: '20px 20px 0 0',
                 opacity: '0.7',
                 display: 'flex',
                 alignItems: 'center',
@@ -101,10 +106,11 @@ const Product = ({ product }) => {
             <Box
               component="img"
               sx={{
-                width: '200px',
+                boxSizing: 'border-box',
+                width: '250px',
                 height: '200px',
                 objectFit: 'cover',
-                border: '1px solid #d0d0d0',
+                borderRadius: '20px 20px 0 0',
                 '&:hover': {
                   cursor: 'pointer',
                 },
@@ -115,9 +121,8 @@ const Product = ({ product }) => {
           )}
         </Box>
 
-        <Box sx={{ m: 0, width: '200px', my: 1 }}>
+        <Box sx={{ m: 0, width: '230px', mt: '10px', px: '10px' }}>
           <Typography
-            title={product.prodBrand}
             variant="body1"
             sx={{
               fontSize: '1.3rem',
@@ -133,8 +138,8 @@ const Product = ({ product }) => {
             title={product.prodName}
             variant="body1"
             sx={{
-              fontSize: '1.1rem',
-              fontWeight: 'bold',
+              width: '100%',
+              fontSize: '0.9rem',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -142,11 +147,51 @@ const Product = ({ product }) => {
           >
             {product.prodName}
           </Typography>
-          <Typography variant="body1">
-            {String(product.prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
-              '원'}
-          </Typography>
-          <Typography variant="body1">{'관심 ' + product.prodDibs}</Typography>
+          <Box sx={{ m: 0, display: 'flex', alignItems: 'flex-end' }}>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+              }}
+            >
+              {String(product.prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: '1.1rem',
+                ml: '3px',
+              }}
+            >
+              원
+            </Typography>
+          </Box>
+
+          <Box
+            sx={{
+              mb: '10px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              width="12"
+              height="12"
+              src="https://img.icons8.com/pastel-glyph/64/000000/hearts--v1.png"
+              alt="hearts--v1"
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                ml: '3px',
+                fontSize: '0.7rem',
+                color: '#ADADAD',
+              }}
+            >
+              {'관심 ' + product.prodDibs}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </>

@@ -17,6 +17,7 @@ import UserNotices from './pages/user-notices/UserNotices';
 import UserCs from './pages/user-cs/UserCs';
 import Admin from './pages/Admin';
 import React from 'react';
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

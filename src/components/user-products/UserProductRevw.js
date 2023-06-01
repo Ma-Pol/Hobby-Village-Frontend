@@ -181,7 +181,7 @@ const Review = ({ review, expanded, handleChange }) => {
             </Typography>
             <Typography
               variant="body1"
-              sx={{ width: '90px', textAlign: 'center' }}
+              sx={{ width: '90px', textAlign: 'center', fontSize: '14px' }}
             >
               {review.revwRegiDate}
             </Typography>
@@ -205,6 +205,7 @@ const Review = ({ review, expanded, handleChange }) => {
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  fontSize: '14px',
                 }}
               >
                 {review.revwWriter}

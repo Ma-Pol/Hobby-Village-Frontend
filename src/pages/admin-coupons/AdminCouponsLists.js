@@ -205,7 +205,7 @@ const AdminCouponsLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 쿠폰 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
@@ -216,7 +216,7 @@ const AdminCouponsLists = () => {
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         쿠폰 목록
@@ -295,7 +295,6 @@ const AdminCouponsLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 쿠폰 목록 테이블 컬럼명 표기 시작 */}
@@ -340,7 +339,6 @@ const AdminCouponsLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             쿠폰 데이터가 존재하지 않습니다.

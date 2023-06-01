@@ -16,7 +16,6 @@ const requestDataRow = {
   display: 'flex',
   alignItems: 'flex-start',
   height: 'auto',
-  userSelect: 'none',
 };
 
 const requestDataNameCol = {
@@ -248,7 +247,8 @@ const AdminRequestsDetails = () => {
           />
         </>
       </Modal>
-      <Container>
+
+      <Container sx={{ userSelect: 'none' }}>
         {/* 신청 상세 글씨 표기 시작 */}
         <Typography
           variant="h4"
@@ -259,7 +259,7 @@ const AdminRequestsDetails = () => {
             pl: 1,
             pr: 1,
             fontWeight: 'bold',
-            userSelect: 'none',
+            fontSize: '3vh',
           }}
         >
           물품 판매/위탁 신청 목록 &gt; 신청 상세
