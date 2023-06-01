@@ -181,93 +181,104 @@ const UserProductsBrandList = () => {
           userSelect: 'none',
         }}
       >
-        {/* 브랜드 리스트 */}
         <Box
           sx={{
             m: 0,
-            mt: '30px',
+            p: 0,
+            width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'flex-end',
           }}
         >
-          <ToggleButtonGroup
-            onChange={handleBrandChange}
-            color="primary"
-            value={brand}
-            exclusive
+          {/* 브랜드 리스트 */}
+          <Box
             sx={{
-              width: '1150px',
+              m: 0,
+              mt: '20px',
+              width: '850px',
               display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
-            <ToggleButton
-              value="all"
-              sx={{ ...brandStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
+            <ToggleButtonGroup
+              onChange={handleBrandChange}
+              color="primary"
+              value={brand}
+              exclusive
+              sx={{
+                display: 'flex',
+                width: '850px',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                flexWrap: 'wrap',
+              }}
             >
-              전체
-            </ToggleButton>
-            {/* 카테고리 불러오기 */}
-            {brandList.map((brand) => {
-              return (
-                <ToggleButton key={brand} value={brand} sx={brandStyle}>
-                  {brand}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        </Box>
+              <ToggleButton
+                value="all"
+                sx={{ ...brandStyle, mr: 'calc(100% - 70px)', mb: '10px' }}
+              >
+                전체
+              </ToggleButton>
+              {/* 카테고리 불러오기 */}
+              {brandList.map((brand) => {
+                return (
+                  <ToggleButton key={brand} value={brand} sx={brandStyle}>
+                    {brand}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          </Box>
 
-        {/* 필터링 */}
-        <Box sx={{ float: 'right' }}>
-          <NativeSelect
-            inputRef={arrayRef}
-            onChange={handleArrayChange}
-            sx={filterStyle}
-            variant="outlined"
-            defaultValue="recent"
-            inputProps={{
-              name: 'array',
-              style: { textAlign: 'center' },
-            }}
-            disableUnderline
-            IconComponent={KeyboardArrowDownIcon}
-          >
-            <option value="recent">최신 순</option>
-            <option value="revwRate">평점 순</option>
-            <option value="popular">인기 순</option>
-            <option value="expensive">가격 높은 순</option>
-            <option value="cheap">가격 낮은 순</option>
-          </NativeSelect>
-          <NativeSelect
-            inputRef={sortRef}
-            onChange={handleSortChange}
-            sx={filterStyle}
-            variant="outlined"
-            defaultValue="all"
-            inputProps={{
-              name: 'sort',
-              style: { textAlign: 'center' },
-            }}
-            disableUnderline
-            IconComponent={KeyboardArrowDownIcon}
-          >
-            <option value="all">전체</option>
-            <option value="available">미대여</option>
-            <option value="rented">대여중</option>
-          </NativeSelect>
+          {/* 필터링 */}
+          <Box sx={{ float: 'right' }}>
+            <NativeSelect
+              inputRef={arrayRef}
+              onChange={handleArrayChange}
+              sx={filterStyle}
+              variant="outlined"
+              defaultValue="recent"
+              inputProps={{
+                name: 'array',
+                style: { textAlign: 'center' },
+              }}
+              disableUnderline
+              IconComponent={KeyboardArrowDownIcon}
+            >
+              <option value="recent">최신 순</option>
+              <option value="revwRate">평점 순</option>
+              <option value="popular">인기 순</option>
+              <option value="expensive">가격 높은 순</option>
+              <option value="cheap">가격 낮은 순</option>
+            </NativeSelect>
+            <NativeSelect
+              inputRef={sortRef}
+              onChange={handleSortChange}
+              sx={filterStyle}
+              variant="outlined"
+              defaultValue="all"
+              inputProps={{
+                name: 'sort',
+                style: { textAlign: 'center' },
+              }}
+              disableUnderline
+              IconComponent={KeyboardArrowDownIcon}
+            >
+              <option value="all">전체</option>
+              <option value="available">미대여</option>
+              <option value="rented">대여중</option>
+            </NativeSelect>
+          </Box>
         </Box>
-
         {/* 상품목록 */}
         {loading ? (
           <Loading height="38vh" />
         ) : (
           <Box
             sx={{
-              mt: '50px',
+              mt: '10px',
               pt: '30px',
               mx: 'auto',
               width: '1100px',

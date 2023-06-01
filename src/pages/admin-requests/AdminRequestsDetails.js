@@ -272,6 +272,7 @@ const AdminRequestsDetails = () => {
           <>
             <Container
               sx={{
+                mt: 5,
                 width: '1100px',
               }}
             >

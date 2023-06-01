@@ -141,69 +141,79 @@ const UserProductsSearch = () => {
         userSelect: 'none',
       }}
     >
-      {/* 검색결과 */}
       <Box
         sx={{
           m: 0,
-          mt: 2,
+          mt: 5,
           p: 0,
           width: '100%',
-          height: '40px',
           display: 'flex',
-          alignItems: 'center',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
         }}
       >
-        <Typography sx={sentenceStyle}>
-          '&nbsp;
-          <Typography sx={keywordStyle}>
-            {searchParams.get('keyword')}
+        {/* 검색결과 */}
+        <Box
+          sx={{
+            m: 0,
+            p: 0,
+            width: '800px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Typography sx={sentenceStyle}>
+            '&nbsp;
+            <Typography sx={keywordStyle}>
+              {searchParams.get('keyword')}
+            </Typography>
+            &nbsp;' 검색 결과 : 총&nbsp;
+            <Typography sx={keywordStyle}>{count}&nbsp;건</Typography>이
+            검색되었습니다.
           </Typography>
-          &nbsp;' 검색 결과 : 총&nbsp;
-          <Typography sx={keywordStyle}>{count}&nbsp;건</Typography>이
-          검색되었습니다.
-        </Typography>
-      </Box>
+        </Box>
 
-      {/* 필터링 */}
-      <Box sx={{ float: 'right' }}>
-        <NativeSelect
-          inputRef={arrayRef}
-          onChange={handleArrayChange}
-          sx={filterStyle}
-          variant="outlined"
-          defaultValue="recent"
-          inputProps={{
-            name: 'array',
-            style: { textAlign: 'center' },
-          }}
-          disableUnderline
-          IconComponent={KeyboardArrowDownIcon}
-        >
-          <option value="recent">최신 순</option>
-          <option value="revwRate">평점 순</option>
-          <option value="popular">인기 순</option>
-          <option value="expensive">가격 높은 순</option>
-          <option value="cheap">가격 낮은 순</option>
-        </NativeSelect>
-        <NativeSelect
-          inputRef={sortRef}
-          onChange={handleSortChange}
-          sx={filterStyle}
-          variant="outlined"
-          defaultValue="all"
-          inputProps={{
-            name: 'sort',
-            style: { textAlign: 'center' },
-          }}
-          disableUnderline
-          IconComponent={KeyboardArrowDownIcon}
-        >
-          <option value="all">전체</option>
-          <option value="available">미대여</option>
-          <option value="rented">대여중</option>
-        </NativeSelect>
+        {/* 필터링 */}
+        <Box sx={{ float: 'right' }}>
+          <NativeSelect
+            inputRef={arrayRef}
+            onChange={handleArrayChange}
+            sx={filterStyle}
+            variant="outlined"
+            defaultValue="recent"
+            inputProps={{
+              name: 'array',
+              style: { textAlign: 'center' },
+            }}
+            disableUnderline
+            IconComponent={KeyboardArrowDownIcon}
+          >
+            <option value="recent">최신 순</option>
+            <option value="revwRate">평점 순</option>
+            <option value="popular">인기 순</option>
+            <option value="expensive">가격 높은 순</option>
+            <option value="cheap">가격 낮은 순</option>
+          </NativeSelect>
+          <NativeSelect
+            inputRef={sortRef}
+            onChange={handleSortChange}
+            sx={filterStyle}
+            variant="outlined"
+            defaultValue="all"
+            inputProps={{
+              name: 'sort',
+              style: { textAlign: 'center' },
+            }}
+            disableUnderline
+            IconComponent={KeyboardArrowDownIcon}
+          >
+            <option value="all">전체</option>
+            <option value="available">미대여</option>
+            <option value="rented">대여중</option>
+          </NativeSelect>
+        </Box>
       </Box>
-
       {/* 상품목록 */}
       {loading ? (
         <Loading height="38vh" />

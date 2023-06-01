@@ -293,7 +293,7 @@ const UserProductsList = () => {
       ) : (
         <Box
           sx={{
-            mt: '0px',
+            mt: '10px',
             pt: '30px',
             mx: 'auto',
             width: '1100px',

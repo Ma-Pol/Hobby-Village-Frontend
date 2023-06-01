@@ -204,7 +204,9 @@ const UserRequests = () => {
       return false;
     }
 
-    createRequest();
+    if (window.confirm('신청글을 등록하시겠습니까?')) {
+      createRequest();
+    }
   };
 
   const createRequest = () => {
@@ -243,8 +245,6 @@ const UserRequests = () => {
 
   const imageChange = (e) => {
     const imageFiles = Array.from(e.target.files);
-
-    let lengthCheck = false;
 
     for (let i = 0; i < imageFiles.length; i++) {
       let check = false;
