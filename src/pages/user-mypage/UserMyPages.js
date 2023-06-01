@@ -24,7 +24,7 @@ const UserMyPages = () => {
         />
         <Route
           exact
-          path="addresses/modify"
+          path="addresses/modify/:addressCode"
           element={<MyPagesAddressesModify />}
         />
         <Route
