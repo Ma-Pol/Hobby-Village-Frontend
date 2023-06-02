@@ -1,8 +1,7 @@
 import { Typography, Box, Checkbox, Paper, Button } from '@mui/material';
 import { CheckCircleOutlineOutlined } from '@mui/icons-material';
 import UserCartItemsPhoto from './UserCartItemsPhoto'
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const UserCartItems = ({
@@ -12,44 +11,88 @@ const UserCartItems = ({
     prodContent,
     prodShipping,
     prodPrice,
-    handleChangeChild,
     cartDelete,
     category,
     period,
-
+    selectedProducts,
+    setSelectedProducts,
+    selectAll,
+    setSelectAll,
+    length,
     }) => {
-     
-    // 대여기간 변경
 
-    const [date, setDate] = useState(period);
+    // 전체선택, 선택항목
 
-    const changeDate = (value) => {
-        const nextDate = date + value;
-        if (nextDate !== 0 && nextDate !== 99) {
-            setDate(nextDate);
+    const [checked, setChecked] = useState(false);
+
+    useEffect(() => {
+        if (selectAll) {
+        setChecked(true);
+        } else if (selectedProducts.length + 1 !== length) {
+        setChecked(false);
+        }
+    }, [selectAll]);
+    
+    const handleSelect = (e) => {
+        setChecked(e.target.checked);
+    
+        if (e.target.checked) {
+        if (selectedProducts.length + 1 === length) {
+            setSelectAll(true);
+        }
+    
+        setSelectedProducts([
+            ...selectedProducts,
+            {
+            prodCode: prodCode,
+            prodName: prodName,
+            prodPrice: prodPrice,
+            prodShipping: prodShipping,
+            period: date,
+            },
+        ]);
+        } else {
+        setSelectAll(false);
+        setSelectedProducts(
+            selectedProducts.filter((product) => product.prodCode !== prodCode)
+        );
         }
     };
 
-     // 결제 페이지로 이동
-     const periodRef = useRef();
-     const navigate = useNavigate();
+    // 대여기간 변경
+    const [date, setDate] = useState(period);
     
-     const payProcess = () => {
- 
-         const period = periodRef.current.value;
- 
-         axios
-             .patch(`/carts/period/modify/${cartCode}`, {
-                 period : period,
-             })
-             .then((res) => {
-                 alert('결제 페이지로 이동합니다.');
-                 navigate(`/purchase`);
-             })
-             .catch((err) => {
-                 console.error(err);
-             });
-    }
+    const changeDate = (value) => {
+        const nextDate = date + value;
+        if (nextDate !== 0 && nextDate !== 99) {
+        setDate(nextDate);
+    
+        if (checked) {
+            changePeriod(nextDate);
+        }
+        }
+    };
+    
+    const changePeriod = (nextDate) => {
+        const newSelectedProducts = selectedProducts.map((product) =>
+        product.prodCode === prodCode ? { ...product, period: nextDate } : product
+        );
+        setSelectedProducts(newSelectedProducts);
+    };
+
+    // 대여기간 DB수정 요청  
+        axios
+            .post(`/carts/${date}/modify/${cartCode}`)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+            
+    // 개별 상품 총가격
+    const TotalByPeriod = parseFloat(prodPrice) * (date / 7); 
 
     return (                                                  
             <div key = {cartCode}>
@@ -63,7 +106,8 @@ const UserCartItems = ({
                         borderRadius : "15px"
                     }}>
                     <Checkbox
-                        onChange={handleChangeChild}
+                        checked={checked}
+                        onChange={handleSelect}
                         icon={<CheckCircleOutlineOutlined />}
                         checkedIcon={<CheckCircleOutlineOutlined />}
                         sx={{
@@ -167,7 +211,7 @@ const UserCartItems = ({
                                 variant="outlined" color="primary" onClick = {() => {changeDate(-7);}}>
                                     -7                                            
                                 </Button>
-                                <span ref={periodRef}>{date}일</span>
+                                <span>{date}일</span>
                                 <Button 
                                     sx = {{
                                         borderRadius: '50%', // 동그라미 모양을 위한 border-radius 값
@@ -205,7 +249,7 @@ const UserCartItems = ({
                                 fontSize : '20px',
                                 fontWeight : 'bold',
                                 }}>
-                                    {prodPrice.toLocaleString()}원
+                                    {(TotalByPeriod).toLocaleString()}원
                             </Typography>
                             <Box display = 'flex'  >
                                 <Typography sx = {{

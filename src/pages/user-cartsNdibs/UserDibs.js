@@ -1,9 +1,11 @@
 import React from 'react';
+import UserDib from "components/user-cartsNdibs/UserDib"
+
 
 const UserDibs = () => {
   return (
     <div>
-      <div></div>
+      <UserDib></UserDib>
     </div>
   );
 };
