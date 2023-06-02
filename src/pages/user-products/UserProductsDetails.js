@@ -253,7 +253,7 @@ const UserProductsDetails = () => {
         : '#C3C36A',
   };
 
-  const [expanded, setExpanded] = useState('0');
+  const [expanded, setExpanded] = useState(0);
 
   const handleChange = (panel) => (e, newExpanded) => {
     setExpanded(newExpanded ? panel : false);

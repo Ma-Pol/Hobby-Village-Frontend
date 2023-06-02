@@ -46,11 +46,15 @@ const MyAccordionSummary = styled((props) => <AccordionSummary {...props} />)(
           ? 'rgba(255, 255, 255, .05)'
           : 'rgba(0, 0, 0, .03)',
     },
+    '&.Mui-expanded': {
+      backgroundColor: 'rgba(0, 0, 0, .03)',
+    },
   })
 );
 
 const MyAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   padding: '0',
+  backgroundColor: 'rgba(0, 0, 0, .03)',
 }));
 
 const Review = ({ review, expanded, handleChange }) => {
@@ -129,8 +133,8 @@ const Review = ({ review, expanded, handleChange }) => {
     position: 'absolute',
     right: '5px',
     bottom: '5px',
-    boxSizing: 'border-box',
     width: '70px',
+    boxSizing: 'border-box',
     m: 0,
     p: 0,
     border: '1px solid #626262',

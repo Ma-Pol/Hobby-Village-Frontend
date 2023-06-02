@@ -434,24 +434,6 @@ const MyPageTop = () => {
                       position: 'relative',
                     }}
                   >
-                    {/* <Box
-                    sx={{
-                      position: 'absolute',
-                      left: '0',
-                      bottom: '-310px',
-                      backgroundColor: '#ffffff',
-                      boxSizing: 'border-box',
-                      width: '100%',
-                      height: '300px',
-                      display: couponListBox ? 'flex' : 'none',
-                      p: '10px',
-                      borderRadius: '10px',
-                      border: '1px solid #dddddd',
-                      boxShadow: '2px 2px 2px 0px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    테스트
-                  </Box> */}
                     <Box
                       sx={{
                         display: 'flex',
@@ -542,7 +524,9 @@ const MyPageTop = () => {
 
                   <Box
                     onClick={() => {
-                      navigate(`/mypages/${email}/requests/lists?filter=none`);
+                      navigate(
+                        `/mypages/${email}/requests/lists?filter=none&pages=1`
+                      );
                     }}
                     sx={{
                       ...myPageTopButtonStyle,
