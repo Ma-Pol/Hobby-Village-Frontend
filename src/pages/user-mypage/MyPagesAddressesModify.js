@@ -256,6 +256,11 @@ const MyPagesAddressesModify = () => {
                 variant="standard"
                 inputRef={receiverRef}
                 defaultValue={addressDetail.receiver}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setModalHandler(true);
+                  }
+                }}
                 sx={{
                   ...textFieldStyle,
                   width: '700px',
@@ -323,6 +328,11 @@ const MyPagesAddressesModify = () => {
                 variant="standard"
                 inputRef={address2Ref}
                 defaultValue={addressDetail.address2}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    phoneRef.current.focus();
+                  }
+                }}
                 sx={{
                   ...textFieldStyle,
                   width: '700px',
@@ -335,6 +345,11 @@ const MyPagesAddressesModify = () => {
                 inputRef={phoneRef}
                 onChange={phoneCheck}
                 defaultValue={addressDetail.phone}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    deliRequestRef.current.focus();
+                  }
+                }}
                 sx={{
                   ...textFieldStyle,
                   width: '700px',

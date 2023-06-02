@@ -12,6 +12,7 @@ import AdminNotices from './admin-notices/AdminNotices';
 import AdminFAQs from './admin-faq/AdminFAQs';
 import AdminQnAs from './admin-qna/AdminQnAs';
 import AdminHeader from '../components/AdminHeader';
+import AdminStats from './admin-stats/AdminStats';
 
 const Admin = () => {
   const location = useLocation();
@@ -38,6 +39,7 @@ const Admin = () => {
         <Route exact path="notices/*" element={<AdminNotices />} />
         <Route exact path="faqs/*" element={<AdminFAQs />} />
         <Route exact path="qnas/*" element={<AdminQnAs />} />
+        <Route exact path="stats/*" element={<AdminStats />} />
         <Route
           path="*"
           element={

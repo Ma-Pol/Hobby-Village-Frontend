@@ -25,11 +25,7 @@ const useStyles = makeStyles({
     gridGap: '16px',
     width: '600px',
     height: '600px',
-    margin: '0 auto',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    margin: '80px auto 16px auto',
   },
 });
 
@@ -90,14 +86,43 @@ const AdminMain = () => {
   };
 
   return (
-    <Box
-      className={classes.container}
-      sx={{
-        userSelect: 'none',
-      }}
-    >
-      {urls.map((url, index) => renderBox(url, index, texts[index]))}
-    </Box>
+    <>
+      <Box
+        className={classes.container}
+        sx={{
+          userSelect: 'none',
+        }}
+      >
+        {urls.map((url, index) => renderBox(url, index, texts[index]))}
+      </Box>
+
+      <Link
+        component={RouterLink}
+        to={'/m/stats'}
+        style={{ textDecoration: 'none' }}
+      >
+        <Box
+          sx={{
+            width: '600px',
+            height: '80px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '5px',
+            backgroundColor: '#E4E58E',
+          }}
+        >
+          <Typography
+            variant="h6"
+            align="center"
+            style={{ fontWeight: 'bold', color: 'black' }}
+          >
+            서비스 이용 통계
+          </Typography>
+        </Box>
+      </Link>
+    </>
   );
 };
 

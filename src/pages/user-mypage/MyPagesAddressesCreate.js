@@ -204,6 +204,11 @@ const MyPagesAddressesCreate = () => {
           <TextField
             label="받는 사람*"
             variant="standard"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setModalHandler(true);
+              }
+            }}
             inputRef={receiverRef}
             sx={{
               ...textFieldStyle,
@@ -269,6 +274,11 @@ const MyPagesAddressesCreate = () => {
             label="상세 주소"
             variant="standard"
             inputRef={address2Ref}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                phoneRef.current.focus();
+              }
+            }}
             sx={{
               ...textFieldStyle,
               width: '700px',
@@ -280,6 +290,11 @@ const MyPagesAddressesCreate = () => {
             variant="standard"
             inputRef={phoneRef}
             onChange={phoneCheck}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                deliRequestRef.current.focus();
+              }
+            }}
             sx={{
               ...textFieldStyle,
               width: '700px',

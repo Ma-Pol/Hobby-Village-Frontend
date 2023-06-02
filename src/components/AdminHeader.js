@@ -207,6 +207,22 @@ function AdminHeader({ id, nickname }) {
           >
             1:1 문의
           </Button>
+          <Button
+            component={Link}
+            to="/m/stats"
+            style={{
+              color: '#000000',
+              textTransform: 'none',
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+            }}
+            disableRipple
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = 'transparent')
+            }
+          >
+            통계
+          </Button>
         </MenuItems>
         <BlackTextTypography
           variant="subtitle1"
