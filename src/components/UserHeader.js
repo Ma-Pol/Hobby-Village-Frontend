@@ -285,7 +285,7 @@ const UserHeader = () => {
             >
               {email !== null && (
                 <Link
-                  to={`/carts/${email}/lists/all`}
+                  to={`/carts/${email}/lists?category=all`}
                   style={{
                     textDecoration: 'none',
                     marginRight: '2rem',

@@ -170,7 +170,7 @@ const UserProductsDetails = () => {
                     '장바구니에 추가되었습니다.\n장바구니로 이동하시겠습니까?'
                   )
                 ) {
-                  navigate(`/carts/${userEmail}/lists/all`);
+                  navigate(`/carts/${userEmail}/lists?category=all`);
                 }
               });
           }

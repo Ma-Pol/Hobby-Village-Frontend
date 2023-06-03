@@ -1,46 +1,126 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import {
   Typography,
   Box,
   ToggleButtonGroup,
   ToggleButton,
   Checkbox,
-  Paper,
-  Divider,
-  Chip,
+  Container,
 } from '@mui/material';
-import { styled } from '@mui/system';
-import { CheckCircleOutlineOutlined } from '@mui/icons-material';
+import { CheckCircleRounded } from '@mui/icons-material';
 import UserDibItems from './UserDibItems';
 import axios from 'axios';
+import Loading from '../../../components/Loading';
+
+const categoryButtonStyle = {
+  mr: '5px',
+  px: '20px',
+  border: 'none',
+  height: '35px',
+  backgroundColor: 'none',
+  color: '#828282',
+  fontSize: '1.2rem',
+  fontWeight: 'Regular',
+  transition: 'all 0.25s',
+  '&:hover': {
+    backgroundColor: '#FFFFFF',
+    color: '#85CF65',
+  },
+  '&.Mui-selected': {
+    backgroundColor: '#FFFFFF',
+    color: '#85CF65',
+    fontWeight: 'bold',
+  },
+  '&.Mui-selected:hover': {
+    backgroundColor: '#FFFFFF',
+    color: '#85CF65',
+    fontWeight: 'bold',
+  },
+};
+
+const categoryButtonInnerCircleStyle = {
+  marginLeft: '5px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '20px',
+  height: '20px',
+  borderRadius: '50%',
+  backgroundColor: '#EBEBA9',
+  fontSize: '0.8rem',
+};
+
+const categoryButtonDividerStyle = {
+  lineHeight: '35px',
+  color: '#b0b0b0',
+};
+
+const checkboxStyle = {
+  color: '#CECECE',
+  p: 0,
+  mr: 1,
+  '&.Mui-checked': {
+    color: '#C3C36A',
+    backgroundColor: '#7f7f7f',
+    p: 0,
+  },
+  '& .MuiSvgIcon-root': {
+    fontSize: '20px',
+    width: '22px',
+    height: '22px',
+  },
+};
 
 const UserDib = () => {
   const { email } = useParams();
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentcategory, setCurrentCategory] = useState(
+  const [currentCategory, setCurrentCategory] = useState(
     searchParams.get('category')
   );
-  const [lists, setLists] = useState([]);
-  const navigate = useNavigate();
 
-  // 찜목록 조회
+  const [count, setCount] = useState({
+    none: 0,
+    product: 0,
+    brand: 0,
+  });
+  const [dibList, setDibList] = useState([]);
+
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  // 찜 목록 조회
   useEffect(() => {
+    getDibData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, email]);
+
+  const getDibData = () => {
     axios
-      .get(`/dibs/${email}/lists?category=${searchParams.get('category')}`)
-      .then((res) => {
-        setLists(res.data);
-        if (searchParams.get('category') !== currentcategory) {
-          setCurrentCategory(searchParams.get('category'));
-        }
-        console.log(res.data);
+      .all([
+        axios.get(`/dibs/count?email=${email}`),
+        axios.get(
+          `/dibs/lists?email=${email}&category=${searchParams.get('category')}`
+        ),
+      ])
+      .then(
+        axios.spread((count, list) => {
+          setCount(count.data);
+          setDibList(list.data);
+          setSelectedProducts([]);
+          setSelectAll(false);
+        })
+      )
+      .finally(() => {
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, [searchParams, email]);
+  };
 
-  // 카테고리 변경
+  // 필터 변경
   const categoryChange = (e, value) => {
     if (value !== null) {
       searchParams.set('category', value);
@@ -49,14 +129,13 @@ const UserDib = () => {
     }
   };
 
-  // 찜 삭제
+  // 찜 개별 삭제
   const dibDelete = (dibCode) => {
-    if (window.confirm('해당 품목을 장바구니에서 삭제하시겠습니까?')) {
+    if (window.confirm('해당 물품을 찜 목록에서 삭제하시겠습니까?')) {
       axios
-        .delete(`/dibs/delete/${dibCode}`)
+        .delete(`/dibs/products?dibCode=${dibCode}`)
         .then(() => {
-          alert('품목이 삭제되었습니다.');
-          navigate(`/dibs/${email}/lists/category`);
+          getDibData();
         })
         .catch((err) => {
           console.error(err);
@@ -66,264 +145,196 @@ const UserDib = () => {
     }
   };
 
-  // 상품 클릭 시 상세페이지로 이동
-  const MoveToProd = () => {
-    navigate(`/products/details/:prodCode`);
-  };
-
-  // 전체선택, 부분선택
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState([]);
-
-  const handleSelectAll = (e) => {
-    setSelectAll(e.target.checked);
-
-    if (e.target.checked) {
-      setSelectedProducts(lists);
+  // 찜 선택 물품 삭제
+  const dibSelectedDelete = () => {
+    if (window.confirm('선택된 물품을 찜 목록에서 삭제하시겠습니까?')) {
+      axios
+        .post(`/dibs/lists`, selectedProducts)
+        .then(() => {
+          getDibData();
+          setSelectedProducts([]);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else {
-      setSelectedProducts([]);
+      return false;
     }
   };
 
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`/dibs/${email}/lists/item`)
-      .then((res) => {
-        setItems(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-
-  // 일반상품 품목 갯수 구하기
-  const getProductCount = () => {
-    const CartItem = items.filter((items) => items.prodBrand === null);
-    return CartItem.length;
-  };
-  // 브랜드 상품 품목 갯수 구하기
-  const getBrandCount = () => {
-    const CartItem = items.filter((items) => items.prodBrand !== null);
-    return CartItem.length;
-  };
-  // 전체 품목 갯수 구하기
-  const getCartItemCount =
-    parseFloat(getProductCount()) + parseFloat(getBrandCount());
-
-  // MUI 스타일
-  const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-    '& .MuiToggleButtonGroup-grouped': {
-      margin: theme.spacing(0.5),
-      border: 0,
-      '&.Mui-disabled': {
-        border: 0,
-      },
-      '&:not(:first-of-type)': {
-        borderRadius: theme.shape.borderRadius,
-      },
-      '&:first-of-type': {
-        borderRadius: theme.shape.borderRadius,
-      },
-      '&:hover': {
-        backgroundColor: '#FFFFFF',
-        color: '#85CF65',
-      },
-      '&.Mui-selected': {
-        backgroundColor: '#FFFFFF',
-        textDecoration: 'underline',
-        color: '#85CF65',
-      },
-      '&.Mui-selected:hover': {
-        backgroundColor: '#FFFFFF',
-        textDecoration: 'underline',
-        color: '#85CF65',
-      },
-    },
-    width: '100%',
-  }));
-
-  const ChipStyle = {
-    ml: 0.5,
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '24px',
-    height: '24px',
-    fontSize: '12px',
-    underline: 'none',
-    color: '#000000',
-    backgroundColor: '#EBEBA9',
-    textDecoration: 'none',
-    '&:selected': {
-      color: '#85CF65',
-    },
+  const handleSelectAll = (e) => {
+    setSelectAll(e.target.checked);
+    setSelectedProducts(e.target.checked ? dibList : []);
   };
 
   return (
-    <div>
-      <Box style={{ margin: 'auto' }}>
-        <Box sx={{ my: 2, height: '50px', borderBottom: '1px solid #B7B7B7' }}>
-          <Typography
-            variant="h5"
+    <>
+      <Container
+        sx={{
+          userSelect: 'none',
+          width: '1100px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 'bold',
+            margin: '30px 0 20px 0',
+          }}
+        >
+          찜 목록
+        </Typography>
+        <ToggleButtonGroup
+          value={String(currentCategory)}
+          exclusive
+          onChange={categoryChange}
+          sx={{
+            ml: '-10px',
+          }}
+        >
+          <ToggleButton disableRipple value="all" sx={categoryButtonStyle}>
+            전체
+            <div style={categoryButtonInnerCircleStyle}>{count.all}</div>
+          </ToggleButton>
+          <Typography sx={categoryButtonDividerStyle}>|</Typography>
+          <ToggleButton disableRipple value="product" sx={categoryButtonStyle}>
+            일반 상품
+            <div style={categoryButtonInnerCircleStyle}>{count.product}</div>
+          </ToggleButton>
+          <Typography sx={categoryButtonDividerStyle}>|</Typography>
+          <ToggleButton
+            disableRipple
+            value="brand"
+            sx={{ ...categoryButtonStyle, border: 0 }}
+          >
+            브랜드관
+            <div style={categoryButtonInnerCircleStyle}>{count.brand}</div>
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Container>
+
+      <Box
+        sx={{
+          mt: 2,
+          pb: 10,
+          width: '100%',
+          minHeight: '60vh',
+          backgroundColor: '#F4F4F4',
+        }}
+      >
+        {loading ? (
+          <Loading height={'60vh'} />
+        ) : (
+          <Container
             sx={{
-              fontweight: 'bold',
+              width: '1100px',
               display: 'flex',
-              alignItems: 'center',
-              fontSize: '1.6rem',
-              ml: '100px',
+              flexDirection: 'column',
             }}
           >
-            찜 목록
-          </Typography>
-        </Box>
-        <Paper
-          elevation={0}
-          sx={{
-            display: 'flex',
-            border: (theme) => `0px ${theme.palette.divider}`,
-            flexWrap: 'wrap',
-          }}
-        >
-          <StyledToggleButtonGroup
-            value={String(currentcategory)}
-            exclusive
-            onChange={categoryChange}
-            sx={{
-              ml: '100px',
-            }}
-          >
-            <ToggleButton key="전체" value="none">
-              전체
-              <Chip
-                label={getCartItemCount}
-                variant="filled"
-                size="small"
-                sx={ChipStyle}
-              ></Chip>
-            </ToggleButton>
-            <Typography
+            {/* 전체 선택, 선택 상품 삭제 시작 */}
+            <Box
               sx={{
-                fontweight: 'light',
-                fontSize: '1.6rem',
-                color: '#DADADA',
-                m: 1,
-              }}
-            >
-              |
-            </Typography>
-            <ToggleButton key="일반 상품" value="product">
-              일반 상품
-              <Chip
-                label={getProductCount()}
-                variant="filled "
-                size="small"
-                sx={ChipStyle}
-              ></Chip>
-            </ToggleButton>
-            <Typography
-              sx={{ fontweight: 'light', fontSize: '1.6rem', color: '#DADADA' }}
-            >
-              |
-            </Typography>
-            <ToggleButton key="브랜드관" value="brand">
-              브랜드관
-              <Chip
-                label={getBrandCount()}
-                variant="filled "
-                size="small"
-                sx={ChipStyle}
-              ></Chip>
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-        </Paper>
-        <Box
-          sx={{
-            width: 'fullWidth',
-            my: 2,
-            height: 'auto',
-            pt: 3,
-            pb: 8,
-            bgcolor: '#F4F4F4',
-          }}
-        >
-          <Box>
-            <Typography
-              variant="h5"
-              sx={{
-                ml: '100px',
+                mt: 2,
                 display: 'flex',
                 alignItems: 'center',
-                fontSize: '12px',
+                userSelect: 'none',
               }}
             >
               <Checkbox
                 checked={selectAll}
                 onChange={handleSelectAll}
-                icon={<CheckCircleOutlineOutlined />}
-                checkedIcon={<CheckCircleOutlineOutlined />}
-                sx={{
-                  color: '#CECECE',
-                  p: 0,
-                  mr: 1,
-                  '&.Mui-checked': {
-                    color: '#000000',
-                    backgroundColor: '#C3C36A',
-                    p: 0,
-                  },
-                  '& .MuiSvgIcon-root': {
-                    fontSize: '20px',
-                    width: '22px',
-                    height: '22px',
-                  },
-                }}
-              ></Checkbox>
-              전체 선택
-              <Divider
-                sx={{ my: 0.5, mx: 2 }}
-                orientation="vertical"
-                variant="middle"
-                flexItem
+                id="selectAll"
+                icon={<CheckCircleRounded />}
+                checkedIcon={<CheckCircleRounded />}
+                sx={checkboxStyle}
               />
-              선택 상품 삭제
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <Box
-              sx={{ display: 'flex', flexDirection: 'column', flexGrow: 0.5 }}
-            >
-              {lists.map((li) => {
-                const category = li.prodBrand === null ? '일반' : '브랜드관';
-                return (
-                  <UserDibItems
-                    key={li.dibCode}
-                    cartCode={li.dibCode}
-                    dibCode={li.dibCode}
-                    prodCode={li.prodCode}
-                    prodName={li.prodName}
-                    prodContent={li.prodContent}
-                    prodShipping={li.prodShipping}
-                    prodPrice={li.prodPrice}
-                    prodDibs={li.prodDibs}
-                    category={category}
-                    selectedProducts={selectedProducts}
-                    setSelectedProducts={setSelectedProducts}
-                    selectAll={selectAll}
-                    setSelectAll={setSelectAll}
-                    length={lists.length}
-                    dibDelete={dibDelete}
-                    MoveToProd={MoveToProd}
-                  />
-                );
-              })}
+              <label htmlFor="selectAll">
+                <Typography
+                  variant="h5"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: '1rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  전체 선택
+                </Typography>
+              </label>
+              <Typography sx={{ lineHeight: '35px', color: '#b0b0b0', mx: 2 }}>
+                |
+              </Typography>
+              <Typography
+                variant="h5"
+                onClick={dibSelectedDelete}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                }}
+              >
+                선택 상품 삭제
+              </Typography>
             </Box>
-          </Box>
-        </Box>
+            {/* 전체 선택, 선택 상품 삭제 끝 */}
+
+            {/* 찜 상품, 결제 정보 시작 */}
+            <Box
+              sx={{
+                mt: 2,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              {/* 찜 상품 시작 */}
+              <Box sx={{ width: '950px' }}>
+                {dibList.length === 0 ? (
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      mt: 2,
+                      width: '100%',
+                      height: '230px',
+                      userSelect: 'none',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#ffffff',
+                      borderRadius: '15px',
+                      boxShadow: '2px 4px 5px #00000040',
+                    }}
+                  >
+                    찜한 상품이 없습니다.
+                  </Typography>
+                ) : (
+                  dibList.map((product) => {
+                    return (
+                      <UserDibItems
+                        key={product.dibCode}
+                        product={product}
+                        dibDelete={dibDelete}
+                        dibList={dibList}
+                        setDibList={setDibList}
+                        selectedProducts={selectedProducts}
+                        setSelectedProducts={setSelectedProducts}
+                        selectAll={selectAll}
+                        setSelectAll={setSelectAll}
+                        length={dibList.length}
+                      />
+                    );
+                  })
+                )}
+              </Box>
+              {/* 찜 상품 끝 */}
+            </Box>
+          </Container>
+        )}
       </Box>
-    </div>
+    </>
   );
 };
 

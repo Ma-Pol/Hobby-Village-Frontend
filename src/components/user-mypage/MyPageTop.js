@@ -493,7 +493,7 @@ const MyPageTop = () => {
 
                   <Box
                     onClick={() => {
-                      navigate(`/dibs/${email}/lists/all`);
+                      navigate(`/dibs/${email}/lists?category=all&pages=1`);
                     }}
                     sx={{
                       ...myPageTopButtonStyle,

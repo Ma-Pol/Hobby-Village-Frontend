@@ -31,12 +31,8 @@ root.render(
       <Route exact path="/recommend/*" element={<Recommend />} />
       <Route exact path="/guide" element={<UserGuide />} />
       <Route exact path="/mypages/:email/*" element={<UserMyPages />} />
-      <Route
-        exact
-        path="/carts/:email/lists/:category"
-        element={<UserCarts />}
-      />
-      <Route exact path="/dibs/:email/lists/:category" element={<UserDibs />} />
+      <Route exact path="/carts/:email/lists" element={<UserCarts />} />
+      <Route exact path="/dibs/:email/lists" element={<UserDibs />} />
       <Route exact path="/reviews/*" element={<UserReviews />} />
       <Route exact path="/products/*" element={<UserProducts />} />
       <Route exact path="/purchase" element={<Purchase />} />

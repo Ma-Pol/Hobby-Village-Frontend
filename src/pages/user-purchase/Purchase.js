@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import {
   Box,
   Button,
@@ -564,6 +565,7 @@ const Purchase = () => {
   // 결제하기 버튼 클릭 시 실행 2 (실제 결제 프로세스)
   const purchaseProcess = async () => {
     let processCheck = true;
+
     const odrNumber =
       new Date().getTime() + '-' + Math.floor(Math.random() * 10000 * 10000);
 
@@ -583,11 +585,11 @@ const Purchase = () => {
           .get(`/purchase/productState/${product.prodCode}`)
           .then((state) => {
             // 대여 중인 상품이 있다면 구매 불가
-            if (state.data !== 0) {
+            if (state.data !== 1) {
+              processCheck = false;
               alert(
                 `결제에 실패했습니다. 다시 시도해주세요.\nERROR: 이미 대여중이거나 삭제된 상품이 존재합니다.\n\n${product.prodName}`
               );
-
               failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
             }
           })
@@ -597,69 +599,76 @@ const Purchase = () => {
       }
 
       // 각 상품들의 prodIsRental을 1로 변경
-      for (let i = 0; i < productList.length; i++) {
-        const product = productList[i];
+      if (processCheck) {
+        for (let i = 0; i < productList.length; i++) {
+          const product = productList[i];
 
-        await axios
-          .patch(`/purchase/productState/${product.prodCode}`)
-          .then((res) => {
-            if (res.data !== 1) {
-              alert(
-                '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO UPDATE PRODUCT STATE'
-              );
+          await axios
+            .patch(`/purchase/productState/${product.prodCode}`)
+            .then((res) => {
+              if (res.data !== 1) {
+                processCheck = false;
+                alert(
+                  '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO UPDATE PRODUCT STATE'
+                );
 
-              purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
-              failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+                purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
+                failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
       }
     }
 
     // 3. 실 결제 진행 전 결제 정보를 서버에 저장
-    await axios
-      .post(
-        `/purchase/preInsertOrder/${prevPage}`,
-        setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
-      )
-      .then((res) => {
-        if (res.data !== 1) {
-          alert(
-            '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO INSERT ORDER 1'
-          );
-          processCheck = false;
+    if (processCheck) {
+      await axios
+        .post(
+          `/purchase/preInsertOrder/${prevPage}`,
+          setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
+        )
+        .then((res) => {
+          if (res.data !== 1) {
+            alert(
+              '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO INSERT ORDER 1'
+            );
+            processCheck = false;
 
-          if (prevPage !== 'mypages') {
-            purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            if (prevPage !== 'mypages') {
+              purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            }
+            failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
           }
-          failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
 
     // 4. 실 결제 진행 전 결제 정보를 아임포트 서버에 저장
-    await axios
-      .post(
-        `/purchase/payments/prepare`,
-        setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
-      )
-      .then((res) => {
-        if (res.data !== 0) {
-          alert(
-            '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO INSERT ORDER 2'
-          );
-          processCheck = false;
+    if (processCheck) {
+      await axios
+        .post(
+          `/purchase/payments/prepare`,
+          setOrderData(odrNumber, productList, prevOdrNumber, prevPage)
+        )
+        .then((res) => {
+          if (res.data !== 0) {
+            alert(
+              '결제에 실패했습니다. 다시 시도해주세요.\nERROR: FAIL TO INSERT ORDER 2'
+            );
+            processCheck = false;
 
-          if (prevPage !== 'mypages') {
-            purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            if (prevPage !== 'mypages') {
+              purchaseFailed(productList); // 결제 실패 시 상품 상태를 원래대로 되돌림
+            }
+            failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
           }
-          failedNavigate(prevPage); // 결제 실패 시 이전 페이지로 이동
-        }
-      });
+        });
+    }
 
     // 5. 실 결제 진행 (아임포트(포트원) API 사용)
     const { IMP } = window; // 아임포트
@@ -762,7 +771,10 @@ const Purchase = () => {
               }
 
               alert(`결제가 완료되었습니다!`);
-              await navigate(`/mypages/${email}/orders`, { replace: true });
+              await navigate(
+                `/mypages/${email}/orders?odrState=payment-completed`,
+                { replace: true }
+              );
             }
 
             // 결제 후처리 실패
@@ -1016,7 +1028,7 @@ const Purchase = () => {
   const failedNavigate = (prevPage) => {
     // 장바구니에서 접근한 경우 장바구니 페이지로 이동
     if (prevPage === 'carts') {
-      return navigate(`/carts/${email}/lists/all`, { replace: true });
+      return navigate(`/carts/${email}/lists?category=all`, { replace: true });
     }
     // 상품 상세 페이지에서 접근한 경우 상품 상세 페이지로 이동
     else if (prevPage === 'details') {
@@ -1027,7 +1039,9 @@ const Purchase = () => {
     }
     // 마이페이지에서 접근한 경우 마이페이지로 이동
     else {
-      return navigate(`/mypages/${email}`, { replace: true });
+      return navigate(`/mypages/${email}/orders?odrState=payment-completed`, {
+        replace: true,
+      });
     }
   };
 

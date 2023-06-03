@@ -41,7 +41,7 @@ const MostPopularBrand = () => {
           userSelect: 'none',
         }}
       >
-        <Typography variant="h4" sx={{ mt: 5, mb: 3, fontWeight: 'bold' }}>
+        <Typography variant="h4" sx={{ mt: 7, mb: 5, fontWeight: 'bold' }}>
           브랜드관 인기 취미 물품
         </Typography>
         <Grid

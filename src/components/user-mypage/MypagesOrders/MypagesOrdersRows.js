@@ -284,7 +284,11 @@ const MypagesOrdersRows = ({ order }) => {
               ) : (
                 <>
                   대여 기간: {order.rentalPeriod}일
-                  <br />~ {order.deadline}까지
+                  {order.deadline !== '1000-01-01' && (
+                    <>
+                      <br />~ {order.deadline}까지
+                    </>
+                  )}
                 </>
               )}
             </Typography>
@@ -367,11 +371,12 @@ const MypagesOrdersRows = ({ order }) => {
                       color: '#000000',
                       fontWeight: 'bold',
                       fontSize: '1rem',
-                      border: '2px solid #C3C36A',
+                      border: '2px solid #000000',
                       backgroundColor: '#ffffff',
                       '&:hover': {
                         backgroundColor: '#ffffff',
-                        color: '#818128',
+                        border: '2px solid #C3C36A',
+                        color: '#C3C36A',
                       },
                     }}
                   >

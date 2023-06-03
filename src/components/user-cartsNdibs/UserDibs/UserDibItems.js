@@ -1,232 +1,267 @@
-import { Typography, Box, Checkbox, Paper, Button } from '@mui/material';
-import { CheckCircleOutlineOutlined } from '@mui/icons-material';
-import UserDibItemsPhoto from './UserDibItemsPhoto';
+import { Typography, Box, Checkbox } from '@mui/material';
+import { CheckCircleRounded } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const UserDibItems = ({
-  dibCode,
-  prodCode,
-  prodName,
-  prodContent,
-  prodShipping,
-  prodPrice,
-  prodDibs,
-  category,
+  product,
+  dibDelete,
   selectedProducts,
   setSelectedProducts,
   selectAll,
   setSelectAll,
   length,
-  dibDelete,
-  MoveToProd,
 }) => {
-  // 전체선택, 선택항목
-
+  const {
+    dibCode,
+    prodCode,
+    prodCategory,
+    prodBrand,
+    prodName,
+    prodDibs,
+    prodPrice,
+    prodShipping,
+    prodIsRental,
+    prodPicture,
+  } = product;
   const [checked, setChecked] = useState(false);
+  const navigate = useNavigate();
 
+  // 컴포넌트 마운트 시, 전체 선택 체크박스 상태 변경 시 수행
   useEffect(() => {
-    if (selectAll) {
-      setChecked(true);
-    } else if (selectedProducts.length + 1 !== length) {
-      setChecked(false);
-    }
+    setChecked(selectedProducts.some((prod) => prod.dibCode === dibCode));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAll]);
 
-  const handleSelect = (e) => {
+  // 체크박스 선택
+  const handleCheck = (e) => {
+    const newSelectedProducts = e.target.checked
+      ? [...selectedProducts, product]
+      : selectedProducts.filter((prod) => prod.dibCode !== dibCode);
+
+    setSelectedProducts(newSelectedProducts);
     setChecked(e.target.checked);
+    setSelectAll(newSelectedProducts.length === length);
+  };
 
-    if (e.target.checked) {
-      if (selectedProducts.length + 1 === length) {
-        setSelectAll(true);
-      }
-
-      setSelectedProducts([
-        ...selectedProducts,
-        {
-          prodCode: prodCode,
-          prodName: prodName,
-          prodPrice: prodPrice,
-          prodShipping: prodShipping,
-        },
-      ]);
-    } else {
-      setSelectAll(false);
-      setSelectedProducts(
-        selectedProducts.filter((product) => product.prodCode !== prodCode)
-      );
-    }
+  const checkboxStyle = {
+    position: 'absolute',
+    p: 0,
+    color: '#CECECE',
+    top: '8px',
+    left: '8px',
+    '&.Mui-checked': {
+      color: '#C3C36A',
+      backgroundColor: '#7f7f7f',
+    },
+    '& .MuiSvgIcon-root': {
+      fontSize: '20px',
+      width: '22px',
+      height: '22px',
+    },
   };
 
   return (
-    <div key={dibCode}>
-      <Paper
-        elevation={3}
+    <>
+      <Box
         sx={{
-          width: '800px',
           my: 2,
-          ml: 22,
-          height: '200px',
-          bgcolor: '#FFFFFF',
+          width: '950px',
+          backgroundColor: '#FFFFFF',
           borderRadius: '15px',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          boxShadow: '2px 4px 5px #00000040',
         }}
       >
-        <Checkbox
-          checked={checked}
-          onChange={handleSelect}
-          icon={<CheckCircleOutlineOutlined />}
-          checkedIcon={<CheckCircleOutlineOutlined />}
-          sx={{
-            color: '#CECECE',
-            p: 0,
-            my: 1,
-            mx: 1,
-            '&.Mui-checked': {
-              color: '#000000',
-              backgroundColor: '#C3C36A',
-              p: 0,
-            },
-            '& .MuiSvgIcon-root': {
-              fontSize: '20px',
-              width: '22px',
-              height: '22px',
-            },
-          }}
-        ></Checkbox>
-        <Button
+        <img
           onClick={() => {
             dibDelete(dibCode);
           }}
-          sx={{
-            borderRadius: '50%', // 동그라미 모양을 위한 border-radius 값
-            width: '24px', // 버튼의 너비
-            height: '24px', // 버튼의 높이
-            minWidth: 'unset',
-            fontSize: '20px',
-            fontWeight: 'lighter',
-            p: 0,
-            mt: 0.5,
-            ml: 91,
-            color: '#CECECE',
-            border: '1px solid #CECECE',
-            '&:hover': {
-              backgroundColor: '#C3C36A',
-              border: '1px solid #CECECE',
-              color: 'black',
-            },
-            '&.Mui-selected': {
-              backgroundColor: '#C3C36A',
-              color: 'black',
-            },
-            '&.Mui-selected:hover': {
-              backgroundColor: '#C3C36A',
-              color: 'black',
-            },
+          width="22px"
+          height="22px"
+          src="https://img.icons8.com/ios/50/949494/cancel.png"
+          alt="delete"
+          style={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            cursor: 'pointer',
+            userSelect: 'none',
           }}
-          variant="outlined"
-          color="primary"
-        >
-          Ⅹ
-        </Button>
+        />
+        <Checkbox
+          checked={checked}
+          onChange={handleCheck}
+          id="selectAll"
+          icon={<CheckCircleRounded />}
+          checkedIcon={<CheckCircleRounded />}
+          sx={checkboxStyle}
+        />
+        {/* 상품 이미지 출력 */}
         <Box
-          sx={{ display: 'flex', ml: 4, cursor: 'pointer' }}
-          onClick={MoveToProd}
+          sx={{
+            position: 'relative',
+            userSelect: 'none',
+            boxSizing: 'border-box',
+            border: '1px solid #d0d0d0',
+            width: '170px',
+            height: '170px',
+            m: '30px 0px 30px 30px',
+          }}
         >
-          <UserDibItemsPhoto
-            prodCode={prodCode}
-            prodName={prodName}
-          ></UserDibItemsPhoto>
-          <Box
-            onClick={MoveToProd}
-            sx={{ width: '335px', mx: 2, cursor: 'pointer' }}
-          >
-            <Typography
+          {prodIsRental === 1 && (
+            <Box
               sx={{
-                fontSize: '18px',
+                position: 'absolute',
+                boxSizing: 'border-box',
+                top: '0px',
+                left: '0px',
+                width: '170px',
+                height: '170px',
+                backgroundColor: '#00000070',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                fontSize: '1.5rem',
+                zIndex: '1',
               }}
             >
-              [{category} - {prodName}]
-            </Typography>
-            <Typography
-              sx={{
-                mt: 1,
-                fontSize: '14px',
-              }}
-            >
-              {prodContent}
-            </Typography>
-          </Box>
+              <p>대여중</p>
+            </Box>
+          )}
           <Box
+            component="img"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              ml: 5,
+              boxSizing: 'border-box',
+              backgroundColor: '#dddddd',
+              objectFit: 'contain',
+              width: '170px',
+              height: '170px',
+            }}
+            src={`http://localhost:8080/carts/image/${prodPicture}`}
+          />
+        </Box>
+        {/* 상품 구분 - 카테고리, 상품명 출력 */}
+        <Box
+          sx={{
+            ml: '30px',
+            width: '320px',
+            height: '170px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: '10px',
+              fontSize: '0.9rem',
             }}
           >
-            <FavoriteBorderIcon
-              style={{
-                color: '#1C1B1F',
-                position: 'absolute',
-                fontSize: 40,
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '12px',
-                color: '#1C1B1F',
-                position: 'absolute',
-              }}
-            >
-              찜
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '12px',
-                color: '#A0A0A0',
-                mt: 7,
-              }}
-            >
-              관심 {prodDibs}
-            </Typography>
-          </Box>
-          <Box textAlign="right" sx={{ ml: 8 }}>
-            <Typography
-              sx={{
-                ml: 4,
-                mt: 5,
-                fontSize: '20px',
-                fontWeight: 'bold',
-              }}
-            >
-              {prodPrice.toLocaleString()}원
-            </Typography>
-            <Box display="flex">
-              <Typography
-                sx={{
-                  ml: 4,
-                  mt: 5,
-                  fontSize: '14px',
-                }}
-              >
-                배송비
-              </Typography>
-              <Typography
-                sx={{
-                  ml: 4,
-                  mt: 5,
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                }}
-              >
-                {prodShipping.toLocaleString()}원
-              </Typography>
-            </Box>
-          </Box>
+            [{prodBrand !== null ? prodBrand : '일반 상품'} - {prodCategory}]
+          </Typography>
+          <Typography
+            title={prodName}
+            variant="h6"
+            onClick={() => {
+              navigate(`/products/details/${prodCode}`);
+            }}
+            sx={{
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              '&:hover': {
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            {prodName}
+          </Typography>
         </Box>
-      </Paper>
-    </div>
+        {/* 상품 찜 개수 출력 */}
+        <Box
+          sx={{
+            ml: '25px',
+            width: '150px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            userSelect: 'none',
+          }}
+        >
+          <FavoriteBorderIcon
+            style={{
+              color: '#1C1B1F',
+              position: 'absolute',
+              fontSize: 60,
+            }}
+          />
+          <Typography
+            sx={{
+              fontSize: '18px',
+              color: '#1C1B1F',
+              position: 'absolute',
+            }}
+          >
+            찜
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '12px',
+              color: '#A0A0A0',
+              mt: 10,
+            }}
+          >
+            관심 {prodDibs}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            ml: '15px',
+            pr: '25px',
+            width: '185px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '1.3rem',
+            }}
+          >
+            {String(prodPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+          </Typography>
+        </Box>
+
+        <Typography
+          variant="h6"
+          sx={{
+            position: 'absolute',
+            right: '25px',
+            bottom: '10px',
+            fontSize: '0.9rem',
+          }}
+        >
+          배송비{' '}
+          <strong>
+            {String(prodShipping).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+          </strong>
+        </Typography>
+      </Box>
+    </>
   );
 };
 
