@@ -274,11 +274,11 @@ const MyRequest = ({
                 </Typography>
               ) : (
                 <Swiper loop={true} style={swiperStyle}>
-                  {pictureList.map((fileName) => {
-                    const fileSrc = `http://localhost:8080/users/mypages/upload/${fileName}`; // 여기에 이미지 요청 경로 넣기
+                  {pictureList.map((imgName) => {
+                    const fileSrc = `http://localhost:8080/requests/mypages/view-image/${imgName}`;
                     return (
                       <SwiperSlide
-                        key={fileName}
+                        key={imgName}
                         style={{
                           display: 'flex',
                           justifyContent: 'center',
@@ -287,7 +287,7 @@ const MyRequest = ({
                       >
                         <Box
                           component="img"
-                          alt={fileName}
+                          alt={imgName}
                           src={fileSrc}
                           sx={{
                             objectFit: 'contain',
