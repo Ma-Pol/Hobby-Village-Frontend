@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import AdminStatsMonthOrder from '../../components/admin-stats/AdminStatsMonthOrder';
-import Loading from 'components/Loading';
-import AdminStatsMonthRequest from 'components/admin-stats/AdminStatsMonthRequest';
-import AdminStatsMonthReview from 'components/admin-stats/AdminStatsMonthReview';
+import Loading from '../../components/Loading';
+import AdminStatsMonthRequest from '../../components/admin-stats/AdminStatsMonthRequest';
+import AdminStatsMonthReview from '../../components/admin-stats/AdminStatsMonthReview';
 
 const AdminStats = () => {
   const [loading, setLoading] = useState(true);

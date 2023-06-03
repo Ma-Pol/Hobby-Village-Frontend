@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import Review from '../../components/user-products/UserProductRevw';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const UserProductsDetails = () => {
   const [loading, setLoading] = useState(true);

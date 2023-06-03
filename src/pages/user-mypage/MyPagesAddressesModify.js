@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import DaumPostcodeEmbed from 'react-daum-postcode';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 
 const MyPagesAddressesModify = () => {
   const [loading, setLoading] = useState(true);

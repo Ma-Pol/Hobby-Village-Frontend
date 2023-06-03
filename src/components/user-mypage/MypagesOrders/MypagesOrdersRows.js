@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import axios from 'axios';
-import Loading from 'components/Loading';
+import Loading from '../../Loading';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
