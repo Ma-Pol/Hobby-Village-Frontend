@@ -468,16 +468,18 @@ const UserProductsDetails = () => {
               <Box
                 sx={{
                   m: 0,
-                  p: '0px 10px 0px 10px',
+                  p: '10px',
                   boxSizing: 'border-box',
                   width: '100%',
                   height: '180px',
                   overflow: 'auto',
                 }}
               >
-                <div
-                  dangerouslySetInnerHTML={{ __html: product.prodContent }}
-                />
+                <Typography>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: product.prodContent }}
+                  />
+                </Typography>
               </Box>
 
               {/* 상품 호스트 */}

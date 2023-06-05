@@ -263,7 +263,7 @@ const Review = ({ review, expanded, handleChange }) => {
                   mb: pictureList.length > 0 ? '10px' : '30px',
                 }}
               >
-                {review.revwContent}
+                <div dangerouslySetInnerHTML={{ __html: review.revwContent }} />
               </Typography>
               {pictureList.length > 0 && (
                 <Swiper
