@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography, Avatar, Box, Container, TextField } from '@mui/material';
 import { styled } from '@mui/system';
+import './UserHeader.css';
 
 const BlackTextTypography = styled(Typography)({
   color: '#000000',
@@ -22,12 +23,31 @@ const UserHeader = () => {
   const searchRef = useRef();
   const [searchMode, setSearchMode] = useState(false);
 
+  const headerHeight = '7rem';
+  window.onscroll = function () {
+    const windowTop = window.scrollY;
+    if (windowTop >= headerHeight) {
+      setIsDropped(true);
+    } else {
+      setIsDropped(false);
+    }
+  };
+
+  const [isDropped, setIsDropped] = useState(false);
+
   return (
     <>
       <Container
         sx={{
           userSelect: 'none',
+          minWidth: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: '#FFFFFF',
+          borderBottom: '1px solid #dbdbdb',
         }}
+        className={`header ${isDropped ? '' : 'drop'}`}
       >
         {/* 헤더 전체 시작 */}
         <Box
@@ -361,10 +381,9 @@ const UserHeader = () => {
       </Container>
       <Box
         sx={{
-          // mb: '5px',
-          borderBottom: '1px solid #d5d5d5',
+          mb: '7rem',
         }}
-      />
+      ></Box>
     </>
   );
 };
