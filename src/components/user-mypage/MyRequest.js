@@ -9,12 +9,14 @@ import {
   AccordionSummary,
   AccordionDetails,
   Modal,
+  NativeSelect,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Loading from '../Loading';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const MyAccordion = styled((props) => (
   <Accordion disableGutters elevation={0} square {...props} />
@@ -67,6 +69,27 @@ const MyRequest = ({
   const [modifyMode, setModifyMode] = useState(false);
   const reqBankRef = useRef();
   const reqAccountNumRef = useRef();
+
+  const bankList = [
+    'KB국민은행',
+    '신한은행',
+    '우리은행',
+    '하나은행',
+    'SC제일은행',
+    '한국씨티은행',
+    '케이뱅크',
+    '카카오뱅크',
+    '기업은행',
+    'NH농협은행',
+    'IBK기업은행',
+    '수협은행',
+    '대구은행',
+    '부산은행',
+    '광주은행',
+    '제주은행',
+    '전북은행',
+    '경남은행',
+  ];
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -160,6 +183,19 @@ const MyRequest = ({
   };
 
   const textFieldStyle = {
+    padding: '0 0 0 15px',
+    margin: '0 10px 0 0',
+    minWidth: '150px',
+    width: '150px',
+    minHeight: '40px',
+    height: '40px',
+    border: '1px solid #BDBDBD',
+    borderRadius: '5px',
+    fontSize: '0.95rem',
+    color: '#000000',
+  };
+
+  const accountFieldStyle = {
     padding: '0',
     margin: '0',
     '& .MuiOutlinedInput-root.Mui-focused': {
@@ -469,18 +505,28 @@ const MyRequest = ({
                     등록 계좌
                   </Typography>
                   {modifyMode ? (
-                    <TextField
+                    <NativeSelect
                       inputRef={reqBankRef}
+                      sx={textFieldStyle}
                       variant="outlined"
                       defaultValue={request.reqBank}
-                      size="small"
-                      sx={{
-                        ...textFieldStyle,
-                        width: '150px',
-                        mr: '10px',
+                      inputProps={{
+                        style: { textAlign: 'center' },
                       }}
-                      inputProps={{ style: { textAlign: 'center' } }}
-                    />
+                      disableUnderline
+                      IconComponent={KeyboardArrowDownIcon}
+                    >
+                      <option value="none" disabled>
+                        은행 선택
+                      </option>
+                      {bankList.map((bank) => {
+                        return (
+                          <option value={bank} key={bank}>
+                            {bank}
+                          </option>
+                        );
+                      })}
+                    </NativeSelect>
                   ) : (
                     <Box sx={defaultTextBoxStyle}>
                       <p style={{ margin: 0 }}>{request.reqBank}</p>
@@ -493,7 +539,7 @@ const MyRequest = ({
                       defaultValue={request.reqAccountNum}
                       size="small"
                       sx={{
-                        ...textFieldStyle,
+                        ...accountFieldStyle,
                         width: '400px',
                       }}
                       inputProps={{ style: { textAlign: 'center' } }}
