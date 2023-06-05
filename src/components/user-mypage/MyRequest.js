@@ -183,7 +183,7 @@ const MyRequest = ({
   };
 
   const textFieldStyle = {
-    padding: '0 0 0 15px',
+    padding: '1px 0 0 32px',
     margin: '0 10px 0 0',
     minWidth: '150px',
     width: '150px',
@@ -191,7 +191,6 @@ const MyRequest = ({
     height: '40px',
     border: '1px solid #BDBDBD',
     borderRadius: '5px',
-    fontSize: '0.95rem',
     color: '#000000',
   };
 
