@@ -584,7 +584,7 @@ const UserModify = () => {
             variant="h4"
             component="h4"
             sx={{
-              fontSize: '3rem',
+              fontSize: '2.5rem',
               fontWeight: 'bold',
               mt: '50px',
               mb: '50px',

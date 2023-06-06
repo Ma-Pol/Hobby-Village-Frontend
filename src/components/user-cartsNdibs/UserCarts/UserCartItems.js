@@ -47,7 +47,7 @@ const UserCartItems = ({
     prodPicture,
   } = product;
   const [currentPeriod, setCurrentPeriod] = useState(period);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   const navigate = useNavigate();
 
   // 컴포넌트 마운트 시, 전체 선택 체크박스 상태 변경 시 수행

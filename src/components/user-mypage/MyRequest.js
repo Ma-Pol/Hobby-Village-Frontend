@@ -448,90 +448,88 @@ const MyRequest = ({
               {/* 카테고리 끝 */}
 
               {/* 등록 계좌 시작 */}
-              {request.reqSort === '위탁' && (
-                <Box
+
+              <Box
+                sx={{
+                  mb: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  component="h6"
+                  variant="body1"
                   sx={{
-                    mb: '15px',
-                    display: 'flex',
-                    alignItems: 'center',
+                    ml: '40px',
+                    mr: '10px',
+                    width: '150px',
+                    fontWeight: 'bold',
                   }}
                 >
-                  <Typography
-                    component="h6"
-                    variant="body1"
-                    sx={{
-                      ml: '40px',
-                      mr: '10px',
-                      width: '150px',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    등록 계좌
-                  </Typography>
-                  {modifyMode ? (
-                    <TextField
-                      inputRef={reqBankRef}
-                      variant="outlined"
-                      defaultValue={request.reqBank}
-                      size="small"
-                      sx={{
-                        ...textFieldStyle,
-                        width: '150px',
-                        mr: '10px',
-                      }}
-                      inputProps={{ style: { textAlign: 'center' } }}
-                    />
-                  ) : (
-                    <Box sx={defaultTextBoxStyle}>
-                      <p style={{ margin: 0 }}>{request.reqBank}</p>
-                    </Box>
-                  )}
-                  {modifyMode ? (
-                    <TextField
-                      inputRef={reqAccountNumRef}
-                      variant="outlined"
-                      defaultValue={request.reqAccountNum}
-                      size="small"
-                      sx={{
-                        ...textFieldStyle,
-                        width: '400px',
-                      }}
-                      inputProps={{ style: { textAlign: 'center' } }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        ...defaultTextBoxStyle,
-                        width: '369px',
-                        mr: '0px',
-                      }}
-                    >
-                      <p style={{ margin: 0 }}>{request.reqAccountNum}</p>
-                    </Box>
-                  )}
-
-                  <Button
+                  등록 계좌
+                </Typography>
+                {modifyMode ? (
+                  <TextField
+                    inputRef={reqBankRef}
+                    variant="outlined"
+                    defaultValue={request.reqBank}
                     size="small"
-                    onClick={() => {
-                      if (modifyMode) {
-                        modifyAccount();
-                      } else {
-                        setModifyMode(true);
-                        setTimeout(() => {
-                          reqBankRef.current.focus();
-                        }, 150);
-                      }
+                    sx={{
+                      ...textFieldStyle,
+                      width: '150px',
+                      mr: '10px',
                     }}
-                    sx={
-                      modifyMode
-                        ? activeModifyBtnStyle
-                        : notActiveModifyBtnStyle
-                    }
+                    inputProps={{ style: { textAlign: 'center' } }}
+                  />
+                ) : (
+                  <Box sx={defaultTextBoxStyle}>
+                    <p style={{ margin: 0 }}>{request.reqBank}</p>
+                  </Box>
+                )}
+                {modifyMode ? (
+                  <TextField
+                    inputRef={reqAccountNumRef}
+                    variant="outlined"
+                    defaultValue={request.reqAccountNum}
+                    size="small"
+                    sx={{
+                      ...textFieldStyle,
+                      width: '400px',
+                    }}
+                    inputProps={{ style: { textAlign: 'center' } }}
+                  />
+                ) : (
+                  <Box
+                    sx={{
+                      ...defaultTextBoxStyle,
+                      width: '369px',
+                      mr: '0px',
+                    }}
                   >
-                    {modifyMode ? '수정 완료' : '계좌 수정'}
-                  </Button>
-                </Box>
-              )}
+                    <p style={{ margin: 0 }}>{request.reqAccountNum}</p>
+                  </Box>
+                )}
+
+                <Button
+                  size="small"
+                  onClick={() => {
+                    if (modifyMode) {
+                      modifyAccount();
+                    } else {
+                      setModifyMode(true);
+                      setTimeout(() => {
+                        reqBankRef.current.focus();
+                      }, 150);
+                    }
+                  }}
+                  sx={
+                    modifyMode ? activeModifyBtnStyle : notActiveModifyBtnStyle
+                  }
+                >
+                  {modifyMode ? '수정 완료' : '계좌 수정'}
+                </Button>
+              </Box>
+
               {/* 등록 계좌 끝 */}
 
               {/* 물품 설명 시작 */}

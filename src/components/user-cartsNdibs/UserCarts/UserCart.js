@@ -107,7 +107,7 @@ const UserCart = () => {
   });
   const [cartList, setCartList] = useState([]);
 
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(true);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   // 장바구니 목록 조회
@@ -128,8 +128,8 @@ const UserCart = () => {
         axios.spread((count, list) => {
           setCount(count.data);
           setCartList(list.data);
-          setSelectedProducts([]);
-          setSelectAll(false);
+          setSelectedProducts(list.data);
+          setSelectAll(true);
         })
       )
       .finally(() => {
@@ -506,7 +506,7 @@ const UserCart = () => {
                       textAlign: 'right',
                     }}
                   >
-                    {TotalPrice}원
+                    {String(TotalPrice).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
                   </Typography>
                 </Box>
                 {/* 총 결제 금액 끝 */}

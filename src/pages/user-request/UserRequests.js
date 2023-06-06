@@ -210,24 +210,15 @@ const UserRequests = () => {
   };
 
   const createRequest = () => {
-    const sendData =
-      sellConsign === 'sell'
-        ? {
-            reqSort: '판매',
-            reqEmail: email,
-            reqCategory: category,
-            reqTitle: titleRef.current.value,
-            reqContent: content,
-          }
-        : {
-            reqSort: '위탁',
-            reqEmail: email,
-            reqBank: bank,
-            reqAccountNum: accountRef.current.value,
-            reqCategory: category,
-            reqTitle: titleRef.current.value,
-            reqContent: content,
-          };
+    const sendData = {
+      reqSort: sellConsign === 'sell' ? '판매' : '위탁',
+      reqEmail: email,
+      reqBank: bank,
+      reqAccountNum: accountRef.current.value,
+      reqCategory: category,
+      reqTitle: titleRef.current.value,
+      reqContent: content,
+    };
 
     axios
       .post(`/requests/create`, sendData)
@@ -688,51 +679,48 @@ const UserRequests = () => {
           {/* 사진 첨부 라인 끝 */}
 
           {/* 계좌번호 입력 라인 시작 */}
-          {sellConsign === 'consign' && (
-            <>
-              <Grid item xs={2} sx={{ ...tableLines, mt: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: '1.3rem',
-                  }}
-                >
-                  계좌 번호
-                </Typography>
-              </Grid>
-              <Grid item xs={2} sx={{ ...tableLines, mt: 1, pr: 1 }}>
-                <BankSelect value={bank} onChange={bankChange} size="small">
-                  <MenuItem value="none" disabled>
-                    은행 선택
-                  </MenuItem>
-                  {bankList.map((bank) => {
-                    return (
-                      <MenuItem
-                        key={bank}
-                        value={bank}
-                        sx={{
-                          textAlign: 'center',
-                        }}
-                      >
-                        {bank}
-                      </MenuItem>
-                    );
-                  })}
-                </BankSelect>
-              </Grid>
 
-              <Grid item xs={8} sx={{ ...tableLines, mt: 1 }}>
-                <TextField
-                  inputRef={accountRef}
-                  onChange={accountChange}
-                  size="small"
-                  placeholder="위탁 수수료 정산을 위해 계좌 번호를 입력해주세요."
-                  sx={{ ...textField, width: '100%' }}
-                />
-              </Grid>
-            </>
-          )}
+          <Grid item xs={2} sx={{ ...tableLines, mt: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '1.3rem',
+              }}
+            >
+              계좌 번호
+            </Typography>
+          </Grid>
+          <Grid item xs={2} sx={{ ...tableLines, mt: 1, pr: 1 }}>
+            <BankSelect value={bank} onChange={bankChange} size="small">
+              <MenuItem value="none" disabled>
+                은행 선택
+              </MenuItem>
+              {bankList.map((bank) => {
+                return (
+                  <MenuItem
+                    key={bank}
+                    value={bank}
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                  >
+                    {bank}
+                  </MenuItem>
+                );
+              })}
+            </BankSelect>
+          </Grid>
+
+          <Grid item xs={8} sx={{ ...tableLines, mt: 1 }}>
+            <TextField
+              inputRef={accountRef}
+              onChange={accountChange}
+              size="small"
+              placeholder="위탁 수수료/판매금 정산을 위해 계좌 번호를 입력해주세요."
+              sx={{ ...textField, width: '100%' }}
+            />
+          </Grid>
           {/* 계좌번호 입력 라인 끝 */}
 
           {/* 물품 판매/위탁 약관 표기 라인 시작 */}

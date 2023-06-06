@@ -173,6 +173,7 @@ const MyPagesRequests = () => {
         sx={{
           userSelect: 'none',
           width: '1100px',
+          minHeight: '60vh',
         }}
       >
         <Box

@@ -18,7 +18,7 @@ const AdminStatsMonthOrder = ({ orderData }) => {
         padding={0.2}
         maxValue={15}
         groupMode="grouped"
-        layout="horizontal"
+        // layout="horizontal"
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'accent' }}
@@ -26,13 +26,7 @@ const AdminStatsMonthOrder = ({ orderData }) => {
           from: 'color',
           modifiers: [['darker', '1.4']],
         }}
-        axisTop={{
-          tickSize: 0,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: '',
-          legendOffset: 36,
-        }}
+        axisTop={null}
         axisRight={null}
         axisBottom={{
           tickSize: 0,

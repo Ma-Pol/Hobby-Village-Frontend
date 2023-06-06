@@ -180,7 +180,7 @@ const AdminNoticesLists = () => {
       {/* 공지사항 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
-        component="h1"
+        component="h4"
         sx={{
           mt: 5,
           mb: 1,

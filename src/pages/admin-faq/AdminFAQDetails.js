@@ -107,7 +107,7 @@ const AdminFAQDetails = () => {
       >
         <Typography
           variant="h4"
-          component="h1"
+          component="h4"
           sx={{
             mt: 5,
             mb: 1,

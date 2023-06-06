@@ -349,6 +349,7 @@ const MyPageTop = () => {
                       navigate(
                         `/mypages/${email}/orders?odrState=payment-completed`
                       );
+                      window.scrollTo(0, 200);
                     }}
                     sx={{
                       ...myPageTopButtonStyle,
@@ -527,6 +528,7 @@ const MyPageTop = () => {
                       navigate(
                         `/mypages/${email}/requests/lists?filter=none&pages=1`
                       );
+                      window.scrollTo(0, 480);
                     }}
                     sx={{
                       ...myPageTopButtonStyle,

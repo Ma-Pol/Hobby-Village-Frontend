@@ -7,6 +7,7 @@ import AdminStatsMonthOrder from '../../components/admin-stats/AdminStatsMonthOr
 import Loading from '../../components/Loading';
 import AdminStatsMonthRequest from '../../components/admin-stats/AdminStatsMonthRequest';
 import AdminStatsMonthReview from '../../components/admin-stats/AdminStatsMonthReview';
+import AdminStatsMonthlyUser from '../../components/admin-stats/AdminStatsMonthUser';
 
 const AdminStats = () => {
   const [loading, setLoading] = useState(true);
@@ -15,6 +16,7 @@ const AdminStats = () => {
   const [monthlyOrderData, setMonthlyOrderData] = useState([]); // 월별 주문 건수
   const [monthlyRequestData, setMonthlyRequestData] = useState([]); // 월별 문의 건수
   const [monthlyReviewData, setMonthlyReviewData] = useState([]); // 월별 리뷰 건수
+  const [monthlyUserData, setMonthlyUserData] = useState([]); // 일별 가입/탈퇴 수
 
   useEffect(() => {
     axios
@@ -24,12 +26,14 @@ const AdminStats = () => {
         axios.get('/m/stats/monthly-order'),
         axios.get('/m/stats/monthly-request'),
         axios.get('/m/stats/monthly-review'),
+        axios.get('/m/stats/monthly-user'),
       ])
       .then(
-        axios.spread((price, count, order, request, review) => {
+        axios.spread((price, count, order, request, review, user) => {
           const odrData = order.data;
           const reqData = request.data;
           const revwData = review.data;
+          const userData = user.data;
 
           for (let i = 0; i < odrData.length; i++) {
             odrData[i].주문 = odrData[i].orderCount;
@@ -50,11 +54,19 @@ const AdminStats = () => {
             delete revwData[i].reviewCount;
           }
 
+          for (let i = 0; i < userData.length; i++) {
+            userData[i].가입회원 = userData[i].joinCount;
+            delete userData[i].joinCount;
+            userData[i].탈퇴회원 = userData[i].leaveCount;
+            delete userData[i].leaveCount;
+          }
+
           setTodayOrderPrice(price.data);
           setTodayOrderCount(count.data);
           setMonthlyOrderData(odrData);
           setMonthlyRequestData(reqData);
           setMonthlyReviewData(revwData);
+          setMonthlyUserData(userData);
         })
       )
       .finally(() => {
@@ -69,7 +81,7 @@ const AdminStats = () => {
     <Container sx={{ userSelect: 'none' }}>
       <Typography
         variant="h4"
-        component="h1"
+        component="h4"
         sx={{
           mt: 5,
           mb: 1,
@@ -221,6 +233,21 @@ const AdminStats = () => {
               월별 리뷰 작성 현황
             </Typography>
             <AdminStatsMonthReview reviewData={monthlyReviewData} />
+
+            {/* 월별 가입/탈퇴 회원 수 현황 */}
+            <Typography
+              variant="h6"
+              component="h2"
+              sx={{
+                mt: 1,
+                mb: 1,
+                fontWeight: 'bold',
+                fontSize: '2vh',
+              }}
+            >
+              월별 가입/탈퇴 회원 수 현황
+            </Typography>
+            <AdminStatsMonthlyUser userData={monthlyUserData} />
           </>
         )}
       </Box>

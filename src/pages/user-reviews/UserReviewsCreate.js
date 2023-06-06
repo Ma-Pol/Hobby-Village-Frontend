@@ -394,7 +394,7 @@ const UserReviewsCreate = () => {
       {/* 타이틀 */}
       <Typography
         variant="h4"
-        component="h1"
+        component="h4"
         sx={{
           mt: 5,
           mb: 5,
@@ -402,6 +402,7 @@ const UserReviewsCreate = () => {
           pr: 1,
           fontWeight: 'bold',
           userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         리뷰 목록 &#62; 리뷰 작성

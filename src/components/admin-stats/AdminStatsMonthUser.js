@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 
-const AdminStatsMonthReview = ({ reviewData }) => {
+const AdminStatsMonthUser = ({ userData }) => {
   return (
     <div
       style={{
@@ -11,8 +11,8 @@ const AdminStatsMonthReview = ({ reviewData }) => {
       }}
     >
       <ResponsiveBar
-        data={reviewData}
-        keys={['리뷰']}
+        data={userData}
+        keys={['가입회원', '탈퇴회원']}
         indexBy="month"
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
         padding={0.2}
@@ -32,7 +32,7 @@ const AdminStatsMonthReview = ({ reviewData }) => {
           tickSize: 0,
           tickPadding: 5,
           tickRotation: 0,
-          legend: '리뷰 작성 수',
+          legend: '회원 수',
           legendPosition: 'middle',
           legendOffset: 37,
         }}
@@ -84,4 +84,4 @@ const AdminStatsMonthReview = ({ reviewData }) => {
   );
 };
 
-export default AdminStatsMonthReview;
+export default AdminStatsMonthUser;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
   Typography,
   Box,
@@ -73,6 +73,7 @@ const checkboxStyle = {
 };
 
 const UserDib = () => {
+  const navigate = useNavigate();
   const { email } = useParams();
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,11 +130,39 @@ const UserDib = () => {
     }
   };
 
+  // 찜 선택 상품 장바구니에 추가 1: 해당 상품의 장바구니 존재 여부 확인
+  const dibSelectedAddCart = () => {
+    if (
+      window.confirm(
+        '선택된 물품을 장바구니에 추가하시겠습니까?\n!! 장바구니에 존재하는 상품은 추가되지 않습니다 !!'
+      )
+    ) {
+      axios
+        .post(`/dibs/carts?email=${email}`, selectedProducts)
+        .then(() => {
+          getDibData();
+          setSelectedProducts([]);
+          if (
+            window.confirm(
+              '장바구니에 추가되었습니다.\n장바구니로 이동하시겠습니까?'
+            )
+          ) {
+            navigate(`/carts/${email}/lists?category=all`);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      return false;
+    }
+  };
+
   // 찜 개별 삭제
-  const dibDelete = (dibCode) => {
+  const dibDelete = (dibCode, prodCode) => {
     if (window.confirm('해당 물품을 찜 목록에서 삭제하시겠습니까?')) {
       axios
-        .delete(`/dibs/products?dibCode=${dibCode}`)
+        .delete(`/dibs/products?dibCode=${dibCode}&prodCode=${prodCode}`)
         .then(() => {
           getDibData();
         })
@@ -264,6 +293,21 @@ const UserDib = () => {
                   전체 선택
                 </Typography>
               </label>
+              <Typography sx={{ lineHeight: '35px', color: '#b0b0b0', mx: 2 }}>
+                |
+              </Typography>
+              <Typography
+                variant="h5"
+                onClick={dibSelectedAddCart}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                }}
+              >
+                선택 상품 장바구니 추가
+              </Typography>
               <Typography sx={{ lineHeight: '35px', color: '#b0b0b0', mx: 2 }}>
                 |
               </Typography>

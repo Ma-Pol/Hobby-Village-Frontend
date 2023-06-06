@@ -78,7 +78,7 @@ const UserDibItems = ({
       >
         <img
           onClick={() => {
-            dibDelete(dibCode);
+            dibDelete(dibCode, prodCode);
           }}
           width="22px"
           height="22px"
