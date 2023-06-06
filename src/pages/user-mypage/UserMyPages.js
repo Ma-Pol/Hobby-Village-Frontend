@@ -5,6 +5,7 @@ import MyPagesRequests from './MyPagesRequests';
 import MyPagesAddresses from './MyPagesAddresses';
 import UserHeader from '../../components/UserHeader';
 import UserFooter from '../../components/UserFooter';
+import UserReviews from '../user-reviews/UserReviews';
 
 const UserMyPages = () => {
   const sessionEmail = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
@@ -28,6 +29,7 @@ const UserMyPages = () => {
         <Route exact path="orders" element={<MyPagesOrders />} />
         <Route exact path="requests/lists" element={<MyPagesRequests />} />
         <Route exact path="addresses/*" element={<MyPagesAddresses />} />
+        <Route exact path="reviews/*" element={<UserReviews />} />
         <Route
           path="*"
           element={

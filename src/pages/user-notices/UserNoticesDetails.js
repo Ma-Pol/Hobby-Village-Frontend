@@ -132,7 +132,7 @@ const UserNoticesDetails = () => {
           sx={{
             mt: 5,
             mb: 1,
-            pl: 2,
+            pl: 1,
             pr: 1,
             fontWeight: 'bold',
             userSelect: 'none',

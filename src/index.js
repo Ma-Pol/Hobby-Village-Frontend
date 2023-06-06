@@ -9,7 +9,6 @@ import UserGuide from './pages/user-guide/UserGuide';
 import UserMyPages from './pages/user-mypage/UserMyPages';
 import UserCarts from './pages/user-cartsNdibs/UserCarts';
 import UserDibs from './pages/user-cartsNdibs/UserDibs';
-import UserReviews from './pages/user-reviews/UserReviews';
 import UserProducts from './pages/user-products/UserProducts';
 import Purchase from './pages/user-purchase/Purchase';
 import UserRequests from './pages/user-request/UserRequests';
@@ -33,7 +32,6 @@ root.render(
       <Route exact path="/mypages/:email/*" element={<UserMyPages />} />
       <Route exact path="/carts/:email/lists" element={<UserCarts />} />
       <Route exact path="/dibs/:email/lists" element={<UserDibs />} />
-      <Route exact path="/reviews/*" element={<UserReviews />} />
       <Route exact path="/products/*" element={<UserProducts />} />
       <Route exact path="/purchase" element={<Purchase />} />
       <Route exact path="/requests" element={<UserRequests />} />

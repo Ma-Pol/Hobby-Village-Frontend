@@ -105,7 +105,7 @@ const AdminMain = () => {
           sx={{
             width: '600px',
             height: '80px',
-            margin: '0 auto',
+            margin: '0 auto 100px auto',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

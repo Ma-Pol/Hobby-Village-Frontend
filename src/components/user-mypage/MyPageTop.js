@@ -349,7 +349,10 @@ const MyPageTop = () => {
                       navigate(
                         `/mypages/${email}/orders?odrState=payment-completed`
                       );
-                      window.scrollTo(0, 200);
+                      window.scrollBy({
+                        top: 400,
+                        behavior: 'smooth',
+                      });
                     }}
                     sx={{
                       ...myPageTopButtonStyle,
@@ -381,8 +384,12 @@ const MyPageTop = () => {
                   <Box
                     onClick={() => {
                       navigate(
-                        `/reviews/${email}/lists?sort=-revwRegiDate&pages=1`
+                        `/mypages/${email}/reviews/lists?sort=-revwRegiDate&pages=1`
                       );
+                      window.scrollBy({
+                        top: 400,
+                        behavior: 'smooth',
+                      });
                     }}
                     sx={{
                       ...myPageTopButtonStyle,
@@ -423,7 +430,6 @@ const MyPageTop = () => {
                 >
                   <Box
                     onClick={() => {
-                      // setCouponListBox(!couponListBox);
                       setCouponListModal(true);
                     }}
                     sx={{
@@ -495,6 +501,7 @@ const MyPageTop = () => {
                   <Box
                     onClick={() => {
                       navigate(`/dibs/${email}/lists?category=all&pages=1`);
+                      window.scrollTo(0, 0);
                     }}
                     sx={{
                       ...myPageTopButtonStyle,
@@ -528,7 +535,10 @@ const MyPageTop = () => {
                       navigate(
                         `/mypages/${email}/requests/lists?filter=none&pages=1`
                       );
-                      window.scrollTo(0, 480);
+                      window.scrollBy({
+                        top: 400,
+                        behavior: 'smooth',
+                      });
                     }}
                     sx={{
                       ...myPageTopButtonStyle,

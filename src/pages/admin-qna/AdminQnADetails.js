@@ -166,13 +166,13 @@ const AdminQnADetails = () => {
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="body1"
                   component="h2"
                   sx={{
                     fontWeight: 'bold',
                   }}
                 >
-                  제목
+                  제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목
                 </Typography>
               </LabelItem>
               <Grid
@@ -185,7 +185,7 @@ const AdminQnADetails = () => {
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="body1"
                   component="h2"
                   title={questionDetail.qstTitle}
                   sx={{
@@ -216,7 +216,7 @@ const AdminQnADetails = () => {
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="body1"
                   component="h2"
                   sx={{
                     fontWeight: 'bold',
@@ -234,7 +234,7 @@ const AdminQnADetails = () => {
                   alignItems: 'center',
                 }}
               >
-                <Typography variant="h6" component="h2">
+                <Typography variant="body1" component="h2">
                   {questionDetail.qstCategory}
                 </Typography>
               </Grid>
@@ -254,17 +254,17 @@ const AdminQnADetails = () => {
                 xs={2}
                 sx={{
                   alignItems: 'flex-start',
-                  pt: 1,
+                  pt: '12px',
                 }}
               >
                 <Typography
-                  variant="h6"
+                  variant="body1"
                   component="h2"
                   sx={{
                     fontWeight: 'bold',
                   }}
                 >
-                  내용
+                  내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용
                 </Typography>
               </LabelItem>
               <Grid
@@ -272,19 +272,17 @@ const AdminQnADetails = () => {
                 xs={10}
                 sx={{
                   px: 1,
-                  pt: 1,
                   display: 'flex',
                   alignItems: 'center',
                 }}
               >
-                <div
-                  style={{
-                    fontSize: '1.1rem',
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: questionDetail.qstContent,
-                  }}
-                ></div>
+                <Typography variant="body1" component="h2">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: questionDetail.qstContent,
+                    }}
+                  ></div>
+                </Typography>
               </Grid>
             </Grid>
           </StyledPaper>
@@ -303,12 +301,11 @@ const AdminQnADetails = () => {
                 }}
               >
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   sx={{
                     fontWeight: 'bold',
                     display: 'flex',
                     alignItems: 'center',
-                    fontSize: '1.5rem',
                   }}
                 >
                   작성한 답변
@@ -325,13 +322,13 @@ const AdminQnADetails = () => {
                     }}
                   >
                     <Typography
-                      variant="h6"
+                      variant="body1"
                       component="h2"
                       sx={{
                         fontWeight: 'bold',
                       }}
                     >
-                      내용
+                      내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용
                     </Typography>
                   </LabelItem>
                   <Grid
@@ -344,12 +341,11 @@ const AdminQnADetails = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <div
-                      style={{
-                        fontSize: '1.1rem',
-                      }}
-                      dangerouslySetInnerHTML={{ __html: answerContent }}
-                    ></div>
+                    <Typography variant="body1" component="h2">
+                      <div
+                        dangerouslySetInnerHTML={{ __html: answerContent }}
+                      ></div>
+                    </Typography>
                   </Grid>
                 </Grid>
               </StyledPaper>

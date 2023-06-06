@@ -320,7 +320,7 @@ const UserRequests = () => {
         } else {
           alert('신청글 등록에는 성공했으나 이미지 업로드에 실패했습니다.');
         }
-        navigate(`/mypages/${email}/requests/lists`);
+        navigate(`/mypages/${email}/requests/lists?filter=none&pages=1`);
       })
       .catch((err) => {
         console.error(err);

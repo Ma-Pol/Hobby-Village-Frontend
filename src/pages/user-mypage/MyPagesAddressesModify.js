@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Checkbox,
   Modal,
+  Tooltip,
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -371,11 +372,14 @@ const MyPagesAddressesModify = () => {
               <Box
                 sx={{
                   width: '700px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 <FormControlLabel
                   control={
                     <Checkbox
+                      disabled={checked}
                       checked={checked}
                       onChange={checkBoxChange}
                       color="success"
@@ -383,6 +387,17 @@ const MyPagesAddressesModify = () => {
                   }
                   label="기본 배송지로 선택"
                 />
+                <Tooltip
+                  arrow
+                  title="기본 배송지로 선택 시, 기존에 선택되어 있던 기본 배송지는 해제됩니다."
+                >
+                  <img
+                    width="20px"
+                    height="20px"
+                    src="https://img.icons8.com/ios/50/000000/info--v1.png"
+                    alt="기본 배송지 선택 도움말"
+                  />
+                </Tooltip>
               </Box>
             </Box>
 

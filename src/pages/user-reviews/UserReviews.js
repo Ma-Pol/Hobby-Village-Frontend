@@ -17,9 +17,8 @@ const UserReviews = () => {
 
   return (
     <>
-      <UserHeader />
       <Routes>
-        <Route exact path=":email/lists" element={<UserReviewsLists />} />
+        <Route exact path="lists" element={<UserReviewsLists />} />
         <Route
           exact
           path="details/:revwCode"
@@ -44,7 +43,6 @@ const UserReviews = () => {
           }
         />
       </Routes>
-      <UserFooter />
     </>
   );
 };

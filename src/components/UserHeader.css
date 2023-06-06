@@ -1,0 +1,22 @@
+.header {
+  width: 100%;
+  background: #ffffff;
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+.header.drop {
+  position: fixed;
+  /* animation: dropHeader 0.3s; */
+}
+
+@keyframes dropHeader {
+  0% {
+    top: -7rem;
+  }
+  100% {
+    top: 0;
+  }
+}

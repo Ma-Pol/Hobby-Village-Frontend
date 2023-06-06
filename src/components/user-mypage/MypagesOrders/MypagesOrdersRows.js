@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const MypagesOrdersRows = ({ order }) => {
   const API_KEY = process.env.REACT_APP_SWEETTRACKER_API_KEY;
+  const email = sessionStorage.getItem('hobbyvillage-email');
   const nickname = sessionStorage.getItem('hobbyvillage-usernickname');
   const navigate = useNavigate();
 
@@ -479,7 +480,7 @@ const MypagesOrdersRows = ({ order }) => {
                 {!reviewed && (
                   <Button
                     variant="contained"
-                    href={`/reviews/create/${order.prodCode}`}
+                    href={`/mypages/${email}/reviews/create/${order.prodCode}`}
                     sx={{
                       my: 1,
                       width: '150px',
@@ -524,7 +525,7 @@ const MypagesOrdersRows = ({ order }) => {
                 {!reviewed && (
                   <Button
                     variant="contained"
-                    href={`/reviews/create/${order.prodCode}`}
+                    href={`/mypages/${email}/reviews/create/${order.prodCode}`}
                     sx={{
                       my: 1,
                       width: '150px',
@@ -550,7 +551,7 @@ const MypagesOrdersRows = ({ order }) => {
               order.odrState !== '취소 처리 완료' && (
                 <Button
                   variant="contained"
-                  href={`/reviews/create/${order.prodCode}`}
+                  href={`/mypages/${email}/reviews/create/${order.prodCode}`}
                   sx={{
                     my: 1,
                     width: '150px',

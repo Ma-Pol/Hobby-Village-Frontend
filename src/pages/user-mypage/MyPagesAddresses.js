@@ -4,8 +4,16 @@ import MyPagesAddressesLists from './MyPagesAddressesLists';
 import MyPagesAddressesCreate from './MyPagesAddressesCreate';
 import MyPagesAddressesModify from './MyPagesAddressesModify';
 import MyPageTop from '../../components/user-mypage/MyPageTop';
+import { useEffect } from 'react';
 
 const MyPagesAddresses = () => {
+  useEffect(() => {
+    window.scrollBy({
+      top: 400,
+      behavior: 'smooth',
+    });
+  }, []);
+
   return (
     <>
       <MyPageTop />

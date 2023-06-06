@@ -13,8 +13,9 @@ const UserReviewsRows = ({
   queryString,
   isLast,
 }) => {
+  const sessionEmail = sessionStorage.getItem('hobbyvillage-email');
   const prodLink = `/products/details/${prodCode}`;
-  const revwLink = `/reviews/details/${revwCode}`;
+  const revwLink = `/mypages/${sessionEmail}/reviews/details/${revwCode}`;
 
   const tableLine = {
     px: 1,

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography, Avatar, Box, Container, TextField } from '@mui/material';
 import { styled } from '@mui/system';
+import './UserHeader.css';
 
 const BlackTextTypography = styled(Typography)({
   color: '#000000',
@@ -22,12 +23,35 @@ const UserHeader = () => {
   const searchRef = useRef();
   const [searchMode, setSearchMode] = useState(false);
 
+  const headerHeight = '7rem';
+  window.onscroll = function () {
+    const windowTop = window.scrollY;
+    if (windowTop >= headerHeight) {
+      setIsDropped(true);
+    } else {
+      setIsDropped(false);
+    }
+  };
+
+  const [isDropped, setIsDropped] = useState(false);
+
   return (
     <>
       <Container
         sx={{
           userSelect: 'none',
+          minWidth: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid #dbdbdb',
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          zIndex: '20',
         }}
+        // className={`header ${isDropped ? '' : 'drop'}`}
       >
         {/* 헤더 전체 시작 */}
         <Box
@@ -110,6 +134,9 @@ const UserHeader = () => {
           >
             <Link
               to="/products/lists?category=all&sort=all&array=recent&pages=1"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
               style={{
                 textDecoration: 'none',
               }}
@@ -131,6 +158,9 @@ const UserHeader = () => {
 
             <Link
               to="/products/brand/lists?brand=all&sort=all&array=recent&pages=1"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
               style={{
                 textDecoration: 'none',
               }}
@@ -152,6 +182,9 @@ const UserHeader = () => {
 
             <Link
               to="/recommend/home"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
               style={{
                 textDecoration: 'none',
               }}
@@ -184,6 +217,7 @@ const UserHeader = () => {
             <Box
               onClick={() => {
                 navigate('/');
+                window.scrollTo(0, 0);
               }}
               component="img"
               src={`${process.env.PUBLIC_URL}/headers/Hobby-Village.png`}
@@ -251,6 +285,7 @@ const UserHeader = () => {
                     navigate(
                       `/products/lists/search?sort=all&array=recent&keyword=${searchRef.current.value}&pages=1`
                     );
+                    window.scrollTo(0, 0);
                   }
                 }}
                 sx={{
@@ -286,6 +321,9 @@ const UserHeader = () => {
               {email !== null && (
                 <Link
                   to={`/carts/${email}/lists?category=all`}
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
                   style={{
                     textDecoration: 'none',
                     marginRight: '2rem',
@@ -312,6 +350,9 @@ const UserHeader = () => {
                     ? `/mypages/${email}/orders?odrState=payment-completed`
                     : '/login'
                 }
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
                 style={{
                   textDecoration: 'none',
                   marginRight: '1rem',
@@ -342,6 +383,9 @@ const UserHeader = () => {
                     ? `/mypages/${email}/orders?odrState=payment-completed`
                     : '/login'
                 }
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
                 style={{ textDecoration: 'none' }}
               >
                 <Avatar
@@ -361,10 +405,9 @@ const UserHeader = () => {
       </Container>
       <Box
         sx={{
-          // mb: '5px',
-          borderBottom: '1px solid #d5d5d5',
+          pb: '104.8px',
         }}
-      />
+      ></Box>
     </>
   );
 };

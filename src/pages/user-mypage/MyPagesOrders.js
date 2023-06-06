@@ -442,6 +442,9 @@ const MyPagesOrders = () => {
           </Box>
         )}
       </Container>
+      <script>
+        document.getElementById('order-lists').scrollIntoView(true);
+      </script>
     </>
   );
 };

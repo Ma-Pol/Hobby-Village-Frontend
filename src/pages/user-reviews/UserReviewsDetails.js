@@ -9,6 +9,7 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import MyPageTop from '../../components/user-mypage/MyPageTop';
 
 const pagination = {
   clickable: true,
@@ -25,7 +26,7 @@ const tableRow = {
   justifyContent: 'center',
   alignItems: 'center',
   boxSizing: 'border-box',
-  width: '1100px',
+  width: '1030px',
   height: '60px',
   borderTop: '1px solid #808080',
   borderLeft: '1px solid #808080',
@@ -39,7 +40,7 @@ const tableRowBottom = {
   justifyContent: 'center',
   alignItems: 'center',
   boxSizing: 'border-box',
-  width: '1100px',
+  width: '1030px',
   height: '400px',
   border: '1px solid #808080',
 };
@@ -203,251 +204,256 @@ const UserReviewsDetails = () => {
   };
 
   return (
-    <Container
-      sx={{
-        minHeight: '80vh',
-      }}
-    >
-      {/* 타이틀 */}
-      <Typography
-        variant="h4"
-        component="h4"
+    <>
+      <MyPageTop />
+
+      <Container
         sx={{
-          mt: 5,
-          mb: 5,
-          pl: 1,
-          pr: 1,
-          fontWeight: 'bold',
+          mt: '40px',
           userSelect: 'none',
-          fontSize: '3vh',
+          width: '1100px',
+          minHeight: '60vh',
         }}
       >
-        리뷰 목록 &#62; 상세
-      </Typography>
+        {/* 타이틀 */}
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 'bold',
+            margin: '30px 0 20px 0',
+          }}
+        >
+          리뷰 상세
+        </Typography>
 
-      {loading ? (
-        <Loading height={'70vh'} />
-      ) : (
-        <>
-          {/* form 시작 */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            {/* 첫 번째 행 */}
-            <Box sx={tableRow}>
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  상품 명
-                </Typography>
-              </Box>
-              <Box sx={tableCell2}>
-                <Typography
-                  variant="body1"
-                  component="h2"
-                  sx={{
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {detail.prodName}
-                </Typography>
-              </Box>
-
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  별점
-                </Typography>
-              </Box>
-              <Box sx={tableCell3}>
-                <Typography
-                  variant="body1"
-                  component="h2"
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Rating value={detail.revwRate} readOnly />
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* 두 번째 행 */}
-            <Box sx={tableRow}>
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  리뷰 제목
-                </Typography>
-              </Box>
-              <Box sx={tableCell2}>
-                <Typography variant="body1" component="h2">
-                  {detail.revwTitle}
-                </Typography>
-              </Box>
-
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  누적 신고 수
-                </Typography>
-              </Box>
-              <Box sx={tableCell3}>
-                <Typography
-                  variant="body1"
-                  component="h2"
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {detail.revwReport}
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* 세 번째 행 */}
-            <Box sx={tableRowBottom}>
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{
-                    fontWeight: 'bold',
-                  }}
-                >
-                  리뷰 본문
-                </Typography>
-              </Box>
-              <Box sx={{ ...tableCell2, py: 1 }}>
-                <Typography
-                  variant="body1"
-                  component="h2"
-                  sx={{
-                    display: 'flex',
-                    height: '100%',
-                    overflow: 'auto',
-                    whiteSpace: 'pre-wrap',
-                  }}
-                >
-                  {detail.revwContent}
-                </Typography>
-              </Box>
-
-              <Box sx={tableHeadCell}>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  첨부 사진
-                </Typography>
-              </Box>
-              <Box sx={tableCell3}>
-                {reviewImages.length === 0 ? (
-                  <Box sx={noImageBox}>
-                    <Typography variant="h6" component="h2" color="#626262">
-                      등록된 사진이 없습니다.
-                    </Typography>
-                  </Box>
-                ) : (
-                  <Swiper
-                    loop={true}
-                    pagination={pagination}
-                    modules={[Pagination]}
-                    style={swiperStyle}
-                  >
-                    {reviewImages.map((fileName) => {
-                      const fileSrc = `http://localhost:8080/m/reviews/images/${fileName}`;
-                      return (
-                        <SwiperSlide
-                          key={fileName}
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Box
-                            component="img"
-                            alt={fileName}
-                            src={fileSrc}
-                            sx={{
-                              objectFit: 'contain',
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
-                  </Swiper>
-                )}
-              </Box>
-            </Box>
-
-            {/* 하단 버튼 */}
+        {loading ? (
+          <Loading height={'70vh'} />
+        ) : (
+          <>
+            {/* form 시작 */}
             <Box
-              style={{
-                marginTop: '20px',
-                marginBottom: '50px',
+              sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'center',
               }}
             >
-              <Button
-                sx={listBtnStyle}
-                onClick={() => {
-                  if (prevQuery === undefined) {
-                    navigate(
-                      `/reviews/${sessionEmail}/lists?sort=-revwRegiDate&pages=1`
-                    );
-                  } else {
-                    navigate(`/reviews/${sessionEmail}/lists${prevQuery}`);
-                  }
-                }}
-              >
-                목록
-              </Button>
+              {/* 첫 번째 행 */}
+              <Box sx={tableRow}>
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    상품 명
+                  </Typography>
+                </Box>
+                <Box sx={tableCell2}>
+                  <Typography
+                    variant="body1"
+                    component="h2"
+                    sx={{
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {detail.prodName}
+                  </Typography>
+                </Box>
 
-              <Button
-                onClick={() => {
-                  navigate(`/reviews/modify/${revwCode}`);
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    별점
+                  </Typography>
+                </Box>
+                <Box sx={tableCell3}>
+                  <Typography
+                    variant="body1"
+                    component="h2"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Rating value={detail.revwRate} readOnly />
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* 두 번째 행 */}
+              <Box sx={tableRow}>
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    리뷰 제목
+                  </Typography>
+                </Box>
+                <Box sx={tableCell2}>
+                  <Typography variant="body1" component="h2">
+                    {detail.revwTitle}
+                  </Typography>
+                </Box>
+
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    누적 신고 수
+                  </Typography>
+                </Box>
+                <Box sx={tableCell3}>
+                  <Typography
+                    variant="body1"
+                    component="h2"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {detail.revwReport}
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* 세 번째 행 */}
+              <Box sx={tableRowBottom}>
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    리뷰 본문
+                  </Typography>
+                </Box>
+                <Box sx={{ ...tableCell2, py: 1 }}>
+                  <Typography
+                    variant="body1"
+                    component="h2"
+                    sx={{
+                      display: 'flex',
+                      height: '100%',
+                      overflow: 'auto',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {detail.revwContent}
+                  </Typography>
+                </Box>
+
+                <Box sx={tableHeadCell}>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    첨부 사진
+                  </Typography>
+                </Box>
+                <Box sx={tableCell3}>
+                  {reviewImages.length === 0 ? (
+                    <Box sx={noImageBox}>
+                      <Typography variant="h6" component="h2" color="#626262">
+                        등록된 사진이 없습니다.
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Swiper
+                      loop={true}
+                      pagination={pagination}
+                      modules={[Pagination]}
+                      style={swiperStyle}
+                    >
+                      {reviewImages.map((fileName) => {
+                        const fileSrc = `http://localhost:8080/m/reviews/images/${fileName}`;
+                        return (
+                          <SwiperSlide
+                            key={fileName}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              alt={fileName}
+                              src={fileSrc}
+                              sx={{
+                                objectFit: 'contain',
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
+                  )}
+                </Box>
+              </Box>
+
+              {/* 하단 버튼 */}
+              <Box
+                style={{
+                  marginTop: '20px',
+                  marginBottom: '50px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
-                sx={updateBtnStyle}
               >
-                수정
-              </Button>
+                <Button
+                  sx={listBtnStyle}
+                  onClick={() => {
+                    if (prevQuery === undefined) {
+                      navigate(
+                        `/mypages/${sessionEmail}/reviews/lists?sort=-revwRegiDate&pages=1`
+                      );
+                    } else {
+                      navigate(
+                        `/mypages/${sessionEmail}/reviews/lists${prevQuery}`
+                      );
+                    }
+                  }}
+                >
+                  목록
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    navigate(
+                      `/mypages/${sessionEmail}/reviews/modify/${revwCode}`
+                    );
+                  }}
+                  sx={updateBtnStyle}
+                >
+                  수정
+                </Button>
+              </Box>
             </Box>
-          </Box>
-          {/* form 끝 */}
-        </>
-      )}
-    </Container>
+            {/* form 끝 */}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

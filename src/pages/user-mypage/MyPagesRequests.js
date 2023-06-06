@@ -116,7 +116,6 @@ const MyPagesRequests = () => {
   };
 
   const handlePaging = (e, value) => {
-    window.scrollTo({ left: 0, top: 1000, behavior: 'smooth' });
     searchParams.set('pages', value);
     setSearchParams(searchParams);
   };
@@ -200,67 +199,67 @@ const MyPagesRequests = () => {
         {loading ? (
           <Loading height={'40vh'} />
         ) : (
-          <Box
-            sx={{
-              width: '1000px',
-              m: '20px auto',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <ToggleButtonGroup
-              onChange={handleCategoryChange}
-              value={filter}
-              exclusive
+          <>
+            <Box
               sx={{
-                mt: '20px',
-                p: 0,
                 width: '1000px',
+                m: '20px auto',
                 display: 'flex',
-                justifyContent: 'flex-end',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              {btnFilter.map((filter) => {
-                return (
-                  <ToggleButton
-                    key={filter.name}
-                    value={filter.value}
-                    sx={filterStyle}
-                  >
-                    {filter.name}
-                  </ToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
-
-            {requestList.length === 0 ? (
-              <Typography
-                variant="h6"
+              <ToggleButtonGroup
+                onChange={handleCategoryChange}
+                value={filter}
+                exclusive
                 sx={{
-                  width: '100%',
-                  textAlign: 'center',
-                  py: '30px',
-                  fontWeight: 'bold',
+                  mt: '20px',
+                  p: 0,
+                  width: '1000px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
                 }}
               >
-                판매/위탁 내역이 없습니다.
-              </Typography>
-            ) : (
-              requestList.map((request) => {
-                return (
-                  <MyRequest
-                    key={request.reqCode}
-                    request={request}
-                    expanded={expanded}
-                    handleAccordionChange={handleAccordionChange}
-                    getRequestList={getRequestList}
-                  />
-                );
-              })
-            )}
-
+                {btnFilter.map((filter) => {
+                  return (
+                    <ToggleButton
+                      key={filter.name}
+                      value={filter.value}
+                      sx={filterStyle}
+                    >
+                      {filter.name}
+                    </ToggleButton>
+                  );
+                })}
+              </ToggleButtonGroup>
+              {requestList.length === 0 ? (
+                <Typography
+                  variant="h6"
+                  sx={{
+                    width: '100%',
+                    textAlign: 'center',
+                    py: '30px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  판매/위탁 내역이 없습니다.
+                </Typography>
+              ) : (
+                requestList.map((request) => {
+                  return (
+                    <MyRequest
+                      key={request.reqCode}
+                      request={request}
+                      expanded={expanded}
+                      handleAccordionChange={handleAccordionChange}
+                      getRequestList={getRequestList}
+                    />
+                  );
+                })
+              )}
+            </Box>
             <Box display="flex" alignItems="center" justifyContent="center">
               <Pagination
                 count={Number(totalPage || 0)}
@@ -271,7 +270,7 @@ const MyPagesRequests = () => {
                 sx={{ margin: '30px 0 100px 0' }}
               />
             </Box>
-          </Box>
+          </>
         )}
       </Container>
     </>
