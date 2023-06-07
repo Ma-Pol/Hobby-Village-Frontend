@@ -440,7 +440,6 @@ const AdminProductsDetails = () => {
                       component="h2"
                       sx={{
                         display: 'flex',
-                        alignItems: 'center',
                         height: '350px',
                         overflow: 'auto',
                         whiteSpace: 'pre-wrap',

@@ -174,8 +174,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {
@@ -207,8 +207,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {
@@ -240,8 +240,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {
@@ -273,8 +273,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {
@@ -306,8 +306,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {
@@ -374,8 +374,8 @@ const MyPagesOrders = () => {
               <img
                 width="25px"
                 height="25px"
-                src="https://img.icons8.com/windows/32/double-right.png"
-                alt="double-right"
+                src="https://img.icons8.com/ios/50/more-than.png"
+                alt="more-than"
               />
               <Box
                 onClick={() => {

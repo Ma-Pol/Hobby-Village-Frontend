@@ -144,7 +144,11 @@ const AdminStats = () => {
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {todayOrderPrice} 원
+                    {String(todayOrderPrice).replace(
+                      /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                      ','
+                    )}
+                    &nbsp; 원
                   </Typography>
                 </Box>
               </Box>
@@ -182,7 +186,11 @@ const AdminStats = () => {
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {todayOrderCount} 건
+                    {String(todayOrderCount).replace(
+                      /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                      ','
+                    )}
+                    &nbsp; 건
                   </Typography>
                 </Box>
               </Box>

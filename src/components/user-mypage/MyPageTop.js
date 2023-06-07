@@ -183,12 +183,21 @@ const MyPageTop = () => {
                     <br />
                     변경
                   </Box>
-                  <Box
-                    component="img"
-                    sx={profPictureStyle}
-                    src={`http://localhost:8080/users/mypages/profile/${profilePicture}`}
-                    alt="프로필 사진"
-                  />
+                  {profilePicture === 'null' ? (
+                    <Box
+                      component="img"
+                      sx={profPictureStyle}
+                      src={`${process.env.PUBLIC_URL}/assets/photo.png`}
+                      alt="프로필 사진"
+                    />
+                  ) : (
+                    <Box
+                      component="img"
+                      sx={profPictureStyle}
+                      src={`http://localhost:8080/users/mypages/profile/${profilePicture}`}
+                      alt="프로필 사진"
+                    />
+                  )}
                 </Box>
                 {/* 프로필 사진 끝 */}
 
