@@ -58,7 +58,7 @@ const tableHeadCell = {
 
 const tableCell2 = {
   px: 2,
-  width: '400px',
+  width: '330px',
   height: '100%',
   display: 'flex',
   alignItems: 'center',
@@ -253,12 +253,20 @@ const UserReviewsDetails = () => {
                 </Box>
                 <Box sx={tableCell2}>
                   <Typography
+                    onClick={() => {
+                      navigate(`/products/details/${detail.prodCode}`);
+                    }}
+                    title={detail.prodName}
                     variant="body1"
                     component="h2"
                     sx={{
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
                     }}
                   >
                     {detail.prodName}

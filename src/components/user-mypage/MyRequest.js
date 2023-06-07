@@ -667,89 +667,93 @@ const MyRequest = ({
             >
               닫기
             </Button>
-            {(request.reqProgress === '1차 심사 중' ||
+            {(((request.reqProgress === '1차 심사 중' ||
               request.reqProgress === '2차 심사 대기' ||
               request.reqProgress === '2차 심사 중' ||
               request.reqProgress === '완료') &&
-              request.reqSort === '위탁' && (
-                <>
-                  <Button
-                    onClick={handleOpen}
-                    sx={{
-                      ...modalBtnDefaultStyle,
-                      position: 'absolute',
-                      right: '80px',
-                      bottom: '10px',
-                      width: '80px',
-                      fontSize: '14px',
-                      backgroundColor: '#F5B8B8',
-                      color: '#000000',
-                      '&:hover': {
-                        backgroundColor: 'tomato',
-                        color: '#FFFFFF',
-                      },
-                    }}
-                  >
-                    철회하기
-                  </Button>
-                  <Modal open={open} onClose={handleClose}>
-                    <Box sx={modalStyle}>
-                      <h1
-                        className="default-font"
-                        style={{
-                          margin: '0 0 30px 0',
-                          fontSize: '30px',
-                          textAlign: 'center',
-                        }}
-                      >
-                        위탁 철회
-                      </h1>
+              request.reqSort === '위탁') ||
+              ((request.reqProgress === '1차 심사 중' ||
+                request.reqProgress === '2차 심사 대기' ||
+                request.reqProgress === '2차 심사 중') &&
+                request.reqSort === '판매')) && (
+              <>
+                <Button
+                  onClick={handleOpen}
+                  sx={{
+                    ...modalBtnDefaultStyle,
+                    position: 'absolute',
+                    right: '80px',
+                    bottom: '10px',
+                    width: '80px',
+                    fontSize: '14px',
+                    backgroundColor: '#F5B8B8',
+                    color: '#000000',
+                    '&:hover': {
+                      backgroundColor: 'tomato',
+                      color: '#FFFFFF',
+                    },
+                  }}
+                >
+                  철회하기
+                </Button>
+                <Modal open={open} onClose={handleClose}>
+                  <Box sx={modalStyle}>
+                    <h1
+                      className="default-font"
+                      style={{
+                        margin: '0 0 30px 0',
+                        fontSize: '30px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      위탁 철회
+                    </h1>
 
-                      <p className="default-font">
-                        위탁 철회를 진행하시겠습니까?
-                        <br />
-                        <br />
-                        현재 대여 중인 물품의 경우, 대여기간이 종료된 후에
-                        <br />
-                        회원님의 <strong>기본 배송지</strong>로 배송됩니다.
-                        <br />
-                        <br />
-                        이점 유의하시어 기본 배송지 확인 후 철회 부탁드립니다.
-                      </p>
-                      <Box sx={{ float: 'right' }}>
-                        <Button
-                          sx={{
-                            ...modalBtnDefaultStyle,
-                            backgroundColor: '#ffffff',
+                    <p className="default-font">
+                      위탁 철회를 진행하시겠습니까?
+                      <br />
+                      <br />
+                      현재 대여 중인 물품의 경우, 대여기간이 종료된 후에
+                      <br />
+                      회원님의 <strong>기본 배송지</strong>로 배송됩니다.
+                      <br />
+                      <br />
+                      이점 유의하시어 기본 배송지 확인 후 철회 부탁드립니다.
+                    </p>
+                    <Box sx={{ float: 'right' }}>
+                      <Button
+                        sx={{
+                          ...modalBtnDefaultStyle,
+                          backgroundColor: '#ffffff',
+                          color: '#000000',
+                          '&:hover': {
+                            backgroundColor: '#f0f0f0',
                             color: '#000000',
-                            '&:hover': {
-                              backgroundColor: '#f0f0f0',
-                              color: '#000000',
-                            },
-                          }}
-                          onClick={handleClose}
-                        >
-                          닫기
-                        </Button>
-                        <Button
-                          sx={{
-                            ...modalBtnDefaultStyle,
-                            backgroundColor: '#F5B8B8',
-                            color: '#000000',
-                            '&:hover': {
-                              backgroundColor: 'tomato',
-                              color: '#FFFFFF',
-                            },
-                          }}
-                          onClick={() => withdraw(request.reqCode)}
-                        >
-                          철회
-                        </Button>
-                      </Box>
+                          },
+                        }}
+                        onClick={handleClose}
+                      >
+                        닫기
+                      </Button>
+                      <Button
+                        sx={{
+                          ...modalBtnDefaultStyle,
+                          backgroundColor: '#F5B8B8',
+                          color: '#000000',
+                          '&:hover': {
+                            backgroundColor: 'tomato',
+                            color: '#FFFFFF',
+                          },
+                        }}
+                        onClick={() => withdraw(request.reqCode)}
+                      >
+                        철회
+                      </Button>
                     </Box>
-                  </Modal>
-                </>
-              )}
+                  </Box>
+                </Modal>
+              </>
+            )}
           </Box>
           {/* 하부 끝 */}
         </MyAccordionDetails>

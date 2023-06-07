@@ -61,6 +61,7 @@ const MypagesOrdersRows = ({ order }) => {
           ],
         },
       });
+      window.scrollTo(0, 0);
     } else {
       return false;
     }
