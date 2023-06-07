@@ -7,20 +7,29 @@ import Loading from '../Loading';
 
 // 상품 목록 출력 컴포넌트 (상품별 이미지 파일명 및 이미지 불러오기)
 const Product = ({ product }) => {
+  const userEmail = sessionStorage.getItem('hobbyvillage-email'); // 이메일을 세션에서 가져오기
   const [loading, setLoading] = useState(true); // 이미지 로딩 여부
   const [picture, setPicture] = useState(''); // 상품 대표 이미지 이름
+  const [isDibs, setIsDibs] = useState(0);
   const prodLink = `/products/details/${product.prodCode}`;
 
   const navigate = useNavigate();
 
-  // 이미지 파일명 불러오기
+  // 이미지 파일명 불러오기&찜 여부 확인하기
   const getProdPictureNames = (prodCode) => {
     axios
-      .get(`/products/lists/getProdPicture?prodCode=${prodCode}`)
-      .then((res) => {
-        const { data } = res;
-        setPicture(data);
-      })
+      .all([
+        axios.get(`/products/lists/getProdPicture?prodCode=${prodCode}`),
+        axios.get(
+          `/products/lists/checkDibs?&email=${userEmail}&prodCode=${prodCode}`
+        ),
+      ])
+      .then(
+        axios.spread((picture, dib) => {
+          setPicture(picture.data);
+          setIsDibs(dib.data);
+        })
+      )
       .finally(() => {
         setLoading(false);
       })
@@ -170,7 +179,11 @@ const Product = ({ product }) => {
             <img
               width="12"
               height="12"
-              src="https://img.icons8.com/pastel-glyph/64/000000/hearts--v1.png"
+              src={
+                isDibs === 1
+                  ? 'https://img.icons8.com/fluency/48/hearts.png'
+                  : 'https://img.icons8.com/pastel-glyph/64/000000/hearts--v1.png'
+              }
               alt="hearts--v1"
             />
             <Typography

@@ -29,6 +29,7 @@ const UserProductsDetails = () => {
   const [period, setPeriod] = useState(0);
 
   const [product, setProduct] = useState({});
+  const [isDib, setIsDib] = useState(0);
   const [brandImg, setBrandImg] = useState();
   const brandLogo = process.env.PUBLIC_URL + `/BrandLogo/${brandImg}`;
   const [prodPictures, setProdPictures] = useState([]);
@@ -60,10 +61,18 @@ const UserProductsDetails = () => {
   // 상품 상세 정보
   const getProductDetail = () => {
     axios
-      .get(`/products/lists/getProductDetail?prodCode=${prodCode}`)
-      .then((res) => {
-        setProduct(res.data);
-      })
+      .all([
+        axios.get(`/products/lists/getProductDetail?prodCode=${prodCode}`),
+        axios.get(
+          `/products/lists/checkDibs?&email=${userEmail}&prodCode=${prodCode}`
+        ),
+      ])
+      .then(
+        axios.spread((product, dib) => {
+          setProduct(product.data);
+          setIsDib(dib.data);
+        })
+      )
       .finally(() => {
         getReviewList();
         getProdImg();
@@ -445,7 +454,12 @@ const UserProductsDetails = () => {
                 }}
               >
                 <Fab aria-label="like" size="small" sx={{ mb: '10px' }}>
-                  <FavoriteIcon onClick={updateDibs} />
+                  <FavoriteIcon
+                    onClick={updateDibs}
+                    sx={{
+                      color: isDib === 1 ? '#FF0000' : '#A0A0A0',
+                    }}
+                  />
                 </Fab>
                 <Typography variant="body2" sx={{ color: '#A0A0A0' }}>
                   관심 {product.prodDibs}
