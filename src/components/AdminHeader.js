@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -8,6 +8,7 @@ const StyledAppBar = styled(AppBar)({
   boxShadow: 'none',
   borderBottom: '1px solid #BCB5B5',
   marginBottom: '1rem',
+  userSelect: 'none',
 });
 
 const StyledToolbar = styled(Toolbar)({
@@ -42,7 +43,9 @@ const SmallTextTypography = styled(Typography)({
   color: '#000000',
 });
 
-function AdminHeader() {
+function AdminHeader({ id, nickname }) {
+  const navigate = useNavigate();
+
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
@@ -78,7 +81,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/coupons"
+            to="/m/coupons/lists?sort=-startDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -106,11 +109,11 @@ function AdminHeader() {
               (e.currentTarget.style.backgroundColor = 'transparent')
             }
           >
-            상품목록
+            상품
           </Button>
           <Button
             component={Link}
-            to="/m/orders"
+            to="/m/orders/lists?sort=-odrDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -126,7 +129,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/reviews"
+            to="/m/reviews/lists?sort=-revwRegiDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -142,7 +145,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/requests"
+            to="/m/requests/sell/lists?sort=-reqDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -158,7 +161,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/notices"
+            to="/m/notices/lists?sort=-notDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -174,7 +177,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/faqs"
+            to="/m/faqs/lists?sort=-faqDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -190,7 +193,7 @@ function AdminHeader() {
           </Button>
           <Button
             component={Link}
-            to="/m/qnas"
+            to="/m/qnas/lists?sort=-qstDate&filter=none&pages=1"
             style={{
               color: '#000000',
               textTransform: 'none',
@@ -204,6 +207,22 @@ function AdminHeader() {
           >
             1:1 문의
           </Button>
+          <Button
+            component={Link}
+            to="/m/stats"
+            style={{
+              color: '#000000',
+              textTransform: 'none',
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+            }}
+            disableRipple
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = 'transparent')
+            }
+          >
+            통계
+          </Button>
         </MenuItems>
         <BlackTextTypography
           variant="subtitle1"
@@ -212,10 +231,31 @@ function AdminHeader() {
             fontWeight: 'bold',
           }}
         >
-          관리자01
+          {!id && !nickname ? '' : `${nickname}`}
         </BlackTextTypography>
-        <UserInfo>
-          <SmallTextTypography>로그아웃</SmallTextTypography>
+        <UserInfo
+          onClick={() => {
+            if (!id && !nickname) {
+              navigate('/m/login');
+            } else {
+              sessionStorage.removeItem('hobbyvillage-id');
+              sessionStorage.removeItem('hobbyvillage-nickname');
+              alert('로그아웃 되었습니다.');
+              navigate('/m/login');
+            }
+          }}
+        >
+          <SmallTextTypography
+            sx={{
+              mt: 1,
+              '&:hover': {
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            {!id && !nickname ? '로그인' : '로그아웃'}
+          </SmallTextTypography>
         </UserInfo>
       </StyledToolbar>
     </StyledAppBar>

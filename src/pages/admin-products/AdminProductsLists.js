@@ -12,12 +12,15 @@ import {
   ToggleButton,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import AdminProductsRows from '../../components/admin-products/AdminProductsLists/AdminProductsRows';
+import Loading from '../../components/Loading';
 
 const AdminProductsLists = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(); // URL 쿼리 스트링 가져오기
+  const location = useLocation(); // 현재 URL 정보 가져오기
   const navigate = useNavigate(); // 페이지 이동
   const [productList, setProductList] = useState([]); // 상품 목록
   const [totalPage, setTotalPage] = useState(); // 총 페이지 수
@@ -56,6 +59,9 @@ const AdminProductsLists = () => {
             keywordRef.current.value = ''; // 현재 검색 키워드 기본값 설정
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -92,6 +98,9 @@ const AdminProductsLists = () => {
             keywordRef.current.value = searchParams.get('keyword');
           })
         )
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
@@ -169,18 +178,18 @@ const AdminProductsLists = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ userSelect: 'none' }}>
       {/* 상품 목록 글씨 표기 시작 */}
       <Typography
         variant="h4"
-        component="h1"
+        component="h4"
         sx={{
           mt: 5,
           mb: 1,
           pl: 1,
           pr: 1,
           fontWeight: 'bold',
-          userSelect: 'none',
+          fontSize: '3vh',
         }}
       >
         상품 목록
@@ -200,20 +209,18 @@ const AdminProductsLists = () => {
             value={String(currentFilter)}
             exclusive
             onChange={filterChange}
-            aria-label="text alignment"
           >
-            <ToggleButton value="none" aria-label="left aligned" sx={filterBox}>
+            <ToggleButton value="none" sx={filterBox}>
               전체 상품
             </ToggleButton>
-            <ToggleButton value="rented" aria-label="centered" sx={filterBox}>
+            <ToggleButton value="rented" sx={filterBox}>
               대여 상품
             </ToggleButton>
-            <ToggleButton
-              value="no-rent"
-              aria-label="right aligned"
-              sx={filterBox}
-            >
+            <ToggleButton value="no-rent" sx={filterBox}>
               미대여 상품
+            </ToggleButton>
+            <ToggleButton value="deleted" sx={filterBox}>
+              삭제된 상품
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
@@ -232,6 +239,7 @@ const AdminProductsLists = () => {
           </InputLabel>
           <NativeSelect
             inputRef={sortRef}
+            value={sortRef.current?.value}
             onChange={sortChange}
             sx={{
               px: 1,
@@ -264,7 +272,6 @@ const AdminProductsLists = () => {
           alignItems: 'center',
           flexDirection: 'column',
           cursor: 'default',
-          userSelect: 'none',
         }}
       >
         {/* 상품 목록 테이블 컬럼명 표기 시작 */}
@@ -293,7 +300,11 @@ const AdminProductsLists = () => {
         {/* 상품 목록 테이블 컬럼명 표기 끝 */}
 
         {/* 상품 목록 테이블 데이터 표기 시작 */}
-        {productList.length === 0 ? (
+        {loading ? (
+          <Box sx={{ m: 0, borderBottom: '2px solid #000000', width: '100%' }}>
+            <Loading height={'436px'} />
+          </Box>
+        ) : productList.length === 0 ? (
           // 상품 데이터가 없을 경우
           <Typography
             sx={{
@@ -302,7 +313,6 @@ const AdminProductsLists = () => {
               fontSize: '1.5rem',
               fontWeight: 'bold',
               textAlign: 'center',
-              userSelect: 'none',
             }}
           >
             상품 데이터가 존재하지 않습니다.
@@ -317,6 +327,7 @@ const AdminProductsLists = () => {
               prodHost={product.prodHost}
               prodIsRental={product.prodIsRental}
               userCode={product.userCode}
+              queryString={location.search}
               isLast={index + 1 === row.length} // 마지막 데이터인지 확인
             />
           ))
@@ -426,10 +437,6 @@ const AdminProductsLists = () => {
             backgroundColor: '#c3c36a',
             color: '#000000',
             fontWeight: 'bold',
-            '&:hover': {
-              backgroundColor: '#c3c36a',
-              color: '#ffffff',
-            },
           }}
         >
           검색

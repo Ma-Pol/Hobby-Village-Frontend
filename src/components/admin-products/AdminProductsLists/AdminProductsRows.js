@@ -1,5 +1,6 @@
-import { Grid, Typography, Button, Link } from '@mui/material';
+import { Grid, Typography, Link } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminProductsRows = ({
   prodCode,
@@ -7,6 +8,7 @@ const AdminProductsRows = ({
   prodHost,
   userCode,
   prodIsRental,
+  queryString,
   isLast,
 }) => {
   const prodLink = `/m/products/details/${prodCode}`;
@@ -46,8 +48,10 @@ const AdminProductsRows = ({
       <Grid item xs={2}>
         <Typography sx={tableData}>
           <Link
-            href={prodLink}
-            title={prodCode + '\n상품 상세 페이지'}
+            component={RouterLink}
+            to={prodLink}
+            state={{ queryString: queryString }}
+            title={prodName + '\n상품 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
           >
@@ -68,7 +72,9 @@ const AdminProductsRows = ({
           }}
         >
           <Link
-            href={prodLink}
+            component={RouterLink}
+            to={prodLink}
+            state={{ queryString: queryString }}
             title={prodName + '\n상품 상세 페이지'}
             underline="hover"
             sx={{ color: '#000000', cursor: 'pointer' }}
