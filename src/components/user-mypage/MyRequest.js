@@ -555,24 +555,31 @@ const MyRequest = ({
                   </Box>
                 )}
 
-                <Button
-                  size="small"
-                  onClick={() => {
-                    if (modifyMode) {
-                      modifyAccount();
-                    } else {
-                      setModifyMode(true);
-                      setTimeout(() => {
-                        reqBankRef.current.focus();
-                      }, 150);
-                    }
-                  }}
-                  sx={
-                    modifyMode ? activeModifyBtnStyle : notActiveModifyBtnStyle
-                  }
-                >
-                  {modifyMode ? '수정 완료' : '계좌 수정'}
-                </Button>
+                {request.reqProgress !== '심사 탈락' &&
+                  request.reqProgress !== '위탁 철회 요청' &&
+                  request.reqProgress !== '철회 진행 중' &&
+                  request.reqProgress !== '철회 완료' && (
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        if (modifyMode) {
+                          modifyAccount();
+                        } else {
+                          setModifyMode(true);
+                          setTimeout(() => {
+                            reqBankRef.current.focus();
+                          }, 150);
+                        }
+                      }}
+                      sx={
+                        modifyMode
+                          ? activeModifyBtnStyle
+                          : notActiveModifyBtnStyle
+                      }
+                    >
+                      {modifyMode ? '수정 완료' : '계좌 수정'}
+                    </Button>
+                  )}
               </Box>
               {/* 등록 계좌 끝 */}
 

@@ -96,21 +96,28 @@ const AdminMain = () => {
         {urls.map((url, index) => renderBox(url, index, texts[index]))}
       </Box>
 
-      <Link
-        component={RouterLink}
-        to={'/m/stats'}
-        style={{ textDecoration: 'none' }}
+      <Box
+        sx={{
+          width: '600px',
+          height: '80px',
+          margin: '0 auto 100px auto',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: '5px',
+          backgroundColor: '#E4E58E',
+        }}
       >
-        <Box
-          sx={{
-            width: '600px',
-            height: '80px',
-            margin: '0 auto 100px auto',
+        <Link
+          component={RouterLink}
+          to={'/m/stats'}
+          style={{
+            textDecoration: 'none',
+            width: '100%',
+            height: '100%',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '5px',
-            backgroundColor: '#E4E58E',
           }}
         >
           <Typography
@@ -120,8 +127,8 @@ const AdminMain = () => {
           >
             서비스 이용 통계
           </Typography>
-        </Box>
-      </Link>
+        </Link>
+      </Box>
     </>
   );
 };

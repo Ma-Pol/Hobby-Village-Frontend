@@ -71,7 +71,8 @@ const buttonStyle = {
 const AdminNoticesModify = () => {
   const [loading, setLoading] = useState(true);
   const { notCode } = useParams();
-  const [notContent, setNotContent] = useState();
+  const [notTitle, setNotTitle] = useState('');
+  const [notContent, setNotContent] = useState('');
   const [notCategory, setNotCategory] = useState('none');
   const notTitleRef = useRef();
   const filesRef = useRef();
@@ -106,7 +107,7 @@ const AdminNoticesModify = () => {
     axios
       .get(`/m/notices/noticeDetails/${notCode}`)
       .then((detail) => {
-        notTitleRef.current.value = detail.data.notTitle;
+        setNotTitle(detail.data.notTitle);
         setNotContent(detail.data.notContent);
         setNotCategory(detail.data.notCategory);
       })
@@ -117,8 +118,6 @@ const AdminNoticesModify = () => {
         console.error(err);
       });
   };
-
-  // 공지사항 파일 조회
 
   const fileChange = (e) => {
     const currentFiles = e.target.files;
@@ -282,6 +281,7 @@ const AdminNoticesModify = () => {
               >
                 <TextField
                   inputRef={notTitleRef}
+                  defaultValue={notTitle}
                   size="small"
                   placeholder="제목을 입력해주세요."
                   sx={{ ...textField, width: '100%' }}

@@ -107,6 +107,9 @@ const UserHeader = () => {
             <Link
               to="/cs/faq/lists?filter=none&pages=1"
               style={{ textDecoration: 'none' }}
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
             >
               <SmallTextTypography
                 sx={{

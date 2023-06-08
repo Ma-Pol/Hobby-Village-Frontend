@@ -497,7 +497,7 @@ const Purchase = () => {
   const purchaseHandler = () => {
     // 추가 주문인지 확인 후 유효성 검사 (추가 주문의 경우 배송지가 필요 없음)
     if (location.state.prevPage !== 'mypages') {
-      const phoneRegExp = /^(010|011|016|017|018|019)-[0-9]{3,4}-[0-9]{4}$/;
+      const phoneRegExp = /^(010|011|016|017|018|019)[0-9]{3,4}[0-9]{4}$/;
 
       // 선택된 배송지가 없는 경우
       if (selectedAddress === 'none') {
