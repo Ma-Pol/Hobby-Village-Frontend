@@ -273,6 +273,7 @@ const AdminProductsCreate = () => {
         prodName: prodNameRef.current.value,
         prodContent: prodContent,
         prodHost: prodHostRef.current.value,
+        reqCode: requestData === null ? 0 : requestData.requestDetail.reqCode,
       })
       .then(() => {
         addProductTag();

@@ -386,7 +386,7 @@ const MypagesOrdersRows = ({ order }) => {
                   </Button>
                 </form>
               </>
-            ) : order.odrState === '배송 완료' && deadline < today ? (
+            ) : order.odrState === '배송 완료' && deadline > today ? (
               <>
                 <Box
                   sx={{
@@ -501,7 +501,7 @@ const MypagesOrdersRows = ({ order }) => {
                   </Button>
                 )}
               </>
-            ) : order.odrState === '배송 완료' && deadline > today ? (
+            ) : order.odrState === '배송 완료' && deadline <= today ? (
               <>
                 <Button
                   variant="contained"

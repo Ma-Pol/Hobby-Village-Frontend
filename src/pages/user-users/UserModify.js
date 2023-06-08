@@ -404,8 +404,8 @@ const UserModify = () => {
       .get(`/users/delete/checkOrderProduct?email=${email}`)
       .then((res) => {
         if (res.data > 0) {
-          alert(`반납 완료되지 않은 주문 물품이 존재합니다.
-          \n해당 물품의 반납이 완료된 후 탈퇴를 진행해주세요.`);
+          alert(`반납 완료 또는 취소 완료되지 않은 주문 물품이 존재합니다.
+          \n해당 물품의 반납 또는 취소가 완료된 후 탈퇴를 진행해주세요.`);
         } else {
           setModalHandler(true);
         }
